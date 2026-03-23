@@ -17,6 +17,7 @@ type View =
 
 const Index = () => {
   const { blocs, addBloc, updateBloc } = useBlocs();
+  const { videoSlots, setVideoUrl } = useVideoBlocs();
   const { lang, setLang } = useLanguage();
   const [view, setView] = useState<View>({ type: "grid" });
 
