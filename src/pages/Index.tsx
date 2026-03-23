@@ -2,6 +2,7 @@ import { useState } from "react";
 import { type Bloc } from "@/data/blocksData";
 import { useBlocs } from "@/hooks/useBlocs";
 import { useLanguage } from "@/hooks/useLanguage";
+import { useVideoBlocs } from "@/hooks/useVideoBlocs";
 import { BlocGrid } from "@/components/BlocGrid";
 import { FitxaViewer } from "@/components/FitxaViewer";
 import { QuizGame } from "@/components/QuizGame";
