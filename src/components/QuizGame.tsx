@@ -1,11 +1,20 @@
 import { useState, useCallback, useMemo } from "react";
 import { type Bloc, type Fitxa } from "@/data/blocksData";
+import { type LangCode } from "@/hooks/useLanguage";
+import { getTraduccio } from "@/data/translations";
 import { useTTS } from "@/hooks/useTTS";
-import { ArrowLeft, Volume2, RotateCcw } from "lucide-react";
+import { ArrowLeft, Volume2, RotateCcw, CheckCircle2, XCircle } from "lucide-react";
 
 interface QuizGameProps {
   bloc: Bloc;
+  lang: LangCode;
   onBack: () => void;
+}
+
+interface Answer {
+  fitxa: Fitxa;
+  correct: boolean;
+  chosen: string;
 }
 
 function shuffle<T>(arr: T[]): T[] {
@@ -17,13 +26,14 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-export function QuizGame({ bloc, onBack }: QuizGameProps) {
+export function QuizGame({ bloc, lang, onBack }: QuizGameProps) {
   const speak = useTTS();
   const [questions, setQuestions] = useState(() => shuffle(bloc.fitxes));
   const [qi, setQi] = useState(0);
   const [score, setScore] = useState({ correct: 0, wrong: 0 });
   const [selected, setSelected] = useState<string | null>(null);
   const [finished, setFinished] = useState(false);
+  const [answers, setAnswers] = useState<Answer[]>([]);
 
   const current = questions[qi];
 
@@ -44,6 +54,7 @@ export function QuizGame({ bloc, onBack }: QuizGameProps) {
       } else {
         setScore((s) => ({ ...s, wrong: s.wrong + 1 }));
       }
+      setAnswers((prev) => [...prev, { fitxa: current, correct, chosen: opt.paraula }]);
       setTimeout(() => {
         setSelected(null);
         if (qi + 1 >= questions.length) {
@@ -62,6 +73,7 @@ export function QuizGame({ bloc, onBack }: QuizGameProps) {
     setScore({ correct: 0, wrong: 0 });
     setSelected(null);
     setFinished(false);
+    setAnswers([]);
   };
 
   const total = score.correct + score.wrong;
@@ -69,7 +81,7 @@ export function QuizGame({ bloc, onBack }: QuizGameProps) {
 
   if (finished) {
     return (
-      <div className="flex flex-col items-center gap-6 animate-reveal-up">
+      <div className="flex flex-col items-center gap-6 animate-reveal-up max-w-2xl mx-auto">
         <h2 className="text-3xl font-extrabold">🎉 Molt bé!</h2>
         <div className="text-6xl">{pct >= 80 ? "🌟" : pct >= 50 ? "👏" : "💪"}</div>
         <div className="text-center">
@@ -78,6 +90,45 @@ export function QuizGame({ bloc, onBack }: QuizGameProps) {
             ✅ {score.correct} encerts · ❌ {score.wrong} errors
           </p>
         </div>
+
+        {/* Results table */}
+        <div className="w-full rounded-2xl border border-border overflow-hidden bg-card shadow-md">
+          <div className="px-4 py-3 bg-muted/50 border-b border-border">
+            <h3 className="font-bold text-foreground text-sm">📋 Resum de resultats</h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border bg-muted/30">
+                  <th className="px-3 py-2 text-left font-semibold text-muted-foreground"></th>
+                  <th className="px-3 py-2 text-left font-semibold text-muted-foreground">Paraula</th>
+                  <th className="px-3 py-2 text-left font-semibold text-muted-foreground">Traducció</th>
+                  <th className="px-3 py-2 text-center font-semibold text-muted-foreground">Resultat</th>
+                </tr>
+              </thead>
+              <tbody>
+                {answers.map((a, i) => (
+                  <tr key={i} className={`border-b border-border/50 last:border-0 ${a.correct ? "" : "bg-destructive/5"}`}>
+                    <td className="px-3 py-2 text-lg">{a.fitxa.emoji}</td>
+                    <td className="px-3 py-2 font-bold text-foreground">{a.fitxa.paraula}</td>
+                    <td className="px-3 py-2 text-muted-foreground">{getTraduccio(a.fitxa.paraula, lang)}</td>
+                    <td className="px-3 py-2 text-center">
+                      {a.correct ? (
+                        <CheckCircle2 className="w-5 h-5 text-accent inline-block" />
+                      ) : (
+                        <div className="flex flex-col items-center gap-0.5">
+                          <XCircle className="w-5 h-5 text-destructive inline-block" />
+                          <span className="text-xs text-destructive">{a.chosen}</span>
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
         <div className="flex gap-3">
           <button onClick={restart} className="flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-bold shadow-md hover:shadow-lg transition-all active:scale-95">
             <RotateCcw className="w-5 h-5" /> Repetir
@@ -111,7 +162,8 @@ export function QuizGame({ bloc, onBack }: QuizGameProps) {
       {/* Question */}
       <div className="flex flex-col items-center gap-2">
         <span className="text-7xl drop-shadow-sm">{current.emoji}</span>
-        <p className="text-muted-foreground text-sm mt-2">Quina paraula és?</p>
+        <p className="text-muted-foreground text-sm mt-1">{getTraduccio(current.paraula, lang)}</p>
+        <p className="text-muted-foreground text-xs">Quina paraula és?</p>
         <button
           onClick={() => speak(current.paraula)}
           className={`p-2 rounded-full ${bloc.color} text-white shadow active:scale-90 transition-all mt-1`}
