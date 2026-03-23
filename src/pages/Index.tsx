@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { type Bloc } from "@/data/blocksData";
 import { useBlocs } from "@/hooks/useBlocs";
+import { useLanguage } from "@/hooks/useLanguage";
 import { BlocGrid } from "@/components/BlocGrid";
 import { FitxaViewer } from "@/components/FitxaViewer";
 import { QuizGame } from "@/components/QuizGame";
 import { BlocEditor } from "@/components/BlocEditor";
+import { LanguageSelector } from "@/components/LanguageSelector";
 
 type View =
   | { type: "grid" }
@@ -14,6 +16,7 @@ type View =
 
 const Index = () => {
   const { blocs, addBloc, updateBloc } = useBlocs();
+  const { lang, setLang } = useLanguage();
   const [view, setView] = useState<View>({ type: "grid" });
 
   return (
@@ -28,14 +31,17 @@ const Index = () => {
               <p className="text-xs text-muted-foreground font-semibold">Programa d'acollida lingüística</p>
             </div>
           </button>
-          {view.type !== "grid" && (
-            <button
-              onClick={() => setView({ type: "grid" })}
-              className="text-sm font-semibold text-primary hover:text-primary/80 transition-colors active:scale-95"
-            >
-              Tots els blocs
-            </button>
-          )}
+          <div className="flex items-center gap-3">
+            <LanguageSelector lang={lang} onChange={setLang} />
+            {view.type !== "grid" && (
+              <button
+                onClick={() => setView({ type: "grid" })}
+                className="text-sm font-semibold text-primary hover:text-primary/80 transition-colors active:scale-95"
+              >
+                Tots els blocs
+              </button>
+            )}
+          </div>
         </div>
       </header>
 
@@ -59,6 +65,7 @@ const Index = () => {
         {view.type === "fitxes" && (
           <FitxaViewer
             bloc={view.bloc}
+            lang={lang}
             onBack={() => setView({ type: "grid" })}
             onStartQuiz={() => setView({ type: "quiz", bloc: view.bloc })}
           />
@@ -66,6 +73,7 @@ const Index = () => {
         {view.type === "quiz" && (
           <QuizGame
             bloc={view.bloc}
+            lang={lang}
             onBack={() => setView({ type: "fitxes", bloc: view.bloc })}
           />
         )}

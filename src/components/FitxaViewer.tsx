@@ -1,15 +1,18 @@
 import { useState } from "react";
-import { type Bloc, type Fitxa } from "@/data/blocksData";
+import { type Bloc } from "@/data/blocksData";
+import { type LangCode } from "@/hooks/useLanguage";
+import { getTraduccio } from "@/data/translations";
 import { useTTS } from "@/hooks/useTTS";
 import { Volume2, ChevronLeft, ChevronRight, ArrowLeft, Gamepad2 } from "lucide-react";
 
 interface FitxaViewerProps {
   bloc: Bloc;
+  lang: LangCode;
   onBack: () => void;
   onStartQuiz: () => void;
 }
 
-export function FitxaViewer({ bloc, onBack, onStartQuiz }: FitxaViewerProps) {
+export function FitxaViewer({ bloc, lang, onBack, onStartQuiz }: FitxaViewerProps) {
   const [current, setCurrent] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const speak = useTTS();
@@ -19,6 +22,8 @@ export function FitxaViewer({ bloc, onBack, onStartQuiz }: FitxaViewerProps) {
     setCurrent((c) => (c + dir + bloc.fitxes.length) % bloc.fitxes.length);
     setFlipped(false);
   };
+
+  const traduccio = getTraduccio(fitxa.paraula, lang);
 
   return (
     <div className="flex flex-col items-center gap-6 animate-reveal-up">
@@ -71,7 +76,7 @@ export function FitxaViewer({ bloc, onBack, onStartQuiz }: FitxaViewerProps) {
         >
           <span className="text-5xl">{fitxa.emoji}</span>
           <span className="text-2xl font-extrabold">{fitxa.paraula}</span>
-          <span className="text-lg opacity-90">{fitxa.traduccio}</span>
+          <span className="text-lg opacity-90">{traduccio}</span>
           <p className="text-sm opacity-80 italic text-center mt-2">"{fitxa.frase}"</p>
         </div>
       </div>
