@@ -61,6 +61,8 @@ const Index = () => {
               blocs={blocs}
               onSelect={(bloc) => setView({ type: "fitxes", bloc })}
               onAddNew={() => setView({ type: "editor" })}
+              videoSlots={videoSlots}
+              onVideoChange={setVideoUrl}
             />
           </div>
         )}
