@@ -74,12 +74,19 @@ const Index = () => {
             lang={lang}
             onBack={() => setView({ type: "grid" })}
             onStartQuiz={() => setView({ type: "quiz", bloc: view.bloc })}
+            onStartSongs={() => setView({ type: "songs", bloc: view.bloc })}
           />
         )}
         {view.type === "quiz" && (
           <QuizGame
             bloc={view.bloc}
             lang={lang}
+            onBack={() => setView({ type: "fitxes", bloc: view.bloc })}
+          />
+        )}
+        {view.type === "songs" && (
+          <SongViewer
+            bloc={view.bloc}
             onBack={() => setView({ type: "fitxes", bloc: view.bloc })}
           />
         )}
