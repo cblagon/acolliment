@@ -3,16 +3,17 @@ import { type Bloc } from "@/data/blocksData";
 import { type LangCode } from "@/hooks/useLanguage";
 import { getTraduccio } from "@/data/translations";
 import { useTTS } from "@/hooks/useTTS";
-import { Volume2, ChevronLeft, ChevronRight, ArrowLeft, Gamepad2 } from "lucide-react";
+import { Volume2, ChevronLeft, ChevronRight, ArrowLeft, Gamepad2, Music } from "lucide-react";
 
 interface FitxaViewerProps {
   bloc: Bloc;
   lang: LangCode;
   onBack: () => void;
   onStartQuiz: () => void;
+  onStartSongs: () => void;
 }
 
-export function FitxaViewer({ bloc, lang, onBack, onStartQuiz }: FitxaViewerProps) {
+export function FitxaViewer({ bloc, lang, onBack, onStartQuiz, onStartSongs }: FitxaViewerProps) {
   const [current, setCurrent] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const speak = useTTS();
@@ -36,10 +37,16 @@ export function FitxaViewer({ bloc, lang, onBack, onStartQuiz }: FitxaViewerProp
         <h2 className="text-xl font-extrabold flex items-center gap-2">
           <span>{bloc.emoji}</span> {bloc.nom}
         </h2>
-        <button onClick={onStartQuiz} className="flex items-center gap-1 text-primary hover:text-primary/80 transition-colors font-semibold text-sm active:scale-95">
-          <Gamepad2 className="w-5 h-5" />
-          Joc
-        </button>
+        <div className="flex items-center gap-3">
+          <button onClick={onStartQuiz} className="flex items-center gap-1 text-primary hover:text-primary/80 transition-colors font-semibold text-sm active:scale-95">
+            <Gamepad2 className="w-4 h-4" />
+            Joc
+          </button>
+          <button onClick={onStartSongs} className="flex items-center gap-1 text-primary hover:text-primary/80 transition-colors font-semibold text-sm active:scale-95">
+            <Music className="w-4 h-4" />
+            Cançons
+          </button>
+        </div>
       </div>
 
       {/* Progress */}

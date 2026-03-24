@@ -6,6 +6,7 @@ import { useVideoBlocs } from "@/hooks/useVideoBlocs";
 import { BlocGrid } from "@/components/BlocGrid";
 import { FitxaViewer } from "@/components/FitxaViewer";
 import { QuizGame } from "@/components/QuizGame";
+import { SongViewer } from "@/components/SongViewer";
 import { BlocEditor } from "@/components/BlocEditor";
 import { LanguageSelector } from "@/components/LanguageSelector";
 
@@ -13,6 +14,7 @@ type View =
   | { type: "grid" }
   | { type: "fitxes"; bloc: Bloc }
   | { type: "quiz"; bloc: Bloc }
+  | { type: "songs"; bloc: Bloc }
   | { type: "editor"; bloc?: Bloc };
 
 const Index = () => {
@@ -72,12 +74,19 @@ const Index = () => {
             lang={lang}
             onBack={() => setView({ type: "grid" })}
             onStartQuiz={() => setView({ type: "quiz", bloc: view.bloc })}
+            onStartSongs={() => setView({ type: "songs", bloc: view.bloc })}
           />
         )}
         {view.type === "quiz" && (
           <QuizGame
             bloc={view.bloc}
             lang={lang}
+            onBack={() => setView({ type: "fitxes", bloc: view.bloc })}
+          />
+        )}
+        {view.type === "songs" && (
+          <SongViewer
+            bloc={view.bloc}
             onBack={() => setView({ type: "fitxes", bloc: view.bloc })}
           />
         )}
