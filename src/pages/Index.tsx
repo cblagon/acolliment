@@ -6,6 +6,7 @@ import { useVideoBlocs } from "@/hooks/useVideoBlocs";
 import { BlocGrid } from "@/components/BlocGrid";
 import { FitxaViewer } from "@/components/FitxaViewer";
 import { QuizGame } from "@/components/QuizGame";
+import { SongViewer } from "@/components/SongViewer";
 import { BlocEditor } from "@/components/BlocEditor";
 import { LanguageSelector } from "@/components/LanguageSelector";
 
