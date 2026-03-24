@@ -3,13 +3,14 @@ import { type Bloc } from "@/data/blocksData";
 import { type LangCode } from "@/hooks/useLanguage";
 import { getTraduccio } from "@/data/translations";
 import { useTTS } from "@/hooks/useTTS";
-import { Volume2, ChevronLeft, ChevronRight, ArrowLeft, Gamepad2 } from "lucide-react";
+import { Volume2, ChevronLeft, ChevronRight, ArrowLeft, Gamepad2, Music } from "lucide-react";
 
 interface FitxaViewerProps {
   bloc: Bloc;
   lang: LangCode;
   onBack: () => void;
   onStartQuiz: () => void;
+  onStartSongs: () => void;
 }
 
 export function FitxaViewer({ bloc, lang, onBack, onStartQuiz }: FitxaViewerProps) {
