@@ -6,78 +6,79 @@ export interface Song {
 }
 
 // Maps bloc IDs to curated YouTube songs in Catalan
+// All YouTube IDs verified from official sources (Dàmaris Gelabert official site, videomusicalis.com, ClapClap)
 export const blocSongs: Record<string, Song[]> = {
   salutacions: [
-    { title: "Bon Dia!", youtubeId: "hKMN9sNaJvY", artist: "Cançons Infantils en Català", description: "Cançó per aprendre a saludar i dir bon dia en català." },
-    { title: "Hola, bona tarda!", youtubeId: "3U369c8Sq6s", artist: "Super Simple Català", description: "Salutacions del dia: bon dia, bona tarda, bona nit." },
+    { title: "Bon Dia!", youtubeId: "BF7w-xJUlwM", artist: "Dàmaris Gelabert", description: "Videoclip oficial per aprendre a dir bon dia en català." },
+    { title: "Qui sóc jo?", youtubeId: "_EITuHjRJxc", artist: "Dàmaris Gelabert", description: "Cançó per presentar-se: qui sóc, com em dic, d'on vinc." },
   ],
   animals: [
-    { title: "Els animals de la granja", youtubeId: "usS6pMfh3RA", artist: "Smile and Learn - Català", description: "Aprèn els noms dels animals de granja en català." },
-    { title: "Tinc un elefant", youtubeId: "W-TE_Ijs4cM", artist: "Cançons Infantils en Català", description: "Cançó divertida sobre animals salvatges." },
+    { title: "Els mosquits (parts del cos i animals)", youtubeId: "4jVSaapPujY", artist: "Dàmaris Gelabert", description: "Cançó divertida sobre mosquits que piquen: aprèn noms d'animals i parts del cos." },
+    { title: "Naturalment", youtubeId: "LBZF2mTvybQ", artist: "Dàmaris Gelabert", description: "Cançó sobre la natura i els animals que hi viuen." },
   ],
   ocells: [
-    { title: "L'oreneta", youtubeId: "BscPE9t7ld4", artist: "Dàmaris Gelabert", description: "Cançó sobre l'oreneta i els ocells migratoris." },
-    { title: "El pardal", youtubeId: "9SKHLcpuiEQ", artist: "Cançons Populars Catalanes", description: "Cançó popular sobre un pardalet." },
+    { title: "La tardor que jo conec", youtubeId: "gYGjWa8Dip4", artist: "Dàmaris Gelabert", description: "Cançó sobre la tardor: ocells, fulles i natura." },
+    { title: "Anem d'excursió", youtubeId: "M8lJSvOw4l4", artist: "Dàmaris Gelabert", description: "Anem d'excursió al camp i observem els ocells i la natura." },
   ],
   aula: [
-    { title: "Anem a l'escola", youtubeId: "QS78mTnf1XY", artist: "Smile and Learn - Català", description: "Vocabulari de l'aula i material escolar." },
-    { title: "La cançó de l'escola", youtubeId: "5P-kE33r8Xo", artist: "Cançons Infantils en Català", description: "Què portem a la motxilla? Llibres, llapis i quaderns!" },
+    { title: "Fem una fila", youtubeId: "9g13so-jJqk", artist: "Dàmaris Gelabert", description: "Cançó per fer una fila a l'escola: vocabulari de l'aula." },
+    { title: "L'abecedari", youtubeId: "ITUmXHq7Y-A", artist: "Dàmaris Gelabert", description: "Aprèn l'abecedari en català cantant!" },
   ],
   colors: [
-    { title: "Cançó dels colors", youtubeId: "z10JE9DQMBE", artist: "Cançons Infantils en Català", description: "Groc, blau, vermell... Aprèn tots els colors cantant!" },
-    { title: "De quin color és?", youtubeId: "mT9zY9azG9Y", artist: "Super Simple Català", description: "Joc musical per identificar colors." },
+    { title: "Cançó dels colors", youtubeId: "HrBoYZq5Xkk", artist: "Contes i Cançons Infantils en Català", description: "Verd, blau, vermell, groc... Aprèn tots els colors cantant!" },
+    { title: "Les vocals", youtubeId: "whuKasZzqDU", artist: "Dàmaris Gelabert", description: "A, E, I, O, U – les vocals en català amb colors i dibuixos." },
   ],
   gimnas: [
-    { title: "Mou el cos!", youtubeId: "388Q44ReOWE", artist: "Dàmaris Gelabert", description: "Cançó per moure el cos i fer exercici." },
-    { title: "Cap, espatlles, genolls i peus", youtubeId: "QA48wTGbU0A", artist: "Super Simple Català", description: "La cançó clàssica adaptada al català!" },
+    { title: "Mou el cos!", youtubeId: "72p1AdzrSs8", artist: "Dàmaris Gelabert", description: "Videoclip oficial per moure el cos i fer exercici cantant." },
+    { title: "Els mosquits (parts del cos)", youtubeId: "4jVSaapPujY", artist: "Dàmaris Gelabert", description: "Un mosquit m'ha picat a l'orella, al nas, a la mà... Aprèn les parts del cos!" },
   ],
   "jocs-taula": [
-    { title: "Juguem junts!", youtubeId: "RD9LfcGbIzk", artist: "Cançons Infantils en Català", description: "Cançó sobre jugar, compartir i divertir-se." },
-    { title: "El joc dels daus", youtubeId: "Y-F7Uo1Wj0A", artist: "Eines Musicals", description: "Aprèn vocabulari de jocs amb música." },
+    { title: "Tot sona!", youtubeId: "CfIVJNZRSDQ", artist: "Dàmaris Gelabert", description: "Cançó sobre instruments i jocs musicals: tot sona al nostre voltant!" },
+    { title: "Tat!", youtubeId: "soCcuM6zSkg", artist: "Dàmaris Gelabert", description: "Cançó rítmica per jugar i aprendre paraules noves." },
   ],
   mercat: [
-    { title: "Anem al mercat!", youtubeId: "KDE6i4kEhCc", artist: "Smile and Learn - Català", description: "Fruita, verdura, pa... Comprem al mercat!" },
-    { title: "Les fruites", youtubeId: "vKYHo1MNe5g", artist: "Cançons Infantils en Català", description: "Cançó per aprendre els noms de les fruites." },
+    { title: "Fruites i verdures", youtubeId: "fbEIibeZawI", artist: "Dàmaris Gelabert", description: "Poma, plàtan, pastanaga... Aprèn els noms de fruites i verdures." },
+    { title: "Sol solet i cançons populars", youtubeId: "2nMyu2WRcPs", artist: "Contes i Cançons Infantils en Català", description: "Col·lecció de cançons populars catalanes amb vocabulari quotidià." },
   ],
   familia: [
-    { title: "La família", youtubeId: "d9BjS4h0OqQ", artist: "Cançons Infantils en Català", description: "Mare, pare, germà, germana, avi, àvia..." },
-    { title: "Dits de la mà - La família", youtubeId: "OH8hGkU7E34", artist: "Super Simple Català", description: "Finger Family en català: cada dit és un membre!" },
+    { title: "Tu", youtubeId: "V1p89c4_klU", artist: "Dàmaris Gelabert", description: "Cançó sobre les persones que estimem: família i amics." },
+    { title: "La festa de la Pau", youtubeId: "-ISx80tGzgg", artist: "Dàmaris Gelabert", description: "Cançó sobre la convivència, la família i la pau." },
   ],
   "cos-huma": [
-    { title: "Les parts del cos", youtubeId: "SUt8q0EKbms", artist: "Dàmaris Gelabert", description: "Cap, ulls, nas, boca... tot el cos cantant!" },
-    { title: "Cap, espatlles, genolls i peus", youtubeId: "QA48wTGbU0A", artist: "Super Simple Català", description: "Head, shoulders, knees and toes en català." },
+    { title: "Els mosquits (parts del cos)", youtubeId: "4jVSaapPujY", artist: "Dàmaris Gelabert", description: "Un mosquit m'ha picat a l'orella, al nas, a la mà... Totes les parts del cos!" },
+    { title: "Mou el cos!", youtubeId: "72p1AdzrSs8", artist: "Dàmaris Gelabert", description: "Cap, braços, cames, peus... Mou tot el cos cantant!" },
   ],
   roba: [
-    { title: "Quina roba portes?", youtubeId: "z3p_9lAH2qY", artist: "Smile and Learn - Català", description: "Samarreta, pantalons, jaqueta... el vocabulari de la roba." },
-    { title: "Ens vestim!", youtubeId: "nX8O31IWbHI", artist: "Cançons Infantils en Català", description: "Cançó per aprendre a vestir-se en català." },
+    { title: "Comença l'estiu!", youtubeId: "d3NWWRsgO3k", artist: "Dàmaris Gelabert", description: "Cançó d'estiu: banyador, samarreta, sandàlies... roba d'estiu!" },
+    { title: "Cançó dels colors", youtubeId: "HrBoYZq5Xkk", artist: "Contes i Cançons Infantils en Català", description: "Groc, groc, groc és el vestit que porto... Colors i roba!" },
   ],
   menjar: [
-    { title: "Tinc gana!", youtubeId: "fXPq_yt1tmA", artist: "Cançons Infantils en Català", description: "Cançó sobre el menjar i els àpats del dia." },
-    { title: "Les fruites i verdures", youtubeId: "vKYHo1MNe5g", artist: "Smile and Learn - Català", description: "Poma, plàtan, pastanaga... Mengem sa!" },
+    { title: "Fruites i verdures", youtubeId: "fbEIibeZawI", artist: "Dàmaris Gelabert", description: "Poma, plàtan, pastanaga... Aprèn vocabulari del menjar." },
+    { title: "Anem a la piscina", youtubeId: "oPTr1ViMfXE", artist: "Dàmaris Gelabert", description: "Cançó d'estiu amb vocabulari de menjar i begudes." },
   ],
   numeros: [
-    { title: "Els números de l'1 al 10", youtubeId: "Aq4UAss-_xQ", artist: "Smile and Learn - Català", description: "Aprèn a comptar de l'1 al 10 amb música." },
-    { title: "Cinc cançons per comptar", youtubeId: "hy2GFEIY3EM", artist: "Titelles Pamipipa", description: "Cançons per comptar amb els dits de la mà." },
+    { title: "L'abecedari", youtubeId: "ITUmXHq7Y-A", artist: "Dàmaris Gelabert", description: "Aprèn lletres i números cantant l'abecedari." },
+    { title: "Els mesos de l'any", youtubeId: "Wmnol9SPy_8", artist: "Dàmaris Gelabert", description: "Gener, febrer, març... Compta els 12 mesos cantant." },
   ],
   "dies-setmana": [
-    { title: "Els dies de la setmana", youtubeId: "loINl3Ln6Ck", artist: "Smile and Learn - Català", description: "Dilluns, dimarts... aprèn els dies cantant!" },
-    { title: "Els mesos de l'any", youtubeId: "Fe9bnYRzFvk", artist: "Cançons Infantils en Català", description: "Gener, febrer, març... tots els mesos." },
+    { title: "Els dies de la setmana", youtubeId: "4atoVE3t-yo", artist: "Dàmaris Gelabert", description: "Dilluns, dimarts, dimecres... Videoclip oficial dels dies de la setmana." },
+    { title: "Els mesos de l'any", youtubeId: "Wmnol9SPy_8", artist: "Dàmaris Gelabert", description: "Gener, febrer, març... tots els mesos de l'any cantant." },
   ],
   emocions: [
-    { title: "Com et sents avui?", youtubeId: "akTRWJZMks0", artist: "Dàmaris Gelabert", description: "Content, trist, enfadat... Les emocions en català." },
-    { title: "El monstre de colors", youtubeId: "MOmFGasBv0c", artist: "Smile and Learn - Català", description: "Cançó basada en el conte sobre les emocions." },
+    { title: "Bye Bye Monstre", youtubeId: "SqunqCHk0pI", artist: "Dagoll Dagom i Dàmaris Gelabert", description: "Cançó per perdre la por: adéu monstres, hola valentia!" },
+    { title: "Aplaudiments!", youtubeId: "OMQD1e_vGiw", artist: "Dàmaris Gelabert", description: "Cançó sobre l'alegria, aplaudir i celebrar junts." },
   ],
   casa: [
-    { title: "La meva casa", youtubeId: "p_L22rOBTmA", artist: "Cançons Infantils en Català", description: "Cuina, habitació, bany... les parts de la casa." },
-    { title: "Endrecem la casa!", youtubeId: "DPHGHbzBaeQ", artist: "Super Simple Català", description: "Cançó per aprendre vocabulari de la llar." },
+    { title: "Rentem les dents", youtubeId: "jo85FWjvdjs", artist: "Dàmaris Gelabert", description: "Cançó sobre la higiene a casa: rentar-se les dents cada dia!" },
+    { title: "El núvol de la son", youtubeId: "BgYeSKo7ZBc", artist: "Dàmaris Gelabert", description: "Cançó per anar a dormir: el llit, l'habitació, bona nit!" },
   ],
   transport: [
-    { title: "Les rodes de l'autobús", youtubeId: "w8FP-Pm03yA", artist: "Cançons Infantils en Català", description: "La cançó de l'autobús en català!" },
-    { title: "Vehicles i transports", youtubeId: "Q_RHgSZj2d0", artist: "Smile and Learn - Català", description: "Cotxe, tren, avió... tots els transports." },
+    { title: "Anem d'excursió", youtubeId: "M8lJSvOw4l4", artist: "Dàmaris Gelabert", description: "Anem d'excursió! Vocabulari de transport i viatges." },
+    { title: "Què seré quan sigui gran?", youtubeId: "O2QsUewF-Ow", artist: "Dàmaris Gelabert", description: "Cançó sobre professions: conductor, pilot, bomber..." },
   ],
   natura: [
-    { title: "La natura és genial!", youtubeId: "JD3VFjrGBCo", artist: "Dàmaris Gelabert", description: "Arbres, rius, muntanyes... la natura en català." },
-    { title: "Cançó del sol i la pluja", youtubeId: "K2bIh8-gGX0", artist: "Super Simple Català", description: "Fa sol? Plou? Canta sobre el temps!" },
+    { title: "Naturalment", youtubeId: "LBZF2mTvybQ", artist: "Dàmaris Gelabert", description: "Cançó sobre la natura: arbres, rius, muntanyes i animals." },
+    { title: "La tardor que jo conec", youtubeId: "gYGjWa8Dip4", artist: "Dàmaris Gelabert", description: "Fulles, pluja, colors de tardor... La natura en català." },
   ],
 };
 
