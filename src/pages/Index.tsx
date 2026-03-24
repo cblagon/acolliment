@@ -13,6 +13,7 @@ type View =
   | { type: "grid" }
   | { type: "fitxes"; bloc: Bloc }
   | { type: "quiz"; bloc: Bloc }
+  | { type: "songs"; bloc: Bloc }
   | { type: "editor"; bloc?: Bloc };
 
 const Index = () => {
