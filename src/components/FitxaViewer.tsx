@@ -13,7 +13,7 @@ interface FitxaViewerProps {
   onStartSongs: () => void;
 }
 
-export function FitxaViewer({ bloc, lang, onBack, onStartQuiz }: FitxaViewerProps) {
+export function FitxaViewer({ bloc, lang, onBack, onStartQuiz, onStartSongs }: FitxaViewerProps) {
   const [current, setCurrent] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const speak = useTTS();
