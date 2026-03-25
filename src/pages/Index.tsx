@@ -9,6 +9,8 @@ import { QuizGame } from "@/components/QuizGame";
 import { SongViewer } from "@/components/SongViewer";
 import { BlocEditor } from "@/components/BlocEditor";
 import { LanguageSelector } from "@/components/LanguageSelector";
+import { exportAllToPDF } from "@/hooks/useExportPDF";
+import { Download } from "lucide-react";
 
 type View =
   | { type: "grid" }
