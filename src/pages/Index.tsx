@@ -38,6 +38,14 @@ const Index = () => {
             </div>
           </button>
           <div className="flex items-center gap-3">
+            <button
+              onClick={() => exportAllToPDF(blocs, lang)}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-sm font-semibold hover:bg-muted/80 transition-all active:scale-95"
+              title="Exportar a PDF"
+            >
+              <Download className="w-4 h-4" />
+              <span className="hidden sm:inline">PDF</span>
+            </button>
             <LanguageSelector lang={lang} onChange={setLang} />
             {view.type !== "grid" && (
               <button
