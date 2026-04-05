@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
 import { Play, Upload, X, Film } from "lucide-react";
+import { RoleplayPlayer } from "./RoleplayPlayer";
+import { type RoleplayData } from "@/data/roleplayData";
 
 interface VideoBlocProps {
   index: number;
@@ -7,23 +9,27 @@ interface VideoBlocProps {
   title: string;
   description: string;
   onVideoChange: (url: string | null) => void;
+  roleplayData?: RoleplayData;
 }
 
-export function VideoBloc({ index, videoUrl, title, description, onVideoChange }: VideoBlocProps) {
+export function VideoBloc({ index, videoUrl, title, description, onVideoChange, roleplayData }: VideoBlocProps) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [playing, setPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [useCustomVideo, setUseCustomVideo] = useState(false);
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const url = URL.createObjectURL(file);
     onVideoChange(url);
+    setUseCustomVideo(true);
   };
 
   const handleRemove = () => {
     if (videoUrl) URL.revokeObjectURL(videoUrl);
     onVideoChange(null);
+    setUseCustomVideo(false);
   };
 
   const togglePlay = () => {
@@ -37,12 +43,15 @@ export function VideoBloc({ index, videoUrl, title, description, onVideoChange }
     }
   };
 
+  const showCustomVideo = videoUrl && useCustomVideo;
+  const showRoleplay = roleplayData && !showCustomVideo;
+
   return (
     <div className="col-span-full rounded-2xl overflow-hidden border-2 border-primary/20 bg-card shadow-lg animate-reveal-up">
       <div className="flex flex-col sm:flex-row">
-        {/* Video area */}
+        {/* Video / Roleplay area */}
         <div className="relative sm:w-1/2 aspect-video bg-muted/50 flex items-center justify-center">
-          {videoUrl ? (
+          {showCustomVideo ? (
             <>
               <video
                 ref={videoRef}
@@ -69,11 +78,13 @@ export function VideoBloc({ index, videoUrl, title, description, onVideoChange }
               )}
               <button
                 onClick={handleRemove}
-                className="absolute top-2 right-2 p-1.5 rounded-full bg-destructive/80 text-white hover:bg-destructive transition-colors"
+                className="absolute top-2 right-2 p-1.5 rounded-full bg-destructive/80 text-white hover:bg-destructive transition-colors z-10"
               >
                 <X className="w-4 h-4" />
               </button>
             </>
+          ) : showRoleplay ? (
+            <RoleplayPlayer data={roleplayData} />
           ) : (
             <button
               onClick={() => fileRef.current?.click()}
@@ -108,13 +119,21 @@ export function VideoBloc({ index, videoUrl, title, description, onVideoChange }
           <p className="text-sm text-muted-foreground leading-relaxed">
             {description}
           </p>
-          <div className="flex items-center gap-2 mt-1">
+          <div className="flex items-center gap-2 mt-1 flex-wrap">
             <span className="px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold">
               🎬 Conversa real
             </span>
             <span className="px-2.5 py-1 rounded-full bg-accent/20 text-accent-foreground text-xs font-bold">
               👥 15-16 anys
             </span>
+            {showRoleplay && (
+              <button
+                onClick={() => fileRef.current?.click()}
+                className="px-2.5 py-1 rounded-full bg-muted text-muted-foreground text-xs font-bold hover:bg-muted/80 transition-colors"
+              >
+                📤 Pujar vídeo propi
+              </button>
+            )}
           </div>
         </div>
       </div>
