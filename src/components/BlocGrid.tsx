@@ -1,6 +1,7 @@
 import { type Bloc } from "@/data/blocksData";
 import { type VideoSlot } from "@/hooks/useVideoBlocs";
 import { VideoBloc } from "./VideoBloc";
+import { roleplays } from "@/data/roleplayData";
 
 interface BlocGridProps {
   blocs: Bloc[];
@@ -40,6 +41,7 @@ export function BlocGrid({ blocs, onSelect, onAddNew, videoSlots, onVideoChange 
               title={slot.title}
               description={slot.description}
               onVideoChange={(url) => onVideoChange(slot.id, url)}
+              roleplayData={roleplays.find((r) => r.id === `roleplay-${vNum}`)}
             />
           );
         }
