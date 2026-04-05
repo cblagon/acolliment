@@ -39,6 +39,7 @@ export function BlocEditor({ bloc, onSave, onCancel }: BlocEditorProps) {
       nom: nom.trim(),
       emoji,
       color,
+      level: bloc?.level ?? "A1",
       fitxes: valid.map((f) => ({ ...f, emoji: f.emoji || "📝", frase: f.frase || `Exemple: ${f.paraula}` })),
     });
   };

@@ -1,15 +1,14 @@
 import { useState, useEffect } from "react";
-import { defaultBlocs, type Bloc } from "@/data/blocksData";
+import { defaultBlocs, type Bloc, type Level } from "@/data/blocksData";
 
 const STORAGE_KEY = "apren-catala-blocs";
 
-export function useBlocs() {
-  const [blocs, setBlocs] = useState<Bloc[]>(() => {
+export function useBlocs(level?: Level) {
+  const [allBlocs, setAllBlocs] = useState<Bloc[]>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved) as Bloc[];
-        // Merge: keep saved custom blocks + update defaults
         const defaultIds = new Set(defaultBlocs.map((b) => b.id));
         const customBlocs = parsed.filter((b) => !defaultIds.has(b.id));
         return [...defaultBlocs, ...customBlocs];
@@ -19,21 +18,22 @@ export function useBlocs() {
   });
 
   useEffect(() => {
-    // Only save custom blocks (non-default)
     const defaultIds = new Set(defaultBlocs.map((b) => b.id));
-    const custom = blocs.filter((b) => !defaultIds.has(b.id));
+    const custom = allBlocs.filter((b) => !defaultIds.has(b.id));
     if (custom.length > 0) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(blocs));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(allBlocs));
     } else {
       localStorage.removeItem(STORAGE_KEY);
     }
-  }, [blocs]);
+  }, [allBlocs]);
 
-  const addBloc = (bloc: Bloc) => setBlocs((prev) => [...prev, bloc]);
+  const blocs = level ? allBlocs.filter((b) => b.level === level) : allBlocs;
+
+  const addBloc = (bloc: Bloc) => setAllBlocs((prev) => [...prev, bloc]);
   const updateBloc = (id: string, bloc: Bloc) =>
-    setBlocs((prev) => prev.map((b) => (b.id === id ? bloc : b)));
+    setAllBlocs((prev) => prev.map((b) => (b.id === id ? bloc : b)));
   const removeBloc = (id: string) =>
-    setBlocs((prev) => prev.filter((b) => b.id !== id));
+    setAllBlocs((prev) => prev.filter((b) => b.id !== id));
 
   return { blocs, addBloc, updateBloc, removeBloc };
 }
