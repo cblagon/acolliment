@@ -1,18 +1,41 @@
 import { useCallback, useEffect, useRef } from "react";
 
+/**
+ * Selects the best available Catalan voice.
+ * Priority: ca-ES native > ca-* > Google ca-ES > es-ES (fallback)
+ */
+function selectBestVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | null {
+  // Score voices — higher is better
+  const scored = voices
+    .filter((v) => v.lang.startsWith("ca") || v.lang.startsWith("es"))
+    .map((v) => {
+      let score = 0;
+      if (v.lang === "ca-ES") score += 100;
+      else if (v.lang.startsWith("ca")) score += 80;
+      else if (v.lang === "es-ES") score += 20;
+      else if (v.lang.startsWith("es")) score += 10;
+
+      // Prefer non-local (network/cloud) voices — they sound much better
+      if (!v.localService) score += 50;
+      // Google voices tend to be higher quality
+      if (v.name.toLowerCase().includes("google")) score += 30;
+      // Microsoft voices are also decent
+      if (v.name.toLowerCase().includes("microsoft")) score += 20;
+
+      return { voice: v, score };
+    })
+    .sort((a, b) => b.score - a.score);
+
+  return scored[0]?.voice ?? null;
+}
+
 export function useTTS() {
-  const catalanVoice = useRef<SpeechSynthesisVoice | null>(null);
+  const bestVoice = useRef<SpeechSynthesisVoice | null>(null);
 
   useEffect(() => {
     const findVoice = () => {
       const voices = speechSynthesis.getVoices();
-      // Priority: ca-ES voices first, then es-ES as fallback
-      catalanVoice.current =
-        voices.find((v) => v.lang === "ca-ES") ??
-        voices.find((v) => v.lang.startsWith("ca")) ??
-        voices.find((v) => v.lang === "es-ES") ??
-        voices.find((v) => v.lang.startsWith("es")) ??
-        null;
+      bestVoice.current = selectBestVoice(voices);
     };
     findVoice();
     speechSynthesis.addEventListener("voiceschanged", findVoice);
@@ -22,11 +45,19 @@ export function useTTS() {
   const speak = useCallback((text: string) => {
     speechSynthesis.cancel();
     const utter = new SpeechSynthesisUtterance(text);
-    if (catalanVoice.current) utter.voice = catalanVoice.current;
-    utter.lang = "ca-ES";
-    utter.rate = 0.85;
+    if (bestVoice.current) {
+      utter.voice = bestVoice.current;
+    }
+    // Use the voice's own lang if it's Catalan, otherwise force ca-ES
+    utter.lang = bestVoice.current?.lang.startsWith("ca")
+      ? bestVoice.current.lang
+      : "ca-ES";
+    utter.rate = 0.82;
+    utter.pitch = 1.0;
     speechSynthesis.speak(utter);
   }, []);
 
   return speak;
 }
+
+export { selectBestVoice };

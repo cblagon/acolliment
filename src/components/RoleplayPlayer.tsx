@@ -1,26 +1,44 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Play, Pause, RotateCcw, Volume2, VolumeX } from "lucide-react";
 import { type RoleplayData } from "@/data/roleplayData";
+import { selectBestVoice } from "@/hooks/useTTS";
 
 interface RoleplayPlayerProps {
   data: RoleplayData;
 }
 
 export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
-  const [currentLine, setCurrentLine] = useState(-1); // -1 = title screen
+  const [currentLine, setCurrentLine] = useState(-1);
   const [isPlaying, setIsPlaying] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
   const [finished, setFinished] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
   const synthRef = useRef(typeof window !== "undefined" ? window.speechSynthesis : null);
+  const voiceRef = useRef<SpeechSynthesisVoice | null>(null);
+
+  // Find best Catalan voice
+  useEffect(() => {
+    const findVoice = () => {
+      const voices = speechSynthesis.getVoices();
+      voiceRef.current = selectBestVoice(voices);
+    };
+    findVoice();
+    speechSynthesis.addEventListener("voiceschanged", findVoice);
+    return () => speechSynthesis.removeEventListener("voiceschanged", findVoice);
+  }, []);
 
   const speak = useCallback((text: string) => {
     if (!soundOn || !synthRef.current) return;
     synthRef.current.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "ca-ES";
-    utterance.rate = 0.85;
-    utterance.pitch = 1.1;
+    if (voiceRef.current) {
+      utterance.voice = voiceRef.current;
+    }
+    utterance.lang = voiceRef.current?.lang.startsWith("ca")
+      ? voiceRef.current.lang
+      : "ca-ES";
+    utterance.rate = 0.82;
+    utterance.pitch = 1.0;
     synthRef.current.speak(utterance);
   }, [soundOn]);
 
