@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { type Bloc } from "@/data/blocksData";
+import { type Bloc, type Level } from "@/data/blocksData";
 import { useBlocs } from "@/hooks/useBlocs";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useVideoBlocs } from "@/hooks/useVideoBlocs";
@@ -19,8 +19,21 @@ type View =
   | { type: "songs"; bloc: Bloc }
   | { type: "editor"; bloc?: Bloc };
 
+const levels: Level[] = ["A1", "A2", "B1"];
+const levelColors: Record<Level, string> = {
+  A1: "bg-green-500",
+  A2: "bg-amber-500",
+  B1: "bg-blue-500",
+};
+const levelLabels: Record<Level, string> = {
+  A1: "Bàsic",
+  A2: "Elemental",
+  B1: "Intermedi",
+};
+
 const Index = () => {
-  const { blocs, addBloc, updateBloc } = useBlocs();
+  const [selectedLevel, setSelectedLevel] = useState<Level>("A1");
+  const { blocs, addBloc, updateBloc } = useBlocs(selectedLevel);
   const { videoSlots, setVideoUrl } = useVideoBlocs();
   const { lang, setLang } = useLanguage();
   const [view, setView] = useState<View>({ type: "grid" });
@@ -37,7 +50,26 @@ const Index = () => {
               <p className="text-xs text-muted-foreground font-semibold">Programa d'acollida lingüística</p>
             </div>
           </button>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Level selector */}
+            <div className="flex rounded-xl bg-muted p-0.5 gap-0.5">
+              {levels.map((lv) => (
+                <button
+                  key={lv}
+                  onClick={() => {
+                    setSelectedLevel(lv);
+                    setView({ type: "grid" });
+                  }}
+                  className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                    selectedLevel === lv
+                      ? `${levelColors[lv]} text-white shadow-sm`
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {lv}
+                </button>
+              ))}
+            </div>
             <button
               onClick={() => exportAllToPDF(blocs, lang)}
               className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-sm font-semibold hover:bg-muted/80 transition-all active:scale-95"
@@ -64,9 +96,14 @@ const Index = () => {
         {view.type === "grid" && (
           <div className="space-y-6">
             <div className="animate-reveal-up">
-              <h2 className="text-2xl font-extrabold text-foreground text-balance">
-                Tria un bloc per començar a aprendre 👇
-              </h2>
+              <div className="flex items-center gap-3">
+                <h2 className="text-2xl font-extrabold text-foreground text-balance">
+                  Tria un bloc per començar a aprendre 👇
+                </h2>
+                <span className={`px-2.5 py-1 rounded-full text-xs font-bold text-white ${levelColors[selectedLevel]}`}>
+                  {selectedLevel} · {levelLabels[selectedLevel]}
+                </span>
+              </div>
               <p className="text-muted-foreground mt-1 text-sm">{blocs.length} blocs · {blocs.reduce((s, b) => s + b.fitxes.length, 0)} paraules</p>
             </div>
             <BlocGrid
