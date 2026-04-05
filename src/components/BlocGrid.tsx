@@ -1,6 +1,7 @@
 import { type Bloc } from "@/data/blocksData";
 import { type VideoSlot } from "@/hooks/useVideoBlocs";
 import { VideoBloc } from "./VideoBloc";
+import { roleplays } from "@/data/roleplayData";
 
 interface BlocGridProps {
   blocs: Bloc[];
