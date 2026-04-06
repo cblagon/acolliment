@@ -4,10 +4,13 @@ export interface DialogueLine {
   emoji?: string;
 }
 
+export type RoleplayLevel = "A1" | "A2" | "B1";
+
 export interface RoleplayData {
   id: string;
   title: string;
   emoji: string;
+  level: RoleplayLevel;
   bgColor1: string;
   bgColor2: string;
   speakerA: { name: string; emoji: string; color: string };
@@ -16,10 +19,12 @@ export interface RoleplayData {
 }
 
 export const roleplays: RoleplayData[] = [
+  // ─── A1 Roleplays ──────────────────────────────────────
   {
-    id: "roleplay-1",
+    id: "roleplay-a1-1",
     title: "Saludar i presentar-se",
     emoji: "👋",
+    level: "A1",
     bgColor1: "#FF6B6B",
     bgColor2: "#FFE66D",
     speakerA: { name: "Laia", emoji: "👧", color: "#E84393" },
@@ -35,27 +40,10 @@ export const roleplays: RoleplayData[] = [
     ],
   },
   {
-    id: "roleplay-2",
-    title: "Anem al mercat!",
-    emoji: "🛒",
-    bgColor1: "#00B894",
-    bgColor2: "#55EFC4",
-    speakerA: { name: "Client", emoji: "🧑", color: "#6C5CE7" },
-    speakerB: { name: "Venedor", emoji: "👨‍🌾", color: "#D63031" },
-    lines: [
-      { speaker: "A", text: "Bon dia! Voldria fruita.", emoji: "🍎" },
-      { speaker: "B", text: "Bon dia! Què voldria?", emoji: "😄" },
-      { speaker: "A", text: "Mig quilo de pomes, si us plau.", emoji: "🍏" },
-      { speaker: "B", text: "Aquí té. Vol alguna cosa més?", emoji: "👍" },
-      { speaker: "A", text: "I un quilo de taronges.", emoji: "🍊" },
-      { speaker: "B", text: "Perfecte! Són tres euros.", emoji: "💰" },
-      { speaker: "A", text: "Aquí té. Gràcies! Adéu!", emoji: "👋" },
-    ],
-  },
-  {
-    id: "roleplay-3",
+    id: "roleplay-a1-2",
     title: "A classe d'educació física",
     emoji: "⚽",
+    level: "A1",
     bgColor1: "#0984E3",
     bgColor2: "#74B9FF",
     speakerA: { name: "Pau", emoji: "🧒", color: "#E17055" },
@@ -71,9 +59,10 @@ export const roleplays: RoleplayData[] = [
     ],
   },
   {
-    id: "roleplay-4",
+    id: "roleplay-a1-3",
     title: "Descrivim com som",
     emoji: "👔",
+    level: "A1",
     bgColor1: "#A29BFE",
     bgColor2: "#DFE6E9",
     speakerA: { name: "Marc", emoji: "👦", color: "#D63031" },
@@ -89,9 +78,10 @@ export const roleplays: RoleplayData[] = [
     ],
   },
   {
-    id: "roleplay-5",
+    id: "roleplay-a1-4",
     title: "Un dia qualsevol",
     emoji: "📅",
+    level: "A1",
     bgColor1: "#FDCB6E",
     bgColor2: "#F8A5C2",
     speakerA: { name: "Júlia", emoji: "👧", color: "#E84393" },
@@ -107,9 +97,10 @@ export const roleplays: RoleplayData[] = [
     ],
   },
   {
-    id: "roleplay-6",
+    id: "roleplay-a1-5",
     title: "Juguem i sortim!",
     emoji: "🎲",
+    level: "A1",
     bgColor1: "#E17055",
     bgColor2: "#FAB1A0",
     speakerA: { name: "Biel", emoji: "🧒", color: "#00B894" },
@@ -124,4 +115,149 @@ export const roleplays: RoleplayData[] = [
       { speaker: "A", text: "Un pi! Anem a veure'l!", emoji: "🌲" },
     ],
   },
+  {
+    id: "roleplay-a1-6",
+    title: "A la meva casa",
+    emoji: "🏠",
+    level: "A1",
+    bgColor1: "#00B894",
+    bgColor2: "#55EFC4",
+    speakerA: { name: "Mireia", emoji: "👧", color: "#6C5CE7" },
+    speakerB: { name: "Hassan", emoji: "👦", color: "#D63031" },
+    lines: [
+      { speaker: "A", text: "Benvingut a casa meva!", emoji: "🏠" },
+      { speaker: "B", text: "Gràcies! Quina casa tan bonica!", emoji: "😊" },
+      { speaker: "A", text: "Aquesta és la cuina.", emoji: "🍳" },
+      { speaker: "B", text: "I aquella porta?", emoji: "🚪" },
+      { speaker: "A", text: "És la meva habitació.", emoji: "🛏️" },
+      { speaker: "B", text: "On és el bany?", emoji: "🚿" },
+      { speaker: "A", text: "Al fons del passadís!", emoji: "👉" },
+    ],
+  },
+
+  // ─── A2 Roleplays ──────────────────────────────────────
+  {
+    id: "roleplay-a2-1",
+    title: "Anem al mercat!",
+    emoji: "🛒",
+    level: "A2",
+    bgColor1: "#00B894",
+    bgColor2: "#55EFC4",
+    speakerA: { name: "Client", emoji: "🧑", color: "#6C5CE7" },
+    speakerB: { name: "Venedor", emoji: "👨‍🌾", color: "#D63031" },
+    lines: [
+      { speaker: "A", text: "Bon dia! Voldria fruita.", emoji: "🍎" },
+      { speaker: "B", text: "Bon dia! Què voldria?", emoji: "😄" },
+      { speaker: "A", text: "Mig quilo de pomes, si us plau.", emoji: "🍏" },
+      { speaker: "B", text: "Aquí té. Vol alguna cosa més?", emoji: "👍" },
+      { speaker: "A", text: "I un quilo de taronges.", emoji: "🍊" },
+      { speaker: "B", text: "Perfecte! Són tres euros.", emoji: "💰" },
+      { speaker: "A", text: "Aquí té. Gràcies! Adéu!", emoji: "👋" },
+    ],
+  },
+  {
+    id: "roleplay-a2-2",
+    title: "Al restaurant",
+    emoji: "🍽️",
+    level: "A2",
+    bgColor1: "#E84393",
+    bgColor2: "#FD79A8",
+    speakerA: { name: "Àlex", emoji: "🧑", color: "#0984E3" },
+    speakerB: { name: "Cambrera", emoji: "👩", color: "#E17055" },
+    lines: [
+      { speaker: "A", text: "Bona tarda! Teniu taula per a dos?", emoji: "🍽️" },
+      { speaker: "B", text: "Sí, seguiu-me, si us plau.", emoji: "😊" },
+      { speaker: "A", text: "Em pot portar la carta?", emoji: "📋" },
+      { speaker: "B", text: "Aquí la té. Què voldrien beure?", emoji: "🥤" },
+      { speaker: "A", text: "Aigua i un suc de taronja.", emoji: "🍊" },
+      { speaker: "B", text: "I per menjar?", emoji: "🤔" },
+      { speaker: "A", text: "De primer, una amanida. De segon, peix.", emoji: "🥗" },
+      { speaker: "B", text: "Molt bé! De postres tenim crema catalana.", emoji: "🍮" },
+      { speaker: "A", text: "Perfecte! El compte, si us plau.", emoji: "🧾" },
+    ],
+  },
+  {
+    id: "roleplay-a2-3",
+    title: "Anem de vacances!",
+    emoji: "🏖️",
+    level: "A2",
+    bgColor1: "#FDCB6E",
+    bgColor2: "#F8A5C2",
+    speakerA: { name: "Sílvia", emoji: "👧", color: "#E84393" },
+    speakerB: { name: "Karim", emoji: "👦", color: "#00B894" },
+    lines: [
+      { speaker: "A", text: "On aniràs de vacances?", emoji: "🏖️" },
+      { speaker: "B", text: "Aniré a la platja amb la família.", emoji: "🌊" },
+      { speaker: "A", text: "Quina sort! I què fareu?", emoji: "😍" },
+      { speaker: "B", text: "Nedarem i farem excursions.", emoji: "🏊" },
+      { speaker: "A", text: "Jo aniré a la muntanya.", emoji: "⛰️" },
+      { speaker: "B", text: "M'encanta la muntanya! Fareu camping?", emoji: "⛺" },
+      { speaker: "A", text: "Sí! Portaré la tenda i el sac de dormir.", emoji: "🎒" },
+      { speaker: "B", text: "Bones vacances, Sílvia!", emoji: "🎉" },
+    ],
+  },
+  {
+    id: "roleplay-a2-4",
+    title: "Parlem dels hobbis",
+    emoji: "🎨",
+    level: "A2",
+    bgColor1: "#A29BFE",
+    bgColor2: "#74B9FF",
+    speakerA: { name: "Laia", emoji: "👧", color: "#6C5CE7" },
+    speakerB: { name: "Youssef", emoji: "👦", color: "#E17055" },
+    lines: [
+      { speaker: "A", text: "Què t'agrada fer al temps lliure?", emoji: "🎨" },
+      { speaker: "B", text: "M'agrada molt dibuixar i llegir.", emoji: "📚" },
+      { speaker: "A", text: "Què llegeixes?", emoji: "🤔" },
+      { speaker: "B", text: "Llegeixo còmics i novel·les.", emoji: "📖" },
+      { speaker: "A", text: "A mi m'encanta cantar i ballar!", emoji: "💃" },
+      { speaker: "B", text: "Cantes bé? Jo toco la guitarra.", emoji: "🎸" },
+      { speaker: "A", text: "Podríem fer música junts!", emoji: "🎵" },
+      { speaker: "B", text: "Bona idea! Quan quedem?", emoji: "📅" },
+    ],
+  },
+  {
+    id: "roleplay-a2-5",
+    title: "A la farmàcia",
+    emoji: "💊",
+    level: "A2",
+    bgColor1: "#00CEC9",
+    bgColor2: "#81ECEC",
+    speakerA: { name: "Nora", emoji: "👧", color: "#D63031" },
+    speakerB: { name: "Farmacèutic", emoji: "👨‍⚕️", color: "#00B894" },
+    lines: [
+      { speaker: "A", text: "Bon dia! Em fa mal el cap.", emoji: "🤕" },
+      { speaker: "B", text: "Des de quan li fa mal?", emoji: "🤔" },
+      { speaker: "A", text: "Des d'ahir al matí.", emoji: "⏰" },
+      { speaker: "B", text: "Té febre o tos?", emoji: "🤒" },
+      { speaker: "A", text: "Una mica de tos, sí.", emoji: "😷" },
+      { speaker: "B", text: "Li recomano aquest medicament.", emoji: "💊" },
+      { speaker: "A", text: "Gràcies! Quant costa?", emoji: "💰" },
+      { speaker: "B", text: "Cinc euros. Que es millori!", emoji: "😊" },
+    ],
+  },
+  {
+    id: "roleplay-a2-6",
+    title: "Quin temps fa?",
+    emoji: "🌦️",
+    level: "A2",
+    bgColor1: "#636E72",
+    bgColor2: "#B2BEC3",
+    speakerA: { name: "Marta", emoji: "👧", color: "#0984E3" },
+    speakerB: { name: "Rachid", emoji: "👦", color: "#E84393" },
+    lines: [
+      { speaker: "A", text: "Quin temps fa avui?", emoji: "🌤️" },
+      { speaker: "B", text: "Fa sol però una mica de fred.", emoji: "☀️" },
+      { speaker: "A", text: "Porta jaqueta per si refresca.", emoji: "🧥" },
+      { speaker: "B", text: "Demà diuen que plourà.", emoji: "🌧️" },
+      { speaker: "A", text: "Portaré el paraigua!", emoji: "☂️" },
+      { speaker: "B", text: "A la teva ciutat plou molt?", emoji: "🤔" },
+      { speaker: "A", text: "No, a Barcelona fa molt sol!", emoji: "😎" },
+      { speaker: "B", text: "M'agrada més el sol que la pluja.", emoji: "🌈" },
+    ],
+  },
 ];
+
+export function getRoleplaysByLevel(level: RoleplayLevel): RoleplayData[] {
+  return roleplays.filter((r) => r.level === level);
+}
