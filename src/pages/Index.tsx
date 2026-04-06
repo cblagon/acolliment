@@ -34,7 +34,7 @@ const levelLabels: Record<Level, string> = {
 const Index = () => {
   const [selectedLevel, setSelectedLevel] = useState<Level>("A1");
   const { blocs, addBloc, updateBloc } = useBlocs(selectedLevel);
-  const { videoSlots, setVideoUrl } = useVideoBlocs();
+  const { videoSlots, setVideoUrl } = useVideoBlocs(selectedLevel);
   const { lang, setLang } = useLanguage();
   const [view, setView] = useState<View>({ type: "grid" });
 
