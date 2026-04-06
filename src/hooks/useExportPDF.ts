@@ -11,6 +11,9 @@ const LANG_NAMES: Record<LangCode, string> = {
   ar: "العربية",
   wo: "Wolof",
   uk: "Українська",
+  mnk: "Mandinka",
+  it: "Italiano",
+  el: "Ελληνικά",
 };
 
 export function exportAllToPDF(blocs: Bloc[], lang: LangCode) {
