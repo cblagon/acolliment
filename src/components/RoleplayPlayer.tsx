@@ -16,28 +16,43 @@ export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
   const synthRef = useRef(typeof window !== "undefined" ? window.speechSynthesis : null);
   const voiceRef = useRef<SpeechSynthesisVoice | null>(null);
 
-  // Find best Catalan voice
+  // Find best Catalan voice — retry until found
   useEffect(() => {
     const findVoice = () => {
       const voices = speechSynthesis.getVoices();
-      voiceRef.current = selectBestVoice(voices);
+      if (voices.length > 0) {
+        voiceRef.current = selectBestVoice(voices);
+      }
     };
     findVoice();
     speechSynthesis.addEventListener("voiceschanged", findVoice);
-    return () => speechSynthesis.removeEventListener("voiceschanged", findVoice);
+    // Some browsers need a small delay for voices to load
+    const retryTimer = setTimeout(findVoice, 500);
+    const retryTimer2 = setTimeout(findVoice, 1500);
+    return () => {
+      speechSynthesis.removeEventListener("voiceschanged", findVoice);
+      clearTimeout(retryTimer);
+      clearTimeout(retryTimer2);
+    };
   }, []);
 
   const speak = useCallback((text: string) => {
     if (!soundOn || !synthRef.current) return;
     synthRef.current.cancel();
+
+    // Re-check voices just before speaking in case they loaded late
+    if (!voiceRef.current) {
+      const voices = speechSynthesis.getVoices();
+      voiceRef.current = selectBestVoice(voices);
+    }
+
     const utterance = new SpeechSynthesisUtterance(text);
     if (voiceRef.current) {
       utterance.voice = voiceRef.current;
     }
-    utterance.lang = voiceRef.current?.lang.startsWith("ca")
-      ? voiceRef.current.lang
-      : "ca-ES";
-    utterance.rate = 0.82;
+    // Always force ca-ES to ensure Catalan pronunciation
+    utterance.lang = "ca-ES";
+    utterance.rate = 0.78;
     utterance.pitch = 1.0;
     synthRef.current.speak(utterance);
   }, [soundOn]);
