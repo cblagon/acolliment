@@ -44,15 +44,20 @@ export function useTTS() {
 
   const speak = useCallback((text: string) => {
     speechSynthesis.cancel();
+
+    // Re-check voices just before speaking
+    if (!bestVoice.current) {
+      const voices = speechSynthesis.getVoices();
+      bestVoice.current = selectBestVoice(voices);
+    }
+
     const utter = new SpeechSynthesisUtterance(text);
     if (bestVoice.current) {
       utter.voice = bestVoice.current;
     }
-    // Use the voice's own lang if it's Catalan, otherwise force ca-ES
-    utter.lang = bestVoice.current?.lang.startsWith("ca")
-      ? bestVoice.current.lang
-      : "ca-ES";
-    utter.rate = 0.82;
+    // Always force ca-ES for correct Catalan pronunciation
+    utter.lang = "ca-ES";
+    utter.rate = 0.78;
     utter.pitch = 1.0;
     speechSynthesis.speak(utter);
   }, []);
