@@ -1,17 +1,21 @@
 import { useState } from "react";
 
-export type LangCode = "en" | "es" | "ar" | "wo" | "uk" | "fr" | "mnk" | "it" | "el";
+export type LangCode = "en" | "es" | "ar" | "wo" | "uk" | "fr" | "mnk" | "it" | "el" | "ur" | "ptBR" | "pt" | "ha";
 
 export const LANGUAGES: Record<LangCode, { name: string; flag: string; nativeName: string }> = {
   es: { name: "Castellà", flag: "🇪🇸", nativeName: "Español" },
   en: { name: "Anglès", flag: "🇬🇧", nativeName: "English" },
   fr: { name: "Francès", flag: "🇫🇷", nativeName: "Français" },
   ar: { name: "Àrab", flag: "🇲🇦", nativeName: "العربية" },
+  ur: { name: "Urdú", flag: "🇵🇰", nativeName: "اردو" },
   wo: { name: "Wolof", flag: "🇸🇳", nativeName: "Wolof" },
   uk: { name: "Ucraïnès", flag: "🇺🇦", nativeName: "Українська" },
   mnk: { name: "Mandinga", flag: "🇬🇲", nativeName: "Mandinka" },
   it: { name: "Italià", flag: "🇮🇹", nativeName: "Italiano" },
   el: { name: "Grec", flag: "🇬🇷", nativeName: "Ελληνικά" },
+  ptBR: { name: "Brasiler", flag: "🇧🇷", nativeName: "Português (Brasil)" },
+  pt: { name: "Portuguès", flag: "🇵🇹", nativeName: "Português" },
+  ha: { name: "Hassaniya", flag: "🇲🇷", nativeName: "حسانية" },
 };
 
 export function useLanguage() {
