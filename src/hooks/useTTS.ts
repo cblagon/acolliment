@@ -43,6 +43,7 @@ export function useTTS() {
   }, []);
 
   const speak = useCallback((text: string) => {
+    // Cancel any ongoing speech
     speechSynthesis.cancel();
 
     // Re-check voices just before speaking
@@ -51,15 +52,20 @@ export function useTTS() {
       bestVoice.current = selectBestVoice(voices);
     }
 
-    const utter = new SpeechSynthesisUtterance(text);
-    if (bestVoice.current) {
-      utter.voice = bestVoice.current;
-    }
-    // Always force ca-ES for correct Catalan pronunciation
-    utter.lang = "ca-ES";
-    utter.rate = 0.78;
-    utter.pitch = 1.0;
-    speechSynthesis.speak(utter);
+    // Small delay after cancel() to work around Chrome bug
+    // where speak() is silently ignored after an immediate cancel()
+    const doSpeak = () => {
+      const utter = new SpeechSynthesisUtterance(text);
+      if (bestVoice.current) {
+        utter.voice = bestVoice.current;
+      }
+      utter.lang = "ca-ES";
+      utter.rate = 0.78;
+      utter.pitch = 1.0;
+      speechSynthesis.speak(utter);
+    };
+
+    setTimeout(doSpeak, 100);
   }, []);
 
   return speak;
