@@ -18,6 +18,10 @@ const LANG_NAMES: Record<LangCode, string> = {
   ptBR: "Português (Brasil)",
   pt: "Português",
   ha: "حسانية",
+  zh: "中文",
+  hi: "हिन्दी",
+  snk: "Soninkanxaane",
+  ro: "Română",
 };
 
 export function exportAllToPDF(blocs: Bloc[], lang: LangCode) {

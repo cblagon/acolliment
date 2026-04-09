@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export type LangCode = "en" | "es" | "ar" | "wo" | "uk" | "fr" | "mnk" | "it" | "el" | "ur" | "ptBR" | "pt" | "ha";
+export type LangCode = "en" | "es" | "ar" | "wo" | "uk" | "fr" | "mnk" | "it" | "el" | "ur" | "ptBR" | "pt" | "ha" | "zh" | "hi" | "snk" | "ro";
 
 export const LANGUAGES: Record<LangCode, { name: string; flag: string; nativeName: string }> = {
   es: { name: "Castellà", flag: "🇪🇸", nativeName: "Español" },
@@ -16,6 +16,10 @@ export const LANGUAGES: Record<LangCode, { name: string; flag: string; nativeNam
   ptBR: { name: "Brasiler", flag: "🇧🇷", nativeName: "Português (Brasil)" },
   pt: { name: "Portuguès", flag: "🇵🇹", nativeName: "Português" },
   ha: { name: "Hassaniya", flag: "🇲🇷", nativeName: "حسانية" },
+  zh: { name: "Xinès", flag: "🇨🇳", nativeName: "中文" },
+  hi: { name: "Hindi", flag: "🇮🇳", nativeName: "हिन्दी" },
+  snk: { name: "Soninké", flag: "🇲🇱", nativeName: "Soninkanxaane" },
+  ro: { name: "Romanès", flag: "🇷🇴", nativeName: "Română" },
 };
 
 export function useLanguage() {
