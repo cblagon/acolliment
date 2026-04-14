@@ -1,5 +1,5 @@
 // Translations keyed by Catalan word → { langCode: translation }
-// Languages: es, en, fr, ar, wo, uk, mnk, it, el, ur, ptBR, pt, ha, zh, hi, snk, ro, srk
+// Languages: es, en, fr, ar, wo, uk, mnk, it, el, ur, ptBR, pt, ha, zh, hi, snk, ro, srk, srk
 
 export const translations: Record<string, Record<string, string>> = {
   // === Salutacions ===
