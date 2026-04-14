@@ -22,6 +22,7 @@ const LANG_NAMES: Record<LangCode, string> = {
   hi: "हिन्दी",
   snk: "Soninkanxaane",
   ro: "Română",
+  srk: "Saranxulle",
 };
 
 export function exportAllToPDF(blocs: Bloc[], lang: LangCode) {
