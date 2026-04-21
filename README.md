@@ -1,3 +1,3 @@
-# Welcome to your Lovable project
+#Benvingut al meu projecte
 
-TODO: Document your project here
+TODO: Projecte d'acolliment per alumnes nouvinguts
