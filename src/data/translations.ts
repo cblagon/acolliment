@@ -2,7 +2,7 @@
 // Languages: es, en, fr, ar, wo, uk, mnk, it, el, ur, ptBR, pt, ha, zh, hi, snk, ro, srk
 
 export const translations: Record<string, Record<string, string>> = {
-  // === Salutacions ===
+  // === Salutacions diferents idiomes ===
   "Hola": { es: "Hola", en: "Hello", fr: "Bonjour", ar: "مرحبا", wo: "Na nga def", uk: "Привіт", mnk: "I be di", it: "Ciao", el: "Γεια σου", ur: "ہیلو", ptBR: "Olá", pt: "Olá", ha: "أهلاً", zh: "你好", hi: "नमस्ते", snk: "An be", srk: "An be", ro: "Bună" },
   "Bon dia": { es: "Buenos días", en: "Good morning", fr: "Bonjour", ar: "صباح الخير", wo: "Jamm nga fanaan", uk: "Доброго ранку", mnk: "I suba di", it: "Buongiorno", el: "Καλημέρα", ur: "صبح بخیر", ptBR: "Bom dia", pt: "Bom dia", ha: "صباح الخير", zh: "早上好", hi: "सुप्रभात", snk: "An xiire suba", srk: "An xiire suba", ro: "Bună dimineața" },
   "Bona tarda": { es: "Buenas tardes", en: "Good afternoon", fr: "Bon après-midi", ar: "مساء الخير", wo: "Naka ngon si", uk: "Добрий день", mnk: "I tlika di", it: "Buon pomeriggio", el: "Καλό απόγευμα", ur: "شام بخیر", ptBR: "Boa tarde", pt: "Boa tarde", ha: "مساء الخير", zh: "下午好", hi: "शुभ दोपहर", snk: "An xiire tika", srk: "An xiire tika", ro: "Bună ziua" },
