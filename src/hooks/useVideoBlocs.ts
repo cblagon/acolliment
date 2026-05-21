@@ -12,17 +12,34 @@ export interface VideoSlot {
 
 const STORAGE_KEY = "apren-catala-videos";
 
+// Default pre-loaded videos per slot id
+const DEFAULT_VIDEOS: Record<string, string> = {
+  "video-A1-salutacions": "/videos/salutacions.mp4",
+};
+
 // Generate video slots dynamically based on level roleplays
 function buildSlots(level: RoleplayLevel): Omit<VideoSlot, "videoUrl">[] {
   const levelRoleplays = getRoleplaysByLevel(level);
-  // Place a video after every 2 blocs (positions 2, 4, 6, 8, ...)
-  return levelRoleplays.map((rp, i) => ({
+  const slots: Omit<VideoSlot, "videoUrl">[] = levelRoleplays.map((rp, i) => ({
     id: `video-${level}-${i + 1}`,
     afterBlocIndex: (i + 1) * 2,
     title: rp.title,
     description: `Roleplay en català: ${rp.title}`,
     roleplayId: rp.id,
   }));
+
+  // Special slot just after "Salutacions" (1r bloc) a A1, amb vídeo precarregat
+  if (level === "A1") {
+    slots.unshift({
+      id: "video-A1-salutacions",
+      afterBlocIndex: 1,
+      title: "Salutacions en català",
+      description: "Vídeo pràctic amb salutacions quotidianes",
+      roleplayId: "",
+    });
+  }
+
+  return slots;
 }
 
 export function useVideoBlocs(level: RoleplayLevel = "A1") {
