@@ -54,7 +54,10 @@ export function useVideoBlocs(level: RoleplayLevel = "A1") {
 
   const slots = useMemo(() => {
     const defs = buildSlots(level);
-    return defs.map((d) => ({ ...d, videoUrl: customUrls[d.id] ?? null }));
+    return defs.map((d) => ({
+      ...d,
+      videoUrl: customUrls[d.id] ?? DEFAULT_VIDEOS[d.id] ?? null,
+    }));
   }, [level, customUrls]);
 
   const setVideoUrl = useCallback((id: string, url: string | null) => {
