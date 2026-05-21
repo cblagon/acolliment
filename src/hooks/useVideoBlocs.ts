@@ -28,11 +28,11 @@ function buildSlots(level: RoleplayLevel): Omit<VideoSlot, "videoUrl">[] {
     roleplayId: rp.id,
   }));
 
-  // Special slot just after "Salutacions" (1r bloc) a A1, amb vídeo precarregat
+  // Special slot just després del 1r roleplay (al costat del vídeo existent), amb vídeo precarregat
   if (level === "A1") {
-    slots.unshift({
+    slots.splice(1, 0, {
       id: "video-A1-salutacions",
-      afterBlocIndex: 1,
+      afterBlocIndex: 2,
       title: "Salutacions en català",
       description: "Vídeo pràctic amb salutacions quotidianes",
       roleplayId: "",
