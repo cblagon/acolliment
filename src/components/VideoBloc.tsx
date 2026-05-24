@@ -114,7 +114,7 @@ export function VideoBloc({ index, videoUrl, title, description, onVideoChange, 
 
 
         {/* Info area */}
-        <div className="sm:w-1/2 p-5 sm:p-6 flex flex-col justify-center gap-3">
+        <div className={`${showBoth ? "lg:w-1/3" : "lg:w-1/2"} p-5 sm:p-6 flex flex-col justify-center gap-3`}>
           <div className="flex items-center gap-2">
             <Film className="w-5 h-5 text-primary" />
             <span className="text-xs font-bold uppercase tracking-wider text-primary">
