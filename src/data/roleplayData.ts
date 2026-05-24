@@ -134,6 +134,25 @@ export const roleplays: RoleplayData[] = [
       { speaker: "A", text: "Al fons del passadís!", emoji: "👉" },
     ],
   },
+  {
+    id: "roleplay-a1-7",
+    title: "Què portes avui?",
+    emoji: "👕",
+    level: "A1",
+    bgColor1: "#FD79A8",
+    bgColor2: "#FDCB6E",
+    speakerA: { name: "Clara", emoji: "👧", color: "#E84393" },
+    speakerB: { name: "Yusuf", emoji: "👦", color: "#0984E3" },
+    lines: [
+      { speaker: "A", text: "Què portes avui?", emoji: "👀" },
+      { speaker: "B", text: "Porto una samarreta vermella.", emoji: "👕" },
+      { speaker: "A", text: "I uns pantalons blaus?", emoji: "👖" },
+      { speaker: "B", text: "Sí! I unes sabates blanques.", emoji: "👟" },
+      { speaker: "A", text: "Jo porto un vestit groc.", emoji: "👗" },
+      { speaker: "B", text: "Tens fred? Porta una jaqueta!", emoji: "🧥" },
+      { speaker: "A", text: "Bona idea! Gràcies!", emoji: "😊" },
+    ],
+  },
 
   // ─── A2 Roleplays ──────────────────────────────────────
   {
