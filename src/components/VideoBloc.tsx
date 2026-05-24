@@ -16,7 +16,7 @@ export function VideoBloc({ index, videoUrl, title, description, onVideoChange, 
   const fileRef = useRef<HTMLInputElement>(null);
   const [playing, setPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [useCustomVideo, setUseCustomVideo] = useState(!roleplayData && !!videoUrl);
+  const [useCustomVideo, setUseCustomVideo] = useState(!!videoUrl);
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
