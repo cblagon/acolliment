@@ -126,14 +126,6 @@ export function VideoBloc({ index, videoUrl, title, description, onVideoChange, 
             <span className="px-2.5 py-1 rounded-full bg-accent/20 text-accent-foreground text-xs font-bold">
               👥 15-16 anys
             </span>
-            {showRoleplay && (
-              <button
-                onClick={() => fileRef.current?.click()}
-                className="px-2.5 py-1 rounded-full bg-muted text-muted-foreground text-xs font-bold hover:bg-muted/80 transition-colors"
-              >
-                📤 Pujar vídeo propi
-              </button>
-            )}
           </div>
         </div>
       </div>
