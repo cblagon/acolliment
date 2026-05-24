@@ -44,57 +44,64 @@ export function VideoBloc({ index, videoUrl, title, description, onVideoChange, 
   };
 
   const showCustomVideo = videoUrl && useCustomVideo;
-  const showRoleplay = roleplayData && !showCustomVideo;
+  const showRoleplay = !!roleplayData;
+  const showBoth = showCustomVideo && showRoleplay;
+
+  const VideoPanel = (
+    <div className="relative aspect-video bg-muted/50 flex items-center justify-center overflow-hidden">
+      <video
+        ref={videoRef}
+        src={videoUrl ?? undefined}
+        className="w-full h-full object-cover"
+        onEnded={() => setPlaying(false)}
+        playsInline
+      />
+      {!playing && (
+        <button
+          onClick={togglePlay}
+          className="absolute inset-0 flex items-center justify-center bg-black/30 hover:bg-black/20 transition-colors"
+        >
+          <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center shadow-xl">
+            <Play className="w-7 h-7 text-primary-foreground ml-1" />
+          </div>
+        </button>
+      )}
+      {playing && <button onClick={togglePlay} className="absolute inset-0" />}
+      <button
+        onClick={handleRemove}
+        className="absolute top-2 right-2 p-1.5 rounded-full bg-destructive/80 text-white hover:bg-destructive transition-colors z-10"
+      >
+        <X className="w-4 h-4" />
+      </button>
+    </div>
+  );
 
   return (
     <div className="col-span-full rounded-2xl overflow-hidden border-2 border-primary/20 bg-card shadow-lg animate-reveal-up">
-      <div className="flex flex-col sm:flex-row">
-        {/* Video / Roleplay area */}
-        <div className="relative sm:w-1/2 aspect-video bg-muted/50 flex items-center justify-center">
-          {showCustomVideo ? (
+      <div className="flex flex-col lg:flex-row">
+        {/* Media area */}
+        <div className={`${showBoth ? "lg:w-2/3" : "lg:w-1/2"} flex flex-col sm:flex-row`}>
+          {showBoth ? (
             <>
-              <video
-                ref={videoRef}
-                src={videoUrl}
-                className="w-full h-full object-cover"
-                onEnded={() => setPlaying(false)}
-                playsInline
-              />
-              {!playing && (
-                <button
-                  onClick={togglePlay}
-                  className="absolute inset-0 flex items-center justify-center bg-black/30 hover:bg-black/20 transition-colors"
-                >
-                  <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center shadow-xl">
-                    <Play className="w-7 h-7 text-primary-foreground ml-1" />
-                  </div>
-                </button>
-              )}
-              {playing && (
-                <button
-                  onClick={togglePlay}
-                  className="absolute inset-0"
-                />
-              )}
-              <button
-                onClick={handleRemove}
-                className="absolute top-2 right-2 p-1.5 rounded-full bg-destructive/80 text-white hover:bg-destructive transition-colors z-10"
-              >
-                <X className="w-4 h-4" />
-              </button>
+              <div className="sm:w-1/2"><RoleplayPlayer data={roleplayData!} /></div>
+              <div className="sm:w-1/2">{VideoPanel}</div>
             </>
+          ) : showCustomVideo ? (
+            <div className="w-full">{VideoPanel}</div>
           ) : showRoleplay ? (
-            <RoleplayPlayer data={roleplayData} />
+            <div className="w-full aspect-video"><RoleplayPlayer data={roleplayData!} /></div>
           ) : (
-            <button
-              onClick={() => fileRef.current?.click()}
-              className="flex flex-col items-center gap-3 p-8 text-muted-foreground hover:text-primary transition-colors"
-            >
-              <div className="w-16 h-16 rounded-full border-2 border-dashed border-current flex items-center justify-center">
-                <Upload className="w-7 h-7" />
-              </div>
-              <span className="text-sm font-semibold">Puja un vídeo MP4</span>
-            </button>
+            <div className="w-full aspect-video bg-muted/50 flex items-center justify-center">
+              <button
+                onClick={() => fileRef.current?.click()}
+                className="flex flex-col items-center gap-3 p-8 text-muted-foreground hover:text-primary transition-colors"
+              >
+                <div className="w-16 h-16 rounded-full border-2 border-dashed border-current flex items-center justify-center">
+                  <Upload className="w-7 h-7" />
+                </div>
+                <span className="text-sm font-semibold">Puja un vídeo MP4</span>
+              </button>
+            </div>
           )}
           <input
             ref={fileRef}
@@ -104,6 +111,7 @@ export function VideoBloc({ index, videoUrl, title, description, onVideoChange, 
             onChange={handleFile}
           />
         </div>
+
 
         {/* Info area */}
         <div className="sm:w-1/2 p-5 sm:p-6 flex flex-col justify-center gap-3">
