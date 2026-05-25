@@ -15,7 +15,6 @@ const STORAGE_KEY = "apren-catala-videos";
 // Default pre-loaded videos per slot id
 const DEFAULT_VIDEOS: Record<string, string> = {
   "video-A1-salutacions": "/videos/salutacions.mp4",
-  "video-A1-1": "/videos/VID-20260506-WA0009.mp4",
   "video-A1-3": "/videos/que_portes.mp4",
 };
 
