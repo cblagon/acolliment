@@ -60,7 +60,7 @@ export const roleplays: RoleplayData[] = [
   },
   {
     id: "roleplay-a1-3",
-    title: "Descrivim com som",
+    title: "Descrivim com anem vestits",
     emoji: "👔",
     level: "A1",
     bgColor1: "#A29BFE",
