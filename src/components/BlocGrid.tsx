@@ -1,7 +1,9 @@
 import { type Bloc } from "@/data/blocksData";
 import { type VideoSlot } from "@/hooks/useVideoBlocs";
+import { type LangCode } from "@/hooks/useLanguage";
 import { VideoBloc } from "./VideoBloc";
 import { roleplays } from "@/data/roleplayData";
+import { t } from "@/i18n/ui";
 
 interface BlocGridProps {
   blocs: Bloc[];
@@ -9,9 +11,11 @@ interface BlocGridProps {
   onAddNew: () => void;
   videoSlots: VideoSlot[];
   onVideoChange: (id: string, url: string | null) => void;
+  helpLang: LangCode;
+  targetLang: LangCode;
 }
 
-export function BlocGrid({ blocs, onSelect, onAddNew, videoSlots, onVideoChange }: BlocGridProps) {
+export function BlocGrid({ blocs, onSelect, onAddNew, videoSlots, onVideoChange, helpLang, targetLang }: BlocGridProps) {
   // Build interleaved list of blocs and video slots
   const items: Array<{ type: "bloc"; bloc: Bloc; index: number } | { type: "video"; slot: VideoSlot }> = [];
 
@@ -20,12 +24,13 @@ export function BlocGrid({ blocs, onSelect, onAddNew, videoSlots, onVideoChange 
 
   blocs.forEach((bloc, i) => {
     items.push({ type: "bloc", bloc, index: i });
-    // Insert video slot after this bloc if it matches
     while (videoIdx < sortedSlots.length && sortedSlots[videoIdx].afterBlocIndex === i + 1) {
       items.push({ type: "video", slot: sortedSlots[videoIdx] });
       videoIdx++;
     }
   });
+
+  const showCatalanOnlyNote = targetLang !== "ca";
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -42,6 +47,7 @@ export function BlocGrid({ blocs, onSelect, onAddNew, videoSlots, onVideoChange 
               description={slot.description}
               onVideoChange={(url) => onVideoChange(slot.id, url)}
               roleplayData={roleplays.find((r) => r.id === slot.roleplayId)}
+              catalanOnlyNote={showCatalanOnlyNote ? t(helpLang, "videoCatalanOnly") : undefined}
             />
           );
         }
@@ -55,7 +61,7 @@ export function BlocGrid({ blocs, onSelect, onAddNew, videoSlots, onVideoChange 
           >
             <span className="text-5xl drop-shadow-sm transition-transform duration-300 group-hover:scale-110">{bloc.emoji}</span>
             <span className="font-bold text-base leading-tight text-center">{bloc.nom}</span>
-            <span className="text-xs opacity-80">{bloc.fitxes.length} fitxes</span>
+            <span className="text-xs opacity-80">{bloc.fitxes.length} {t(helpLang, "fitxesCount")}</span>
           </button>
         );
       })}
@@ -65,8 +71,9 @@ export function BlocGrid({ blocs, onSelect, onAddNew, videoSlots, onVideoChange 
         style={{ animationDelay: `${blocs.length * 60}ms` }}
       >
         <span className="text-4xl">➕</span>
-        <span className="font-bold text-sm">Nou Bloc</span>
+        <span className="font-bold text-sm">{t(helpLang, "newBloc")}</span>
       </button>
     </div>
   );
 }
+

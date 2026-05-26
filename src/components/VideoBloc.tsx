@@ -10,9 +10,10 @@ interface VideoBlocProps {
   description: string;
   onVideoChange: (url: string | null) => void;
   roleplayData?: RoleplayData;
+  catalanOnlyNote?: string;
 }
 
-export function VideoBloc({ index, videoUrl, title, description, onVideoChange, roleplayData }: VideoBlocProps) {
+export function VideoBloc({ index, videoUrl, title, description, onVideoChange, roleplayData, catalanOnlyNote }: VideoBlocProps) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [playing, setPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -134,6 +135,11 @@ export function VideoBloc({ index, videoUrl, title, description, onVideoChange, 
             <span className="px-2.5 py-1 rounded-full bg-accent/20 text-accent-foreground text-xs font-bold">
               👥 15-16 anys
             </span>
+            {catalanOnlyNote && (
+              <span className="px-2.5 py-1 rounded-full bg-muted text-muted-foreground text-xs font-semibold">
+                🇪🇸 {catalanOnlyNote}
+              </span>
+            )}
           </div>
         </div>
       </div>

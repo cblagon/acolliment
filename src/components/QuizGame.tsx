@@ -1,13 +1,15 @@
 import { useState, useCallback, useMemo } from "react";
 import { type Bloc, type Fitxa } from "@/data/blocksData";
 import { type LangCode } from "@/hooks/useLanguage";
-import { getTraduccio } from "@/data/translations";
+import { getTraduccio, getWord } from "@/data/translations";
 import { useTTS } from "@/hooks/useTTS";
-import { ArrowLeft, Volume2, RotateCcw, CheckCircle2, XCircle } from "lucide-react";
+import { t } from "@/i18n/ui";
+import { ArrowLeft, Volume2, VolumeX, RotateCcw, CheckCircle2, XCircle } from "lucide-react";
 
 interface QuizGameProps {
   bloc: Bloc;
-  lang: LangCode;
+  targetLang: LangCode;
+  helpLang: LangCode;
   onBack: () => void;
 }
 
@@ -26,8 +28,9 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-export function QuizGame({ bloc, lang, onBack }: QuizGameProps) {
+export function QuizGame({ bloc, targetLang, helpLang, onBack }: QuizGameProps) {
   const speak = useTTS();
+  const ttsOk = speak.isAvailable(targetLang);
   const [questions, setQuestions] = useState(() => shuffle(bloc.fitxes));
   const [qi, setQi] = useState(0);
   const [score, setScore] = useState({ correct: 0, wrong: 0 });
@@ -49,7 +52,7 @@ export function QuizGame({ bloc, lang, onBack }: QuizGameProps) {
       setSelected(opt.paraula);
       const correct = opt.paraula === current.paraula;
       if (correct) {
-        speak(current.paraula);
+        if (ttsOk) speak(getWord(current.paraula, targetLang), targetLang);
         setScore((s) => ({ ...s, correct: s.correct + 1 }));
       } else {
         setScore((s) => ({ ...s, wrong: s.wrong + 1 }));
@@ -64,7 +67,7 @@ export function QuizGame({ bloc, lang, onBack }: QuizGameProps) {
         }
       }, 1200);
     },
-    [selected, current, qi, questions.length, speak]
+    [selected, current, qi, questions.length, speak, ttsOk, targetLang]
   );
 
   const restart = () => {
@@ -82,43 +85,43 @@ export function QuizGame({ bloc, lang, onBack }: QuizGameProps) {
   if (finished) {
     return (
       <div className="flex flex-col items-center gap-6 animate-reveal-up max-w-2xl mx-auto">
-        <h2 className="text-3xl font-extrabold">🎉 Molt bé!</h2>
+        <h2 className="text-3xl font-extrabold">🎉 {t(helpLang, "veryGood")}</h2>
         <div className="text-6xl">{pct >= 80 ? "🌟" : pct >= 50 ? "👏" : "💪"}</div>
         <div className="text-center">
-          <p className="text-2xl font-bold">{pct}% correcte</p>
+          <p className="text-2xl font-bold">{pct}{t(helpLang, "percentCorrect")}</p>
           <p className="text-muted-foreground mt-1">
-            ✅ {score.correct} encerts · ❌ {score.wrong} errors
+            ✅ {score.correct} {t(helpLang, "correct")} · ❌ {score.wrong} {t(helpLang, "wrong")}
           </p>
         </div>
 
         {/* Results table */}
         <div className="w-full rounded-2xl border border-border overflow-hidden bg-card shadow-md">
           <div className="px-4 py-3 bg-muted/50 border-b border-border">
-            <h3 className="font-bold text-foreground text-sm">📋 Resum de resultats</h3>
+            <h3 className="font-bold text-foreground text-sm">📋 {t(helpLang, "summary")}</h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border bg-muted/30">
                   <th className="px-3 py-2 text-left font-semibold text-muted-foreground"></th>
-                  <th className="px-3 py-2 text-left font-semibold text-muted-foreground">Paraula</th>
-                  <th className="px-3 py-2 text-left font-semibold text-muted-foreground">Traducció</th>
-                  <th className="px-3 py-2 text-center font-semibold text-muted-foreground">Resultat</th>
+                  <th className="px-3 py-2 text-left font-semibold text-muted-foreground">{t(helpLang, "word")}</th>
+                  <th className="px-3 py-2 text-left font-semibold text-muted-foreground">{t(helpLang, "translation")}</th>
+                  <th className="px-3 py-2 text-center font-semibold text-muted-foreground">{t(helpLang, "result")}</th>
                 </tr>
               </thead>
               <tbody>
                 {answers.map((a, i) => (
                   <tr key={i} className={`border-b border-border/50 last:border-0 ${a.correct ? "" : "bg-destructive/5"}`}>
                     <td className="px-3 py-2 text-lg">{a.fitxa.emoji}</td>
-                    <td className="px-3 py-2 font-bold text-foreground">{a.fitxa.paraula}</td>
-                    <td className="px-3 py-2 text-muted-foreground">{getTraduccio(a.fitxa.paraula, lang)}</td>
+                    <td className="px-3 py-2 font-bold text-foreground">{getWord(a.fitxa.paraula, targetLang)}</td>
+                    <td className="px-3 py-2 text-muted-foreground">{getTraduccio(a.fitxa.paraula, helpLang)}</td>
                     <td className="px-3 py-2 text-center">
                       {a.correct ? (
                         <CheckCircle2 className="w-5 h-5 text-accent inline-block" />
                       ) : (
                         <div className="flex flex-col items-center gap-0.5">
                           <XCircle className="w-5 h-5 text-destructive inline-block" />
-                          <span className="text-xs text-destructive">{a.chosen}</span>
+                          <span className="text-xs text-destructive">{getWord(a.chosen, targetLang)}</span>
                         </div>
                       )}
                     </td>
@@ -131,10 +134,10 @@ export function QuizGame({ bloc, lang, onBack }: QuizGameProps) {
 
         <div className="flex gap-3">
           <button onClick={restart} className="flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-bold shadow-md hover:shadow-lg transition-all active:scale-95">
-            <RotateCcw className="w-5 h-5" /> Repetir
+            <RotateCcw className="w-5 h-5" /> {t(helpLang, "retry")}
           </button>
           <button onClick={onBack} className="flex items-center gap-2 px-6 py-3 rounded-xl bg-muted text-foreground font-bold hover:bg-muted/80 transition-all active:scale-95">
-            <ArrowLeft className="w-5 h-5" /> Tornar
+            <ArrowLeft className="w-5 h-5" /> {t(helpLang, "back")}
           </button>
         </div>
       </div>
@@ -147,9 +150,9 @@ export function QuizGame({ bloc, lang, onBack }: QuizGameProps) {
       <div className="flex items-center justify-between w-full max-w-lg">
         <button onClick={onBack} className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors active:scale-95">
           <ArrowLeft className="w-5 h-5" />
-          <span className="font-semibold text-sm">Tornar</span>
+          <span className="font-semibold text-sm">{t(helpLang, "back")}</span>
         </button>
-        <h2 className="text-lg font-extrabold">🎮 Joc — {bloc.nom}</h2>
+        <h2 className="text-lg font-extrabold">🎮 {t(helpLang, "game")} — {bloc.nom}</h2>
         <span className="text-sm font-semibold text-muted-foreground">{qi + 1}/{questions.length}</span>
       </div>
 
@@ -162,13 +165,15 @@ export function QuizGame({ bloc, lang, onBack }: QuizGameProps) {
       {/* Question */}
       <div className="flex flex-col items-center gap-2">
         <span className="text-7xl drop-shadow-sm">{current.emoji}</span>
-        <p className="text-muted-foreground text-sm mt-1">{getTraduccio(current.paraula, lang)}</p>
-        <p className="text-muted-foreground text-xs">Quina paraula és?</p>
+        <p className="text-muted-foreground text-sm mt-1">{getTraduccio(current.paraula, helpLang)}</p>
+        <p className="text-muted-foreground text-xs">{t(helpLang, "whichWord")}</p>
         <button
-          onClick={() => speak(current.paraula)}
-          className={`p-2 rounded-full ${bloc.color} text-white shadow active:scale-90 transition-all mt-1`}
+          onClick={() => ttsOk && speak(getWord(current.paraula, targetLang), targetLang)}
+          disabled={!ttsOk}
+          title={ttsOk ? "" : t(helpLang, "ttsUnavailable")}
+          className={`p-2 rounded-full ${bloc.color} text-white shadow active:scale-90 transition-all mt-1 disabled:opacity-40 disabled:cursor-not-allowed`}
         >
-          <Volume2 className="w-5 h-5" />
+          {ttsOk ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
         </button>
       </div>
 
@@ -190,7 +195,7 @@ export function QuizGame({ bloc, lang, onBack }: QuizGameProps) {
               disabled={!!selected}
               className={`p-4 rounded-2xl font-bold text-lg transition-all active:scale-95 ${cls}`}
             >
-              {opt.paraula}
+              {getWord(opt.paraula, targetLang)}
             </button>
           );
         })}
