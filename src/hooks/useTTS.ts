@@ -1,27 +1,47 @@
 import { useCallback, useEffect, useRef } from "react";
+import { type LangCode } from "@/hooks/useLanguage";
 
-/**
- * Selects the best available Catalan voice.
- * Priority: ca-ES native > ca-* > Google ca-ES > es-ES (fallback)
- */
-function selectBestVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | null {
-  // Score voices — higher is better
+/** Map our app's LangCode to a BCP-47 locale for the SpeechSynthesis API. null = unsupported. */
+export const LANG_TO_BCP47: Record<LangCode, string | null> = {
+  ca: "ca-ES",
+  es: "es-ES",
+  en: "en-GB",
+  fr: "fr-FR",
+  ar: "ar-SA",
+  ur: "ur-PK",
+  uk: "uk-UA",
+  it: "it-IT",
+  el: "el-GR",
+  ptBR: "pt-BR",
+  pt: "pt-PT",
+  zh: "zh-CN",
+  hi: "hi-IN",
+  ro: "ro-RO",
+  ha: "ar-SA", // fallback to Arabic
+  wo: null,
+  mnk: null,
+  snk: null,
+  srk: null,
+};
+
+function selectBestVoice(voices: SpeechSynthesisVoice[], bcp47: string): SpeechSynthesisVoice | null {
+  const primary = bcp47.toLowerCase();
+  const base = primary.split("-")[0];
+
   const scored = voices
-    .filter((v) => v.lang.startsWith("ca") || v.lang.startsWith("es"))
+    .filter((v) => {
+      const l = v.lang.toLowerCase();
+      return l === primary || l.startsWith(base + "-") || l === base;
+    })
     .map((v) => {
+      const l = v.lang.toLowerCase();
       let score = 0;
-      if (v.lang === "ca-ES") score += 100;
-      else if (v.lang.startsWith("ca")) score += 80;
-      else if (v.lang === "es-ES") score += 20;
-      else if (v.lang.startsWith("es")) score += 10;
-
-      // Prefer non-local (network/cloud) voices — they sound much better
+      if (l === primary) score += 100;
+      else if (l.startsWith(base + "-")) score += 60;
+      else if (l === base) score += 40;
       if (!v.localService) score += 50;
-      // Google voices tend to be higher quality
       if (v.name.toLowerCase().includes("google")) score += 30;
-      // Microsoft voices are also decent
       if (v.name.toLowerCase().includes("microsoft")) score += 20;
-
       return { voice: v, score };
     })
     .sort((a, b) => b.score - a.score);
@@ -29,46 +49,51 @@ function selectBestVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice |
   return scored[0]?.voice ?? null;
 }
 
+/**
+ * Returns a `speak(text, lang?)` function plus `isAvailable(lang)`.
+ * Default lang = 'ca' for backward compatibility.
+ */
 export function useTTS() {
-  const bestVoice = useRef<SpeechSynthesisVoice | null>(null);
+  const voicesRef = useRef<SpeechSynthesisVoice[]>([]);
 
   useEffect(() => {
-    const findVoice = () => {
-      const voices = speechSynthesis.getVoices();
-      bestVoice.current = selectBestVoice(voices);
+    const refresh = () => {
+      voicesRef.current = speechSynthesis.getVoices();
     };
-    findVoice();
-    speechSynthesis.addEventListener("voiceschanged", findVoice);
-    return () => speechSynthesis.removeEventListener("voiceschanged", findVoice);
+    refresh();
+    speechSynthesis.addEventListener("voiceschanged", refresh);
+    return () => speechSynthesis.removeEventListener("voiceschanged", refresh);
   }, []);
 
-  const speak = useCallback((text: string) => {
-    // Cancel any ongoing speech
+  const isAvailable = useCallback((lang: LangCode = "ca") => {
+    const bcp47 = LANG_TO_BCP47[lang];
+    if (!bcp47) return false;
+    if (voicesRef.current.length === 0) voicesRef.current = speechSynthesis.getVoices();
+    return selectBestVoice(voicesRef.current, bcp47) !== null;
+  }, []);
+
+  const speak = useCallback((text: string, lang: LangCode = "ca") => {
+    const bcp47 = LANG_TO_BCP47[lang];
+    if (!bcp47) return; // unsupported language — silent no-op
     speechSynthesis.cancel();
 
-    // Re-check voices just before speaking
-    if (!bestVoice.current) {
-      const voices = speechSynthesis.getVoices();
-      bestVoice.current = selectBestVoice(voices);
-    }
+    if (voicesRef.current.length === 0) voicesRef.current = speechSynthesis.getVoices();
+    const voice = selectBestVoice(voicesRef.current, bcp47);
 
-    // Small delay after cancel() to work around Chrome bug
-    // where speak() is silently ignored after an immediate cancel()
-    const doSpeak = () => {
+    setTimeout(() => {
       const utter = new SpeechSynthesisUtterance(text);
-      if (bestVoice.current) {
-        utter.voice = bestVoice.current;
-      }
-      utter.lang = "ca-ES";
-      utter.rate = 0.78;
+      if (voice) utter.voice = voice;
+      utter.lang = bcp47;
+      utter.rate = lang === "ca" ? 0.78 : 0.85;
       utter.pitch = 1.0;
       speechSynthesis.speak(utter);
-    };
-
-    setTimeout(doSpeak, 100);
+    }, 100);
   }, []);
 
-  return speak;
+  // Backward-compat: allow `speak("hola")` calls — they default to Catalan.
+  return Object.assign(speak, { isAvailable }) as ((text: string, lang?: LangCode) => void) & {
+    isAvailable: (lang?: LangCode) => boolean;
+  };
 }
 
 export { selectBestVoice };

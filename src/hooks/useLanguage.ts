@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
-export type LangCode = "en" | "es" | "ar" | "wo" | "uk" | "fr" | "mnk" | "it" | "el" | "ur" | "ptBR" | "pt" | "ha" | "zh" | "hi" | "snk" | "ro" | "srk";
+export type LangCode = "ca" | "en" | "es" | "ar" | "wo" | "uk" | "fr" | "mnk" | "it" | "el" | "ur" | "ptBR" | "pt" | "ha" | "zh" | "hi" | "snk" | "ro" | "srk";
 
 export const LANGUAGES: Record<LangCode, { name: string; flag: string; nativeName: string }> = {
+  ca: { name: "Català", flag: "🏴󠁥󠁳󠁣󠁴󠁿", nativeName: "Català" },
   es: { name: "Castellà", flag: "🇪🇸", nativeName: "Español" },
   en: { name: "Anglès", flag: "🇬🇧", nativeName: "English" },
   fr: { name: "Francès", flag: "🇫🇷", nativeName: "Français" },
@@ -23,15 +24,47 @@ export const LANGUAGES: Record<LangCode, { name: string; flag: string; nativeNam
   srk: { name: "Sarankhulé", flag: "🇲🇱", nativeName: "Saranxulle" },
 };
 
+const TARGET_KEY = "apren-target-lang";
+const HELP_KEY = "apren-help-lang";
+
+/** Legacy single-language hook (kept for backward compatibility — returns help lang). */
 export function useLanguage() {
   const [lang, setLang] = useState<LangCode>(() => {
-    return (localStorage.getItem("apren-catala-lang") as LangCode) || "es";
+    return (localStorage.getItem(HELP_KEY) as LangCode) || (localStorage.getItem("apren-catala-lang") as LangCode) || "es";
   });
 
   const changeLang = (code: LangCode) => {
     setLang(code);
-    localStorage.setItem("apren-catala-lang", code);
+    localStorage.setItem(HELP_KEY, code);
   };
 
   return { lang, setLang: changeLang };
+}
+
+/** Dual-language hook: targetLang = what the student is learning, helpLang = bridge language. */
+export function useLanguages() {
+  const [targetLang, setTargetLangState] = useState<LangCode>(() => {
+    return (localStorage.getItem(TARGET_KEY) as LangCode) || "ca";
+  });
+  const [helpLang, setHelpLangState] = useState<LangCode>(() => {
+    return (localStorage.getItem(HELP_KEY) as LangCode) || (localStorage.getItem("apren-catala-lang") as LangCode) || "es";
+  });
+
+  const setTargetLang = useCallback((code: LangCode) => {
+    setTargetLangState(code);
+    localStorage.setItem(TARGET_KEY, code);
+    // If help lang equals new target, auto-swap help to a sensible default
+    if (code === (localStorage.getItem(HELP_KEY) as LangCode)) {
+      const fallback: LangCode = code === "es" ? "ca" : "es";
+      setHelpLangState(fallback);
+      localStorage.setItem(HELP_KEY, fallback);
+    }
+  }, []);
+
+  const setHelpLang = useCallback((code: LangCode) => {
+    setHelpLangState(code);
+    localStorage.setItem(HELP_KEY, code);
+  }, []);
+
+  return { targetLang, helpLang, setTargetLang, setHelpLang };
 }
