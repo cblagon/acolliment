@@ -26,7 +26,6 @@ const LANG_NAMES: Record<LangCode, string> = {
   srk: "Saranxulle",
 };
 
-import { getWord } from "@/data/translations";
 
 export function exportAllToPDF(blocs: Bloc[], targetLang: LangCode, helpLang: LangCode) {
   const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
