@@ -24,7 +24,7 @@ export const LANG_TO_BCP47: Record<LangCode, string | null> = {
   srk: null,
 };
 
-function selectBestVoice(voices: SpeechSynthesisVoice[], bcp47: string): SpeechSynthesisVoice | null {
+function selectBestVoice(voices: SpeechSynthesisVoice[], bcp47: string = "ca-ES"): SpeechSynthesisVoice | null {
   const primary = bcp47.toLowerCase();
   const base = primary.split("-")[0];
 

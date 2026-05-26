@@ -237,5 +237,5 @@ export function langName(target: LangCode, helpLang: LangCode): string {
 export function t(lang: LangCode, key: StringKey, params?: Record<string, string>): string {
   const raw = dict[lang]?.[key] ?? dict.en?.[key] ?? key;
   if (!params) return raw;
-  return Object.entries(params).reduce((s, [k, v]) => s.replaceAll(`{${k}}`, v), raw);
+  return Object.entries(params).reduce((s, [k, v]) => s.split(`{${k}}`).join(v), raw);
 }

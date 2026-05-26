@@ -5,6 +5,7 @@ import { type LangCode } from "@/hooks/useLanguage";
 import { getTraduccio } from "@/data/translations";
 
 const LANG_NAMES: Record<LangCode, string> = {
+  ca: "Català",
   es: "Castellà",
   en: "English",
   fr: "Français",
