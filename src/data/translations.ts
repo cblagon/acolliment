@@ -426,7 +426,14 @@ export const translations: Record<string, Record<string, string>> = {
   "En definitiva": { es: "En definitiva", en: "In short / Ultimately", fr: "En définitive", ar: "في النهاية", wo: "Ca mujj", uk: "Зрештою", mnk: "A laban kono", it: "In definitiva", el: "Εν τέλει", ur: "بالآخر", ptBR: "Em definitivo", pt: "Em definitivo", ha: "في النهاية", zh: "总而言之", hi: "अंततः", snk: "A laban kono", srk: "A laban kono", ro: "În definitiv" },
 };
 
-/** Get translation for a fitxa in the given language */
+/** Get translation for a fitxa in the given language. 'ca' returns the Catalan word as-is. */
 export function getTraduccio(paraula: string, lang: string): string {
+  if (lang === "ca") return paraula;
   return translations[paraula]?.[lang] || translations[paraula]?.["en"] || paraula;
 }
+
+/** Get the word in the target language (alias of getTraduccio with explicit semantics). */
+export function getWord(catalanKey: string, lang: string): string {
+  return getTraduccio(catalanKey, lang);
+}
+
