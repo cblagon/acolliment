@@ -14,33 +14,32 @@ const STORAGE_KEY = "apren-catala-videos";
 
 // Default pre-loaded videos per slot id
 const DEFAULT_VIDEOS: Record<string, string> = {
-  "video-A1-salutacions": "/videos/salutacions.mp4",
+  "video-A1-1": "/videos/salutacions.mp4",
   "video-A1-3": "/videos/que_portes.mp4",
+};
+
+// Override title/description per slot id when the combined block needs a different label
+const SLOT_OVERRIDES: Record<string, { title?: string; description?: string }> = {
+  "video-A1-1": {
+    title: "Salutacions en català",
+    description: "Vídeo pràctic amb salutacions quotidianes",
+  },
 };
 
 // Generate video slots dynamically based on level roleplays
 function buildSlots(level: RoleplayLevel): Omit<VideoSlot, "videoUrl">[] {
   const levelRoleplays = getRoleplaysByLevel(level);
-  const slots: Omit<VideoSlot, "videoUrl">[] = levelRoleplays.map((rp, i) => ({
-    id: `video-${level}-${i + 1}`,
-    afterBlocIndex: (i + 1) * 2,
-    title: rp.title,
-    description: `Roleplay en català: ${rp.title}`,
-    roleplayId: rp.id,
-  }));
-
-  // Special slot just després del 1r roleplay (al costat del vídeo existent), amb vídeo precarregat
-  if (level === "A1") {
-    slots.splice(1, 0, {
-      id: "video-A1-salutacions",
-      afterBlocIndex: 2,
-      title: "Salutacions en català",
-      description: "Vídeo pràctic amb salutacions quotidianes",
-      roleplayId: "",
-    });
-  }
-
-  return slots;
+  return levelRoleplays.map((rp, i) => {
+    const id = `video-${level}-${i + 1}`;
+    const override = SLOT_OVERRIDES[id] ?? {};
+    return {
+      id,
+      afterBlocIndex: (i + 1) * 2,
+      title: override.title ?? rp.title,
+      description: override.description ?? `Roleplay en català: ${rp.title}`,
+      roleplayId: rp.id,
+    };
+  });
 }
 
 export function useVideoBlocs(level: RoleplayLevel = "A1") {
