@@ -2,7 +2,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { type Bloc } from "@/data/blocksData";
 import { type LangCode } from "@/hooks/useLanguage";
-import { getTraduccio } from "@/data/translations";
+import { getWord } from "@/data/translations";
 
 const LANG_NAMES: Record<LangCode, string> = {
   ca: "Català",
