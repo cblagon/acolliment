@@ -9,6 +9,7 @@ import { QuizGame } from "@/components/QuizGame";
 import { SongViewer } from "@/components/SongViewer";
 import { BlocEditor } from "@/components/BlocEditor";
 import { LanguageSelector } from "@/components/LanguageSelector";
+import { VisitorCounter } from "@/components/VisitorCounter";
 import { exportAllToPDF } from "@/hooks/useExportPDF";
 import { t, langName } from "@/i18n/ui";
 import { Download } from "lucide-react";
