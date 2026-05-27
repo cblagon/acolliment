@@ -96,6 +96,7 @@ const Index = () => {
               label={`🌍 ${t(helpLang, "helpIn")}:`}
               title={t(helpLang, "helpIn")}
             />
+            <VisitorCounter />
             {view.type !== "grid" && (
               <button
                 onClick={() => setView({ type: "grid" })}
