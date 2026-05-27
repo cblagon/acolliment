@@ -93,7 +93,6 @@ const Index = () => {
               lang={helpLang}
               onChange={setHelpLang}
               label={`🌍 ${t(helpLang, "helpIn")}:`}
-              exclude={targetLang}
               title={t(helpLang, "helpIn")}
             />
             {view.type !== "grid" && (

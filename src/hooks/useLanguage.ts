@@ -53,12 +53,6 @@ export function useLanguages() {
   const setTargetLang = useCallback((code: LangCode) => {
     setTargetLangState(code);
     localStorage.setItem(TARGET_KEY, code);
-    // If help lang equals new target, auto-swap help to a sensible default
-    if (code === (localStorage.getItem(HELP_KEY) as LangCode)) {
-      const fallback: LangCode = code === "es" ? "ca" : "es";
-      setHelpLangState(fallback);
-      localStorage.setItem(HELP_KEY, fallback);
-    }
   }, []);
 
   const setHelpLang = useCallback((code: LangCode) => {
