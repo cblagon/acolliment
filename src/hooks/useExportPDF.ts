@@ -87,7 +87,7 @@ export function exportAllToPDF(blocs: Bloc[], targetLang: LangCode, helpLang: La
         doc.setFontSize(8);
         doc.setFont("helvetica", "normal");
         doc.text(
-          `Aprèn ${LANG_NAMES[targetLang]}! — Pàgina ${doc.getNumberOfPages()}`,
+          `${titleText} — Pàgina ${doc.getNumberOfPages()}`,
           pageW / 2,
           doc.internal.pageSize.getHeight() - 8,
           { align: "center" }
