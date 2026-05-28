@@ -3,6 +3,7 @@ import autoTable from "jspdf-autotable";
 import { type Bloc } from "@/data/blocksData";
 import { type LangCode } from "@/hooks/useLanguage";
 import { getWord } from "@/data/translations";
+import { t, langName } from "@/i18n/ui";
 
 const LANG_NAMES: Record<LangCode, string> = {
   ca: "Català",
@@ -32,12 +33,13 @@ export function exportAllToPDF(blocs: Bloc[], targetLang: LangCode, helpLang: La
   const pageW = doc.internal.pageSize.getWidth();
 
   // Title
+  const titleText = t(helpLang, "learnTitle", { lang: langName(targetLang, helpLang) });
   doc.setFontSize(22);
   doc.setFont("helvetica", "bold");
-  doc.text(`Aprèn ${LANG_NAMES[targetLang]}!`, pageW / 2, 20, { align: "center" });
+  doc.text(titleText, pageW / 2, 20, { align: "center" });
   doc.setFontSize(11);
   doc.setFont("helvetica", "normal");
-  doc.text(`${LANG_NAMES[targetLang]} → ${LANG_NAMES[helpLang]}`, pageW / 2, 28, { align: "center" });
+  doc.text(`${langName(targetLang, helpLang)} → ${langName(helpLang, helpLang)}`, pageW / 2, 28, { align: "center" });
   doc.text(`Data: ${new Date().toLocaleDateString()}`, pageW / 2, 34, { align: "center" });
 
   let y = 42;
@@ -85,7 +87,7 @@ export function exportAllToPDF(blocs: Bloc[], targetLang: LangCode, helpLang: La
         doc.setFontSize(8);
         doc.setFont("helvetica", "normal");
         doc.text(
-          `Aprèn ${LANG_NAMES[targetLang]}! — Pàgina ${doc.getNumberOfPages()}`,
+          `${titleText} — Pàgina ${doc.getNumberOfPages()}`,
           pageW / 2,
           doc.internal.pageSize.getHeight() - 8,
           { align: "center" }
