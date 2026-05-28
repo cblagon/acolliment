@@ -173,6 +173,21 @@ const Index = () => {
           />
         )}
       </main>
+
+      {/* Footer */}
+      <footer className="py-6 text-center text-xs text-muted-foreground border-t border-border">
+        <a href="https://acolliment.vercel.app/" className="hover:underline font-semibold">Acolliment</a>
+        {" "}© 2026 by{" "}
+        <a href="https://dossier.xtec.cat/cblaya/" className="hover:underline">Cristina Blaya Góngora</a>
+        {" "}is licensed under{" "}
+        <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" className="hover:underline">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International</a>
+        <span className="inline-flex items-center ml-1 align-middle">
+          <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="CC" className="w-4 h-4 mx-0.5" />
+          <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="BY" className="w-4 h-4 mx-0.5" />
+          <img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="NC" className="w-4 h-4 mx-0.5" />
+          <img src="https://mirrors.creativecommons.org/presskit/icons/nd.svg" alt="ND" className="w-4 h-4 mx-0.5" />
+        </span>
+      </footer>
     </div>
   );
 };
