@@ -3,6 +3,7 @@ import autoTable from "jspdf-autotable";
 import { type Bloc } from "@/data/blocksData";
 import { type LangCode } from "@/hooks/useLanguage";
 import { getWord } from "@/data/translations";
+import { t, langName } from "@/i18n/ui";
 
 const LANG_NAMES: Record<LangCode, string> = {
   ca: "Català",
