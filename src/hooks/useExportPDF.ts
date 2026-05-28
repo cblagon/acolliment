@@ -33,12 +33,13 @@ export function exportAllToPDF(blocs: Bloc[], targetLang: LangCode, helpLang: La
   const pageW = doc.internal.pageSize.getWidth();
 
   // Title
+  const titleText = t(helpLang, "learnTitle", { lang: langName(targetLang, helpLang) });
   doc.setFontSize(22);
   doc.setFont("helvetica", "bold");
-  doc.text(`Aprèn ${LANG_NAMES[targetLang]}!`, pageW / 2, 20, { align: "center" });
+  doc.text(titleText, pageW / 2, 20, { align: "center" });
   doc.setFontSize(11);
   doc.setFont("helvetica", "normal");
-  doc.text(`${LANG_NAMES[targetLang]} → ${LANG_NAMES[helpLang]}`, pageW / 2, 28, { align: "center" });
+  doc.text(`${langName(targetLang, helpLang)} → ${langName(helpLang, helpLang)}`, pageW / 2, 28, { align: "center" });
   doc.text(`Data: ${new Date().toLocaleDateString()}`, pageW / 2, 34, { align: "center" });
 
   let y = 42;
