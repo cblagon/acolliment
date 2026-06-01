@@ -12,7 +12,8 @@ import { LanguageSelector } from "@/components/LanguageSelector";
 import { VisitorCounter } from "@/components/VisitorCounter";
 import { exportAllToPDF } from "@/hooks/useExportPDF";
 import { t, langName } from "@/i18n/ui";
-import { Download } from "lucide-react";
+import { Download, HelpCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 
 type View =
   | { type: "grid" }
@@ -96,6 +97,14 @@ const Index = () => {
               label={`🌍 ${t(helpLang, "helpIn")}:`}
               title={t(helpLang, "helpIn")}
             />
+            <Link
+              to="/ajuda"
+              title="Com fer-ne ús"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-sm font-semibold hover:bg-muted/80 transition-all active:scale-95"
+            >
+              <HelpCircle className="w-4 h-4" />
+              <span className="hidden sm:inline">Ajuda</span>
+            </Link>
             <VisitorCounter />
             {view.type !== "grid" && (
               <button
