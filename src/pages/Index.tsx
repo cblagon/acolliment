@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { type Bloc, type Level } from "@/data/blocksData";
 import { useBlocs } from "@/hooks/useBlocs";
 import { useLanguages } from "@/hooks/useLanguage";
 import { useVideoBlocs } from "@/hooks/useVideoBlocs";
+import { useAuth } from "@/hooks/useAuth";
 import { BlocGrid } from "@/components/BlocGrid";
 import { FitxaViewer } from "@/components/FitxaViewer";
 import { QuizGame } from "@/components/QuizGame";
@@ -12,8 +13,9 @@ import { LanguageSelector } from "@/components/LanguageSelector";
 import { VisitorCounter } from "@/components/VisitorCounter";
 import { exportAllToPDF } from "@/hooks/useExportPDF";
 import { t, langName } from "@/i18n/ui";
-import { Download, HelpCircle } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Download, HelpCircle, LogIn, LogOut } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 type View =
   | { type: "grid" }

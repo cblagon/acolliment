@@ -4,7 +4,7 @@ import { type LangCode } from "@/hooks/useLanguage";
 import { VideoBloc } from "./VideoBloc";
 import { roleplays } from "@/data/roleplayData";
 import { t } from "@/i18n/ui";
-import { Lock } from "lucide-react";
+
 
 interface BlocGridProps {
   blocs: Bloc[];
