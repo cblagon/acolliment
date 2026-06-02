@@ -5,6 +5,7 @@ import { VideoBloc } from "./VideoBloc";
 import { roleplays } from "@/data/roleplayData";
 import { t } from "@/i18n/ui";
 
+
 interface BlocGridProps {
   blocs: Bloc[];
   onSelect: (bloc: Bloc) => void;
@@ -13,9 +14,11 @@ interface BlocGridProps {
   onVideoChange: (id: string, url: string | null) => void;
   helpLang: LangCode;
   targetLang: LangCode;
+  isAuthenticated?: boolean;
+  loginToAddLabel?: string;
 }
 
-export function BlocGrid({ blocs, onSelect, onAddNew, videoSlots, onVideoChange, helpLang, targetLang }: BlocGridProps) {
+export function BlocGrid({ blocs, onSelect, onAddNew, videoSlots, onVideoChange, helpLang, targetLang, isAuthenticated = false, loginToAddLabel }: BlocGridProps) {
   // Build interleaved list of blocs and video slots
   const items: Array<{ type: "bloc"; bloc: Bloc; index: number } | { type: "video"; slot: VideoSlot }> = [];
 
@@ -67,11 +70,14 @@ export function BlocGrid({ blocs, onSelect, onAddNew, videoSlots, onVideoChange,
       })}
       <button
         onClick={onAddNew}
+        title={!isAuthenticated ? loginToAddLabel : undefined}
         className="flex flex-col items-center justify-center gap-3 rounded-2xl p-6 border-2 border-dashed border-muted-foreground/30 text-muted-foreground hover:border-primary hover:text-primary transition-all duration-300 hover:-translate-y-1 active:scale-[0.97] animate-reveal-up"
         style={{ animationDelay: `${blocs.length * 60}ms` }}
       >
-        <span className="text-4xl">➕</span>
-        <span className="font-bold text-sm">{t(helpLang, "newBloc")}</span>
+        <span className="text-4xl">{isAuthenticated ? "➕" : "🔒"}</span>
+        <span className="font-bold text-sm text-center leading-tight">
+          {isAuthenticated ? t(helpLang, "newBloc") : (loginToAddLabel ?? t(helpLang, "newBloc"))}
+        </span>
       </button>
     </div>
   );
