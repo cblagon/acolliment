@@ -36,7 +36,39 @@ const Index = () => {
   const { blocs, addBloc, updateBloc } = useBlocs(selectedLevel);
   const { videoSlots, setVideoUrl } = useVideoBlocs(selectedLevel);
   const { targetLang, helpLang, setTargetLang, setHelpLang } = useLanguages();
+  const { isAuthenticated, user, signOut } = useAuth();
+  const navigate = useNavigate();
   const [view, setView] = useState<View>({ type: "grid" });
+
+  const loginToAddLabel: Record<string, string> = {
+    ca: "Inicia sessió per afegir mòduls",
+    es: "Inicia sesión para añadir módulos",
+    en: "Sign in to add modules",
+  };
+  const restrictedToast: Record<string, string> = {
+    ca: "Acció restringida. Inicia sessió amb el teu correu i contrasenya per afegir mòduls.",
+    es: "Acción restringida. Inicia sesión con tu correo y contraseña para añadir módulos.",
+    en: "Restricted action. Sign in with your email and password to add modules.",
+  };
+  const addLabel = loginToAddLabel[helpLang] ?? loginToAddLabel.en;
+
+  // Guard: if user navigates to editor view without auth, redirect to /auth
+  useEffect(() => {
+    if (view.type === "editor" && !isAuthenticated) {
+      toast.error(restrictedToast[helpLang] ?? restrictedToast.en);
+      setView({ type: "grid" });
+      navigate("/auth?reason=restricted");
+    }
+  }, [view, isAuthenticated, navigate, helpLang]);
+
+  const handleAddNew = () => {
+    if (!isAuthenticated) {
+      toast.error(restrictedToast[helpLang] ?? restrictedToast.en);
+      navigate("/auth?reason=restricted");
+      return;
+    }
+    setView({ type: "editor" });
+  };
 
   const levelLabels: Record<Level, string> = {
     A1: t(helpLang, "basic"),
@@ -108,6 +140,25 @@ const Index = () => {
               <span className="hidden sm:inline">Ajuda</span>
             </Link>
             <VisitorCounter />
+            {isAuthenticated ? (
+              <button
+                onClick={async () => { await signOut(); toast.success("Sessió tancada"); }}
+                title={user?.email ?? ""}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-sm font-semibold hover:bg-muted/80 transition-all active:scale-95"
+              >
+                <LogOut className="w-4 h-4" />
+                <span className="hidden sm:inline">Sortir</span>
+              </button>
+            ) : (
+              <Link
+                to="/auth"
+                title="Inicia sessió"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-all active:scale-95"
+              >
+                <LogIn className="w-4 h-4" />
+                <span className="hidden sm:inline">Entrar</span>
+              </Link>
+            )}
             {view.type !== "grid" && (
               <button
                 onClick={() => setView({ type: "grid" })}
