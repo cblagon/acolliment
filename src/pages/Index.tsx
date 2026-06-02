@@ -191,11 +191,13 @@ const Index = () => {
             <BlocGrid
               blocs={blocs}
               onSelect={(bloc) => setView({ type: "fitxes", bloc })}
-              onAddNew={() => setView({ type: "editor" })}
+              onAddNew={handleAddNew}
               videoSlots={videoSlots}
               onVideoChange={setVideoUrl}
               helpLang={helpLang}
               targetLang={targetLang}
+              isAuthenticated={isAuthenticated}
+              loginToAddLabel={addLabel}
             />
           </div>
         )}
