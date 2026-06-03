@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, BookOpen, Languages, Gamepad2, Music, Video, Download, Sparkles } from "lucide-react";
 import { useLanguages, LANGUAGES } from "@/hooks/useLanguage";
 import type { LangCode } from "@/hooks/useLanguage";
+import { langName } from "@/i18n/ui";
 
 type AboutStrings = {
   subtitle: string;
@@ -320,7 +321,7 @@ const About = () => {
                 <div className="mb-4 flex items-center gap-2">
                   <span className="text-2xl">{LANGUAGES[tl].flag}</span>
                   <h3 className="text-lg font-extrabold text-foreground">
-                    {stepsSrc.title} · {LANGUAGES[tl].nativeName}
+                    {s.title} · {langName(tl, helpLang)}
                   </h3>
                 </div>
               )}
