@@ -106,9 +106,13 @@ const STRINGS: Partial<Record<LangCode, AboutStrings>> = {
   },
 };
 
+import { LANGUAGES } from "@/hooks/useLanguage";
+
 const About = () => {
-  const { helpLang } = useLanguages();
+  const { helpLang, targetLang } = useLanguages();
   const s = STRINGS[helpLang] ?? STRINGS.en!;
+  // "Com fer-ne ús" → render once per learning language (target). Fallback to English when not translated.
+  const targetLangs = Array.from(new Set([targetLang])) as LangCode[];
 
   const stepMeta = [
     { icon: Languages, color: "bg-blue-500" },
