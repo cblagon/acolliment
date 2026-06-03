@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft, BookOpen, Languages, Gamepad2, Music, Video, Download, Sparkles } from "lucide-react";
-import { useLanguages } from "@/hooks/useLanguage";
+import { useLanguages, LANGUAGES } from "@/hooks/useLanguage";
 import type { LangCode } from "@/hooks/useLanguage";
 
 type AboutStrings = {
