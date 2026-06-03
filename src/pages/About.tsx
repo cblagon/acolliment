@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, BookOpen, Languages, Gamepad2, Music, Video, Download, Sparkles } from "lucide-react";
 import { useLanguages, LANGUAGES } from "@/hooks/useLanguage";
 import type { LangCode } from "@/hooks/useLanguage";
+import { langName } from "@/i18n/ui";
 
 type AboutStrings = {
   subtitle: string;
