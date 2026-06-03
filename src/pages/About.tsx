@@ -106,7 +106,7 @@ const STRINGS: Partial<Record<LangCode, AboutStrings>> = {
   },
 };
 
-import { LANGUAGES } from "@/hooks/useLanguage";
+
 
 const About = () => {
   const { helpLang, targetLang } = useLanguages();
