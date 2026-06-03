@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft, BookOpen, Languages, Gamepad2, Music, Video, Download, Sparkles } from "lucide-react";
-import { useLanguages } from "@/hooks/useLanguage";
+import { useLanguages, LANGUAGES } from "@/hooks/useLanguage";
 import type { LangCode } from "@/hooks/useLanguage";
 
 type AboutStrings = {
@@ -106,9 +106,13 @@ const STRINGS: Partial<Record<LangCode, AboutStrings>> = {
   },
 };
 
+
+
 const About = () => {
-  const { helpLang } = useLanguages();
+  const { helpLang, targetLang } = useLanguages();
   const s = STRINGS[helpLang] ?? STRINGS.en!;
+  // "Com fer-ne ús" → render once per learning language (target). Fallback to English when not translated.
+  const targetLangs = Array.from(new Set([targetLang])) as LangCode[];
 
   const stepMeta = [
     { icon: Languages, color: "bg-blue-500" },
@@ -150,25 +154,42 @@ const About = () => {
           <p className="text-muted-foreground">{s.intro}</p>
         </section>
 
-        <section className="mt-8 grid gap-4">
-          {s.steps.map((step, i) => {
-            const Icon = stepMeta[i].icon;
-            return (
-              <article
-                key={step.title}
-                className="flex gap-4 p-5 rounded-2xl border border-border bg-card hover:shadow-md transition-shadow"
-              >
-                <div className={`${stepMeta[i].color} text-white rounded-xl p-3 h-fit shrink-0`}>
-                  <Icon className="w-5 h-5" />
+        {targetLangs.map((tl) => {
+          const stepsSrc = STRINGS[tl] ?? STRINGS.en!;
+          const sameAsHelp = tl === helpLang;
+          return (
+            <section key={tl} className="mt-8">
+              {!sameAsHelp && (
+                <div className="mb-4 flex items-center gap-2">
+                  <span className="text-2xl">{LANGUAGES[tl].flag}</span>
+                  <h3 className="text-lg font-extrabold text-foreground">
+                    {stepsSrc.title} · {LANGUAGES[tl].nativeName}
+                  </h3>
                 </div>
-                <div>
-                  <h3 className="font-extrabold text-foreground">{step.title}</h3>
-                  <p className="text-sm text-muted-foreground mt-1">{step.text}</p>
-                </div>
-              </article>
-            );
-          })}
-        </section>
+              )}
+              <div className="grid gap-4">
+                {stepsSrc.steps.map((step, i) => {
+                  const Icon = stepMeta[i].icon;
+                  return (
+                    <article
+                      key={step.title}
+                      className="flex gap-4 p-5 rounded-2xl border border-border bg-card hover:shadow-md transition-shadow"
+                    >
+                      <div className={`${stepMeta[i].color} text-white rounded-xl p-3 h-fit shrink-0`}>
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h4 className="font-extrabold text-foreground">{step.title}</h4>
+                        <p className="text-sm text-muted-foreground mt-1">{step.text}</p>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </section>
+          );
+        })}
+
 
         <section className="mt-12 p-6 rounded-2xl bg-gradient-to-br from-primary/10 via-accent/10 to-background border border-border">
           <span className="inline-block px-3 py-1 rounded-full bg-foreground text-background text-xs font-bold">
