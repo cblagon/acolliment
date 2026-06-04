@@ -152,6 +152,16 @@ const Index = () => {
               <HelpCircle className="w-4 h-4" />
               <span className="hidden sm:inline">Ajuda</span>
             </Link>
+            {isAdmin && (
+              <Link
+                to="/admin"
+                title="Panell d'administració"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500 text-white text-sm font-semibold hover:bg-amber-600 transition-all active:scale-95"
+              >
+                <ShieldCheck className="w-4 h-4" />
+                <span className="hidden sm:inline">Admin</span>
+              </Link>
+            )}
             <VisitorCounter />
             {isAuthenticated ? (
               <button
