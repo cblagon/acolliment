@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { type Bloc, type Level } from "@/data/blocksData";
 import { useBlocs } from "@/hooks/useBlocs";
 import { useLanguages } from "@/hooks/useLanguage";
 import { useVideoBlocs } from "@/hooks/useVideoBlocs";
 import { useAuth } from "@/hooks/useAuth";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
+import { useBlocSubmissions, submissionToBloc } from "@/hooks/useBlocSubmissions";
 import { BlocGrid } from "@/components/BlocGrid";
 import { FitxaViewer } from "@/components/FitxaViewer";
 import { QuizGame } from "@/components/QuizGame";
@@ -13,7 +15,7 @@ import { LanguageSelector } from "@/components/LanguageSelector";
 import { VisitorCounter } from "@/components/VisitorCounter";
 import { exportAllToPDF } from "@/hooks/useExportPDF";
 import { t, langName } from "@/i18n/ui";
-import { Download, HelpCircle, LogIn, LogOut } from "lucide-react";
+import { Download, HelpCircle, LogIn, LogOut, ShieldCheck } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -33,12 +35,23 @@ const levelColors: Record<Level, string> = {
 
 const Index = () => {
   const [selectedLevel, setSelectedLevel] = useState<Level>("A1");
-  const { blocs, addBloc, updateBloc } = useBlocs(selectedLevel);
+  const { blocs: defaultBlocs } = useBlocs(selectedLevel);
   const { videoSlots, setVideoUrl } = useVideoBlocs(selectedLevel);
   const { targetLang, helpLang, setTargetLang, setHelpLang } = useLanguages();
   const { isAuthenticated, user, signOut } = useAuth();
+  const { isAdmin } = useIsAdmin();
+  const { submissions, submit } = useBlocSubmissions();
   const navigate = useNavigate();
   const [view, setView] = useState<View>({ type: "grid" });
+
+  // Merge user submissions visible to this session into the grid
+  const { blocs, pendingIds, rejectedIds } = useMemo(() => {
+    const levelSubs = submissions.filter((s) => s.level === selectedLevel);
+    const extras = levelSubs.map(submissionToBloc);
+    const pending = new Set(levelSubs.filter((s) => s.status === "pending").map((s) => s.id));
+    const rejected = new Set(levelSubs.filter((s) => s.status === "rejected").map((s) => s.id));
+    return { blocs: [...defaultBlocs, ...extras], pendingIds: pending, rejectedIds: rejected };
+  }, [defaultBlocs, submissions, selectedLevel]);
 
   const loginToAddLabel: Record<string, string> = {
     ca: "Inicia sessió per afegir mòduls",
