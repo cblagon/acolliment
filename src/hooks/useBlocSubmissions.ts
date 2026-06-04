@@ -63,7 +63,7 @@ export function useBlocSubmissions() {
         nom: bloc.nom,
         emoji: bloc.emoji,
         color: bloc.color,
-        data: { fitxes: bloc.fitxes },
+        data: { fitxes: bloc.fitxes } as unknown as Record<string, unknown>,
         status: "pending",
       });
       if (error) throw error;
