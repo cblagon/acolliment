@@ -385,7 +385,15 @@ const About = () => {
           </div>
         </section>
 
-        <div className="mt-10 text-center">
+        <div className="mt-10 text-center space-y-4">
+          <div>
+            <Link
+              to="/ajuda/moderacio"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-amber-100 text-amber-900 font-bold border border-amber-300 hover:bg-amber-200 transition-all active:scale-95"
+            >
+              🛡️ Com es revisen les aportacions dels usuaris
+            </Link>
+          </div>
           <Link
             to="/"
             className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-primary text-primary-foreground font-bold hover:bg-primary/90 transition-all active:scale-95"
