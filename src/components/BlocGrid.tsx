@@ -16,9 +16,11 @@ interface BlocGridProps {
   targetLang: LangCode;
   isAuthenticated?: boolean;
   loginToAddLabel?: string;
+  pendingIds?: Set<string>;
+  rejectedIds?: Set<string>;
 }
 
-export function BlocGrid({ blocs, onSelect, onAddNew, videoSlots, onVideoChange, helpLang, targetLang, isAuthenticated = false, loginToAddLabel }: BlocGridProps) {
+export function BlocGrid({ blocs, onSelect, onAddNew, videoSlots, onVideoChange, helpLang, targetLang, isAuthenticated = false, loginToAddLabel, pendingIds, rejectedIds }: BlocGridProps) {
   // Build interleaved list of blocs and video slots
   const items: Array<{ type: "bloc"; bloc: Bloc; index: number } | { type: "video"; slot: VideoSlot }> = [];
 
@@ -55,6 +57,8 @@ export function BlocGrid({ blocs, onSelect, onAddNew, videoSlots, onVideoChange,
           );
         }
         const { bloc, index } = item;
+        const isPending = pendingIds?.has(bloc.id);
+        const isRejected = rejectedIds?.has(bloc.id);
         return (
           <button
             key={bloc.id}
@@ -62,6 +66,16 @@ export function BlocGrid({ blocs, onSelect, onAddNew, videoSlots, onVideoChange,
             className={`group relative flex flex-col items-center justify-center gap-3 rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 active:scale-[0.97] ${bloc.color} text-white animate-reveal-up`}
             style={{ animationDelay: `${index * 60}ms` }}
           >
+            {isPending && (
+              <span className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-amber-400 text-amber-900 text-[10px] font-bold border border-amber-600 shadow-sm">
+                ⏳ Pendent
+              </span>
+            )}
+            {isRejected && (
+              <span className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-red-400 text-red-900 text-[10px] font-bold border border-red-600 shadow-sm">
+                ❌ Rebutjat
+              </span>
+            )}
             <span className="text-5xl drop-shadow-sm transition-transform duration-300 group-hover:scale-110">{bloc.emoji}</span>
             <span className="font-bold text-base leading-tight text-center">{bloc.nom}</span>
             <span className="text-xs opacity-80">{bloc.fitxes.length} {t(helpLang, "fitxesCount")}</span>
