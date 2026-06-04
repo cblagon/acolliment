@@ -211,6 +211,8 @@ const Index = () => {
               targetLang={targetLang}
               isAuthenticated={isAuthenticated}
               loginToAddLabel={addLabel}
+              pendingIds={pendingIds}
+              rejectedIds={rejectedIds}
             />
           </div>
         )}
@@ -242,10 +244,14 @@ const Index = () => {
           <BlocEditor
             bloc={view.bloc}
             onCancel={() => setView({ type: "grid" })}
-            onSave={(bloc) => {
-              if (view.bloc) updateBloc(view.bloc.id, bloc);
-              else addBloc(bloc);
-              setView({ type: "grid" });
+            onSave={async (bloc) => {
+              try {
+                await submit({ ...bloc, level: selectedLevel });
+                toast.success("Aportació enviada! Quedarà pendent de revisió per l'administradora.");
+                setView({ type: "grid" });
+              } catch (e: any) {
+                toast.error("No s'ha pogut enviar: " + (e?.message ?? "error"));
+              }
             }}
           />
         )}
