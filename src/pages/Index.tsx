@@ -44,13 +44,19 @@ const Index = () => {
   const navigate = useNavigate();
   const [view, setView] = useState<View>({ type: "grid" });
 
+  // IDs that belong to the "Presentacions orals" section (rendered separately)
+  const ORAL_IDS = new Set(["presentat", "descriu-companya"]);
+
   // Merge user submissions visible to this session into the grid
-  const { blocs, pendingIds, rejectedIds } = useMemo(() => {
+  const { blocs, oralBlocs, pendingIds, rejectedIds } = useMemo(() => {
     const levelSubs = submissions.filter((s) => s.level === selectedLevel);
     const extras = levelSubs.map(submissionToBloc);
     const pending = new Set(levelSubs.filter((s) => s.status === "pending").map((s) => s.id));
     const rejected = new Set(levelSubs.filter((s) => s.status === "rejected").map((s) => s.id));
-    return { blocs: [...defaultBlocs, ...extras], pendingIds: pending, rejectedIds: rejected };
+    const all = [...defaultBlocs, ...extras];
+    const oral = selectedLevel === "A1" ? all.filter((b) => ORAL_IDS.has(b.id)) : [];
+    const main = selectedLevel === "A1" ? all.filter((b) => !ORAL_IDS.has(b.id)) : all;
+    return { blocs: main, oralBlocs: oral, pendingIds: pending, rejectedIds: rejected };
   }, [defaultBlocs, submissions, selectedLevel]);
 
   const loginToAddLabel: Record<string, string> = {
