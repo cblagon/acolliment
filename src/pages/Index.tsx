@@ -230,6 +230,53 @@ const Index = () => {
               pendingIds={pendingIds}
               rejectedIds={rejectedIds}
             />
+
+            {oralBlocs.length > 0 && (
+              <section className="mt-10 animate-reveal-up">
+                <div className="flex items-center gap-3 mb-4 flex-wrap">
+                  <h2 className="text-2xl font-extrabold text-foreground">
+                    🎤 Presentacions orals
+                  </h2>
+                  <span className="px-2.5 py-1 rounded-full text-xs font-bold text-white bg-bloom-pink">
+                    Diàlegs guiats
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
+                  <div className="lg:col-span-1 grid grid-cols-2 lg:grid-cols-1 gap-4">
+                    {oralBlocs.map((bloc, i) => {
+                      const isPending = pendingIds?.has(bloc.id);
+                      const isRejected = rejectedIds?.has(bloc.id);
+                      return (
+                        <button
+                          key={bloc.id}
+                          onClick={() => setView({ type: "fitxes", bloc })}
+                          className={`group relative flex flex-col items-center justify-center gap-3 rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 active:scale-[0.97] ${bloc.color} text-white animate-reveal-up`}
+                          style={{ animationDelay: `${i * 60}ms` }}
+                        >
+                          {isPending && (
+                            <span className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-amber-400 text-amber-900 text-[10px] font-bold border border-amber-600 shadow-sm">⏳ Pendent</span>
+                          )}
+                          {isRejected && (
+                            <span className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-red-400 text-red-900 text-[10px] font-bold border border-red-600 shadow-sm">❌ Rebutjat</span>
+                          )}
+                          <span className="text-5xl drop-shadow-sm transition-transform duration-300 group-hover:scale-110">{bloc.emoji}</span>
+                          <span className="font-bold text-base leading-tight text-center">{bloc.nom}</span>
+                          <span className="text-xs opacity-80">{bloc.fitxes.length} {t(helpLang, "fitxesCount")}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <div className="lg:col-span-2 rounded-2xl overflow-hidden border-2 border-primary/20 bg-card shadow-lg">
+                    <video
+                      src="/videos/presentacions.mp4"
+                      controls
+                      playsInline
+                      className="w-full h-full object-cover aspect-video bg-black"
+                    />
+                  </div>
+                </div>
+              </section>
+            )}
           </div>
         )}
         {view.type === "fitxes" && (
