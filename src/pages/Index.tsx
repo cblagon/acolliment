@@ -266,12 +266,12 @@ const Index = () => {
                       );
                     })}
                   </div>
-                  <div className="lg:col-span-2 rounded-2xl overflow-hidden border-2 border-primary/20 bg-card shadow-lg">
+                  <div className="lg:col-span-2 rounded-2xl overflow-hidden border-2 border-primary/20 bg-card shadow-lg flex items-center justify-center">
                     <video
                       src="/videos/presentacions.mp4"
                       controls
                       playsInline
-                      className="w-full h-full object-contain aspect-video bg-card"
+                      className="max-h-[70vh] w-auto h-auto max-w-full"
                     />
                   </div>
                 </div>
