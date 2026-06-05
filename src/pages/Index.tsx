@@ -271,7 +271,7 @@ const Index = () => {
                       src="/videos/presentacions.mp4"
                       controls
                       playsInline
-                      className="w-full h-full object-cover aspect-video bg-black"
+                      className="w-full h-full object-contain aspect-video bg-black"
                     />
                   </div>
                 </div>
