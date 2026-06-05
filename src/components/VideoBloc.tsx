@@ -53,7 +53,7 @@ export function VideoBloc({ index, videoUrl, title, description, onVideoChange, 
       <video
         ref={videoRef}
         src={videoUrl ?? undefined}
-        className="w-full h-full object-contain bg-black"
+        className="w-full h-full object-contain bg-card"
         onEnded={() => setPlaying(false)}
         playsInline
       />
