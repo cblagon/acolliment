@@ -5,6 +5,7 @@ import { getTraduccio, getWord } from "@/data/translations";
 import { useTTS } from "@/hooks/useTTS";
 import { t } from "@/i18n/ui";
 import { Volume2, VolumeX, ChevronLeft, ChevronRight, ArrowLeft, Gamepad2, Music } from "lucide-react";
+import { SpeechCheck } from "@/components/SpeechCheck";
 
 interface FitxaViewerProps {
   bloc: Bloc;
