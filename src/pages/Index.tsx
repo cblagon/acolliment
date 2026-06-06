@@ -44,8 +44,15 @@ const Index = () => {
   const navigate = useNavigate();
   const [view, setView] = useState<View>({ type: "grid" });
 
-  // IDs that belong to the "Presentacions orals" section (rendered separately)
-  const ORAL_IDS = new Set(["presentat", "descriu-companya"]);
+  // IDs that belong to the "Presentacions orals" section (rendered separately), per level
+  const ORAL_IDS_BY_LEVEL: Record<Level, Set<string>> = {
+    A1: new Set(["presentat", "descriu-companya"]),
+    A2: new Set(["presenta-familia", "explica-rutina"]),
+    B1: new Set(["experiencia-personal", "opinio-tema"]),
+  };
+  const ORAL_VIDEO_BY_LEVEL: Partial<Record<Level, string>> = {
+    A1: "/videos/presentacions.mp4",
+  };
 
   // Merge user submissions visible to this session into the grid
   const { blocs, oralBlocs, pendingIds, rejectedIds } = useMemo(() => {
@@ -54,10 +61,14 @@ const Index = () => {
     const pending = new Set(levelSubs.filter((s) => s.status === "pending").map((s) => s.id));
     const rejected = new Set(levelSubs.filter((s) => s.status === "rejected").map((s) => s.id));
     const all = [...defaultBlocs, ...extras];
-    const oral = selectedLevel === "A1" ? all.filter((b) => ORAL_IDS.has(b.id)) : [];
-    const main = selectedLevel === "A1" ? all.filter((b) => !ORAL_IDS.has(b.id)) : all;
+    const oralSet = ORAL_IDS_BY_LEVEL[selectedLevel];
+    const oral = all.filter((b) => oralSet.has(b.id));
+    const main = all.filter((b) => !oralSet.has(b.id));
     return { blocs: main, oralBlocs: oral, pendingIds: pending, rejectedIds: rejected };
   }, [defaultBlocs, submissions, selectedLevel]);
+
+  const oralVideoSrc = ORAL_VIDEO_BY_LEVEL[selectedLevel];
+
 
   const loginToAddLabel: Record<string, string> = {
     ca: "Inicia sessió per afegir mòduls",
@@ -241,8 +252,8 @@ const Index = () => {
                     Diàlegs guiats
                   </span>
                 </div>
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
-                  <div className="lg:col-span-1 grid grid-cols-2 lg:grid-cols-1 gap-4">
+                <div className={`grid grid-cols-1 gap-4 items-stretch ${oralVideoSrc ? "lg:grid-cols-3" : ""}`}>
+                  <div className={`${oralVideoSrc ? "lg:col-span-1 grid grid-cols-2 lg:grid-cols-1" : "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"} gap-4`}>
                     {oralBlocs.map((bloc, i) => {
                       const isPending = pendingIds?.has(bloc.id);
                       const isRejected = rejectedIds?.has(bloc.id);
@@ -266,15 +277,18 @@ const Index = () => {
                       );
                     })}
                   </div>
-                  <div className="lg:col-span-2 rounded-2xl overflow-hidden border-2 border-primary/20 bg-card shadow-lg flex items-center justify-center">
-                    <video
-                      src="/videos/presentacions.mp4"
-                      controls
-                      playsInline
-                      className="max-h-[70vh] w-auto h-auto max-w-full"
-                    />
-                  </div>
+                  {oralVideoSrc && (
+                    <div className="lg:col-span-2 rounded-2xl overflow-hidden border-2 border-primary/20 bg-card shadow-lg flex items-center justify-center">
+                      <video
+                        src={oralVideoSrc}
+                        controls
+                        playsInline
+                        className="max-h-[70vh] w-auto h-auto max-w-full"
+                      />
+                    </div>
+                  )}
                 </div>
+
               </section>
             )}
           </div>
