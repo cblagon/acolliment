@@ -252,8 +252,8 @@ const Index = () => {
                     Diàlegs guiats
                   </span>
                 </div>
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
-                  <div className="lg:col-span-1 grid grid-cols-2 lg:grid-cols-1 gap-4">
+                <div className={`grid grid-cols-1 gap-4 items-stretch ${oralVideoSrc ? "lg:grid-cols-3" : ""}`}>
+                  <div className={`${oralVideoSrc ? "lg:col-span-1 grid grid-cols-2 lg:grid-cols-1" : "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4"} gap-4`}>
                     {oralBlocs.map((bloc, i) => {
                       const isPending = pendingIds?.has(bloc.id);
                       const isRejected = rejectedIds?.has(bloc.id);
@@ -277,15 +277,18 @@ const Index = () => {
                       );
                     })}
                   </div>
-                  <div className="lg:col-span-2 rounded-2xl overflow-hidden border-2 border-primary/20 bg-card shadow-lg flex items-center justify-center">
-                    <video
-                      src="/videos/presentacions.mp4"
-                      controls
-                      playsInline
-                      className="max-h-[70vh] w-auto h-auto max-w-full"
-                    />
-                  </div>
+                  {oralVideoSrc && (
+                    <div className="lg:col-span-2 rounded-2xl overflow-hidden border-2 border-primary/20 bg-card shadow-lg flex items-center justify-center">
+                      <video
+                        src={oralVideoSrc}
+                        controls
+                        playsInline
+                        className="max-h-[70vh] w-auto h-auto max-w-full"
+                      />
+                    </div>
+                  )}
                 </div>
+
               </section>
             )}
           </div>
