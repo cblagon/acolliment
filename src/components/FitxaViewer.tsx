@@ -117,6 +117,8 @@ export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, o
           <ChevronRight className="w-6 h-6" />
         </button>
       </div>
+
+      <SpeechCheck bloc={bloc} targetLang={targetLang} helpLang={helpLang} />
     </div>
   );
 }
