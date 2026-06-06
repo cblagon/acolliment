@@ -5,6 +5,7 @@ import { getTraduccio, getWord } from "@/data/translations";
 import { useTTS } from "@/hooks/useTTS";
 import { t } from "@/i18n/ui";
 import { Volume2, VolumeX, ChevronLeft, ChevronRight, ArrowLeft, Gamepad2, Music } from "lucide-react";
+import { SpeechCheck } from "@/components/SpeechCheck";
 
 interface FitxaViewerProps {
   bloc: Bloc;
@@ -116,6 +117,8 @@ export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, o
           <ChevronRight className="w-6 h-6" />
         </button>
       </div>
+
+      <SpeechCheck bloc={bloc} targetLang={targetLang} helpLang={helpLang} />
     </div>
   );
 }
