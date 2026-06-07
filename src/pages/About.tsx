@@ -264,13 +264,165 @@ const STRINGS: Partial<Record<LangCode, AboutStrings>> = {
   },
 };
 
+type AudioStrings = {
+  title: string;
+  intro: string;
+  callout: string;
+  windows: string;
+  android: string;
+  ios: string;
+  mac: string;
+  outro: string;
+};
+
+const AUDIO_STRINGS: Partial<Record<LangCode, AudioStrings>> = {
+  ca: {
+    title: "🔊 L'àudio en català no sona bé al meu dispositiu?",
+    intro: "L'aplicació fa servir la <strong>síntesi de veu del teu propi dispositiu</strong> (sistema operatiu o navegador) per llegir les paraules en català. Si el dispositiu <strong>no té instal·lada cap veu catalana nativa</strong>, l'àudio pot sonar robòtic, tallat o no sonar gens.",
+    callout: "👉 La solució és instal·lar la veu catalana al sistema operatiu:",
+    windows: "<strong>Windows:</strong> Configuració → Hora i idioma → Idioma i regió → Afegeix idioma → Català → Opcions d'idioma → Descarrega «Veu».",
+    android: "<strong>Android:</strong> Configuració → Sistema → Idiomes i introducció → Sortida de síntesi de veu → Configuració del motor → Instal·la dades de veu → Català.",
+    ios: "<strong>iPhone / iPad:</strong> Configuració → Accessibilitat → Contingut llegit → Veus → Català → Descarrega una veu (per exemple «Montserrat»).",
+    mac: "<strong>Mac:</strong> Configuració del sistema → Accessibilitat → Contingut llegit → Veu del sistema → Gestiona les veus → Català.",
+    outro: "Un cop instal·lada, <strong>tanca i torna a obrir el navegador</strong> i l'àudio sonarà amb pronúncia catalana correcta. 🎧",
+  },
+  es: {
+    title: "🔊 ¿El audio en catalán no suena bien en mi dispositivo?",
+    intro: "La aplicación usa la <strong>síntesis de voz de tu propio dispositivo</strong> (sistema operativo o navegador) para leer las palabras en catalán. Si el dispositivo <strong>no tiene instalada ninguna voz catalana nativa</strong>, el audio puede sonar robótico, cortado o no sonar.",
+    callout: "👉 La solución es instalar la voz catalana en el sistema operativo:",
+    windows: "<strong>Windows:</strong> Configuración → Hora e idioma → Idioma y región → Añadir idioma → Catalán → Opciones de idioma → Descargar «Voz».",
+    android: "<strong>Android:</strong> Configuración → Sistema → Idiomas e introducción → Salida de síntesis de voz → Configuración del motor → Instalar datos de voz → Catalán.",
+    ios: "<strong>iPhone / iPad:</strong> Ajustes → Accesibilidad → Contenido leído → Voces → Catalán → Descargar una voz (por ejemplo «Montserrat»).",
+    mac: "<strong>Mac:</strong> Ajustes del sistema → Accesibilidad → Contenido leído → Voz del sistema → Gestionar voces → Catalán.",
+    outro: "Una vez instalada, <strong>cierra y vuelve a abrir el navegador</strong> y el audio sonará con la pronunciación catalana correcta. 🎧",
+  },
+  en: {
+    title: "🔊 Catalan audio doesn't sound right on my device?",
+    intro: "The app uses your <strong>device's own speech synthesis</strong> (operating system or browser) to read words in Catalan. If your device <strong>doesn't have a native Catalan voice installed</strong>, audio may sound robotic, choppy or silent.",
+    callout: "👉 The fix is to install the Catalan voice on the operating system:",
+    windows: "<strong>Windows:</strong> Settings → Time & Language → Language & region → Add a language → Catalan → Language options → Download «Speech».",
+    android: "<strong>Android:</strong> Settings → System → Languages & input → Text-to-speech output → Engine settings → Install voice data → Catalan.",
+    ios: "<strong>iPhone / iPad:</strong> Settings → Accessibility → Spoken Content → Voices → Catalan → Download a voice (for example «Montserrat»).",
+    mac: "<strong>Mac:</strong> System Settings → Accessibility → Spoken Content → System Voice → Manage Voices → Catalan.",
+    outro: "Once installed, <strong>close and reopen your browser</strong> and audio will play with correct Catalan pronunciation. 🎧",
+  },
+  fr: {
+    title: "🔊 L'audio en catalan ne sonne pas bien sur mon appareil ?",
+    intro: "L'application utilise la <strong>synthèse vocale de votre propre appareil</strong> (système d'exploitation ou navigateur) pour lire les mots en catalan. Si l'appareil <strong>n'a aucune voix catalane native installée</strong>, l'audio peut sembler robotique, coupé ou inaudible.",
+    callout: "👉 La solution est d'installer la voix catalane dans le système d'exploitation :",
+    windows: "<strong>Windows :</strong> Paramètres → Heure et langue → Langue et région → Ajouter une langue → Catalan → Options de langue → Télécharger « Voix ».",
+    android: "<strong>Android :</strong> Paramètres → Système → Langues et saisie → Sortie de synthèse vocale → Paramètres du moteur → Installer les données vocales → Catalan.",
+    ios: "<strong>iPhone / iPad :</strong> Réglages → Accessibilité → Contenu énoncé → Voix → Catalan → Télécharger une voix (par exemple « Montserrat »).",
+    mac: "<strong>Mac :</strong> Réglages système → Accessibilité → Contenu énoncé → Voix système → Gérer les voix → Catalan.",
+    outro: "Une fois installée, <strong>fermez et rouvrez le navigateur</strong> et l'audio se fera entendre avec la prononciation catalane correcte. 🎧",
+  },
+  ar: {
+    title: "🔊 الصوت بالكتالانية لا يبدو جيداً على جهازي؟",
+    intro: "يستخدم التطبيق <strong>محرك تحويل النص إلى كلام الخاص بجهازك</strong> (نظام التشغيل أو المتصفح) لقراءة الكلمات بالكتالانية. إذا لم يكن لدى الجهاز <strong>أي صوت كتالاني أصلي مثبت</strong>، فقد يبدو الصوت آلياً أو متقطعاً أو غير مسموع.",
+    callout: "👉 الحل هو تثبيت الصوت الكتالاني في نظام التشغيل:",
+    windows: "<strong>Windows:</strong> الإعدادات → الوقت واللغة → اللغة والمنطقة → إضافة لغة → الكتالانية → خيارات اللغة → تنزيل «الصوت».",
+    android: "<strong>Android:</strong> الإعدادات → النظام → اللغات والإدخال → إخراج تحويل النص إلى كلام → إعدادات المحرك → تثبيت بيانات الصوت → الكتالانية.",
+    ios: "<strong>iPhone / iPad:</strong> الإعدادات → إمكانية الوصول → المحتوى المنطوق → الأصوات → الكتالانية → تنزيل صوت (مثل «Montserrat»).",
+    mac: "<strong>Mac:</strong> إعدادات النظام → إمكانية الوصول → المحتوى المنطوق → صوت النظام → إدارة الأصوات → الكتالانية.",
+    outro: "بعد التثبيت، <strong>أغلق المتصفح وأعد فتحه</strong> وسيُسمع الصوت بالنطق الكتالاني الصحيح. 🎧",
+  },
+  it: {
+    title: "🔊 L'audio in catalano non suona bene sul mio dispositivo?",
+    intro: "L'app usa la <strong>sintesi vocale del tuo dispositivo</strong> (sistema operativo o browser) per leggere le parole in catalano. Se il dispositivo <strong>non ha alcuna voce catalana nativa installata</strong>, l'audio può sembrare robotico, spezzato o non sentirsi.",
+    callout: "👉 La soluzione è installare la voce catalana nel sistema operativo:",
+    windows: "<strong>Windows:</strong> Impostazioni → Data/ora e lingua → Lingua e area → Aggiungi una lingua → Catalano → Opzioni lingua → Scarica «Voce».",
+    android: "<strong>Android:</strong> Impostazioni → Sistema → Lingue e immissione → Output sintesi vocale → Impostazioni motore → Installa dati vocali → Catalano.",
+    ios: "<strong>iPhone / iPad:</strong> Impostazioni → Accessibilità → Contenuto letto → Voci → Catalano → Scarica una voce (ad esempio «Montserrat»).",
+    mac: "<strong>Mac:</strong> Impostazioni di sistema → Accessibilità → Contenuto letto → Voce del sistema → Gestisci voci → Catalano.",
+    outro: "Una volta installata, <strong>chiudi e riapri il browser</strong> e l'audio si sentirà con la pronuncia catalana corretta. 🎧",
+  },
+  pt: {
+    title: "🔊 O áudio em catalão não soa bem no meu dispositivo?",
+    intro: "A aplicação usa a <strong>síntese de voz do teu próprio dispositivo</strong> (sistema operativo ou navegador) para ler as palavras em catalão. Se o dispositivo <strong>não tiver nenhuma voz catalã nativa instalada</strong>, o áudio pode soar robótico, cortado ou não soar de todo.",
+    callout: "👉 A solução é instalar a voz catalã no sistema operativo:",
+    windows: "<strong>Windows:</strong> Definições → Hora e Idioma → Idioma e região → Adicionar idioma → Catalão → Opções de idioma → Transferir «Voz».",
+    android: "<strong>Android:</strong> Definições → Sistema → Idiomas e introdução → Saída de síntese de voz → Definições do motor → Instalar dados de voz → Catalão.",
+    ios: "<strong>iPhone / iPad:</strong> Definições → Acessibilidade → Conteúdo Falado → Vozes → Catalão → Transferir uma voz (por exemplo «Montserrat»).",
+    mac: "<strong>Mac:</strong> Definições do sistema → Acessibilidade → Conteúdo Falado → Voz do sistema → Gerir vozes → Catalão.",
+    outro: "Depois de instalada, <strong>fecha e reabre o navegador</strong> e o áudio terá a pronúncia catalã correta. 🎧",
+  },
+  ptBR: {
+    title: "🔊 O áudio em catalão não está bom no meu dispositivo?",
+    intro: "O app usa a <strong>síntese de voz do seu próprio dispositivo</strong> (sistema operacional ou navegador) para ler as palavras em catalão. Se o dispositivo <strong>não tiver nenhuma voz catalã nativa instalada</strong>, o áudio pode parecer robótico, cortado ou não tocar.",
+    callout: "👉 A solução é instalar a voz catalã no sistema operacional:",
+    windows: "<strong>Windows:</strong> Configurações → Hora e Idioma → Idioma e região → Adicionar idioma → Catalão → Opções de idioma → Baixar «Voz».",
+    android: "<strong>Android:</strong> Configurações → Sistema → Idiomas e entrada → Saída de conversão de texto em voz → Configurações do mecanismo → Instalar dados de voz → Catalão.",
+    ios: "<strong>iPhone / iPad:</strong> Ajustes → Acessibilidade → Conteúdo Falado → Vozes → Catalão → Baixar uma voz (por exemplo «Montserrat»).",
+    mac: "<strong>Mac:</strong> Ajustes do Sistema → Acessibilidade → Conteúdo Falado → Voz do sistema → Gerenciar vozes → Catalão.",
+    outro: "Depois de instalada, <strong>feche e reabra o navegador</strong> e o áudio tocará com a pronúncia catalã correta. 🎧",
+  },
+  uk: {
+    title: "🔊 Каталонський звук погано звучить на моєму пристрої?",
+    intro: "Застосунок використовує <strong>синтез мовлення вашого пристрою</strong> (операційна система або браузер) для читання слів каталонською. Якщо на пристрої <strong>не встановлено жодного рідного каталонського голосу</strong>, звук може звучати роботизовано, переривчасто або не звучати взагалі.",
+    callout: "👉 Рішення — встановити каталонський голос в операційній системі:",
+    windows: "<strong>Windows:</strong> Налаштування → Час і мова → Мова та регіон → Додати мову → Каталонська → Параметри мови → Завантажити «Мовлення».",
+    android: "<strong>Android:</strong> Налаштування → Система → Мови та введення → Виведення синтезу мовлення → Налаштування рушія → Встановити голосові дані → Каталонська.",
+    ios: "<strong>iPhone / iPad:</strong> Налаштування → Доступність → Озвучений вміст → Голоси → Каталонська → Завантажити голос (наприклад «Montserrat»).",
+    mac: "<strong>Mac:</strong> Системні налаштування → Доступність → Озвучений вміст → Голос системи → Керувати голосами → Каталонська.",
+    outro: "Після встановлення <strong>закрийте і знову відкрийте браузер</strong> — звук звучатиме з правильною каталонською вимовою. 🎧",
+  },
+  ro: {
+    title: "🔊 Audio-ul în catalană nu sună bine pe dispozitivul meu?",
+    intro: "Aplicația folosește <strong>sinteza vocală a propriului tău dispozitiv</strong> (sistem de operare sau browser) pentru a citi cuvintele în catalană. Dacă dispozitivul <strong>nu are nicio voce catalană nativă instalată</strong>, audio-ul poate suna robotic, întrerupt sau să nu se audă deloc.",
+    callout: "👉 Soluția este să instalezi vocea catalană în sistemul de operare:",
+    windows: "<strong>Windows:</strong> Setări → Oră și limbă → Limbă și regiune → Adaugă o limbă → Catalană → Opțiuni de limbă → Descarcă «Voce».",
+    android: "<strong>Android:</strong> Setări → Sistem → Limbi și introducere → Ieșire text-vorbire → Setări motor → Instalează date vocale → Catalană.",
+    ios: "<strong>iPhone / iPad:</strong> Setări → Accesibilitate → Conținut rostit → Voci → Catalană → Descarcă o voce (de exemplu «Montserrat»).",
+    mac: "<strong>Mac:</strong> Setări sistem → Accesibilitate → Conținut rostit → Voce sistem → Gestionare voci → Catalană.",
+    outro: "Odată instalată, <strong>închide și redeschide browserul</strong>, iar audio-ul va suna cu pronunția catalană corectă. 🎧",
+  },
+  el: {
+    title: "🔊 Ο ήχος στα καταλανικά δεν ακούγεται καλά στη συσκευή μου;",
+    intro: "Η εφαρμογή χρησιμοποιεί τη <strong>σύνθεση ομιλίας της συσκευής σας</strong> (λειτουργικό σύστημα ή πρόγραμμα περιήγησης) για να διαβάζει τις λέξεις στα καταλανικά. Αν η συσκευή <strong>δεν έχει εγκατεστημένη καμία γηγενή καταλανική φωνή</strong>, ο ήχος μπορεί να ακούγεται ρομποτικός, κομμένος ή να μην ακούγεται καθόλου.",
+    callout: "👉 Η λύση είναι να εγκαταστήσετε την καταλανική φωνή στο λειτουργικό σύστημα:",
+    windows: "<strong>Windows:</strong> Ρυθμίσεις → Ώρα & Γλώσσα → Γλώσσα & περιοχή → Προσθήκη γλώσσας → Καταλανικά → Επιλογές γλώσσας → Λήψη «Ομιλία».",
+    android: "<strong>Android:</strong> Ρυθμίσεις → Σύστημα → Γλώσσες και εισαγωγή → Έξοδος μετατροπής κειμένου σε ομιλία → Ρυθμίσεις μηχανής → Εγκατάσταση δεδομένων φωνής → Καταλανικά.",
+    ios: "<strong>iPhone / iPad:</strong> Ρυθμίσεις → Προσβασιμότητα → Εκφωνούμενο περιεχόμενο → Φωνές → Καταλανικά → Λήψη φωνής (π.χ. «Montserrat»).",
+    mac: "<strong>Mac:</strong> Ρυθμίσεις συστήματος → Προσβασιμότητα → Εκφωνούμενο περιεχόμενο → Φωνή συστήματος → Διαχείριση φωνών → Καταλανικά.",
+    outro: "Μόλις εγκατασταθεί, <strong>κλείστε και ανοίξτε ξανά το πρόγραμμα περιήγησης</strong> και ο ήχος θα ακούγεται με σωστή καταλανική προφορά. 🎧",
+  },
+  ur: {
+    title: "🔊 کیا میرے ڈیوائس پر کاتالان آڈیو ٹھیک نہیں سنائی دیتا؟",
+    intro: "ایپ کاتالان میں الفاظ پڑھنے کے لیے آپ کے <strong>ڈیوائس کی اپنی اسپیچ سنتھیسس</strong> (آپریٹنگ سسٹم یا براؤزر) استعمال کرتی ہے۔ اگر ڈیوائس میں <strong>کوئی مقامی کاتالان آواز نصب نہیں</strong> تو آڈیو روبوٹک، کٹا ہوا یا خاموش لگ سکتا ہے۔",
+    callout: "👉 حل یہ ہے کہ آپریٹنگ سسٹم میں کاتالان آواز انسٹال کریں:",
+    windows: "<strong>Windows:</strong> Settings → Time & Language → Language & region → زبان شامل کریں → کاتالان → زبان کے اختیارات → «Speech» ڈاؤن لوڈ کریں۔",
+    android: "<strong>Android:</strong> Settings → System → Languages & input → Text-to-speech output → Engine settings → Install voice data → کاتالان۔",
+    ios: "<strong>iPhone / iPad:</strong> Settings → Accessibility → Spoken Content → Voices → کاتالان → آواز ڈاؤن لوڈ کریں (مثلاً «Montserrat»)۔",
+    mac: "<strong>Mac:</strong> System Settings → Accessibility → Spoken Content → System Voice → آوازوں کا انتظام → کاتالان۔",
+    outro: "انسٹال ہونے کے بعد، <strong>براؤزر بند کریں اور دوبارہ کھولیں</strong> اور آڈیو درست کاتالان تلفظ کے ساتھ سنائی دے گا۔ 🎧",
+  },
+  zh: {
+    title: "🔊 我的设备上加泰罗尼亚语音频听起来不正常？",
+    intro: "应用使用您<strong>设备自身的语音合成</strong>（操作系统或浏览器）来朗读加泰罗尼亚语单词。如果设备<strong>未安装任何原生加泰罗尼亚语音</strong>，音频可能听起来机械、断断续续或根本没有声音。",
+    callout: "👉 解决办法是在操作系统中安装加泰罗尼亚语音：",
+    windows: "<strong>Windows：</strong>设置 → 时间和语言 → 语言和区域 → 添加语言 → 加泰罗尼亚语 → 语言选项 → 下载「语音」。",
+    android: "<strong>Android：</strong>设置 → 系统 → 语言和输入法 → 文本转语音输出 → 引擎设置 → 安装语音数据 → 加泰罗尼亚语。",
+    ios: "<strong>iPhone / iPad：</strong>设置 → 辅助功能 → 朗读内容 → 语音 → 加泰罗尼亚语 → 下载语音（例如「Montserrat」）。",
+    mac: "<strong>Mac：</strong>系统设置 → 辅助功能 → 朗读内容 → 系统语音 → 管理语音 → 加泰罗尼亚语。",
+    outro: "安装完成后，<strong>关闭并重新打开浏览器</strong>，音频将以正确的加泰罗尼亚语发音播放。🎧",
+  },
+  hi: {
+    title: "🔊 क्या मेरे डिवाइस पर कैटलन ऑडियो ठीक नहीं सुनाई देता?",
+    intro: "ऐप कैटलन में शब्द पढ़ने के लिए आपके <strong>डिवाइस की अपनी स्पीच सिंथेसिस</strong> (ऑपरेटिंग सिस्टम या ब्राउज़र) का उपयोग करता है। यदि डिवाइस में <strong>कोई मूल कैटलन आवाज़ इंस्टॉल नहीं</strong> है, तो ऑडियो रोबोटिक, कटा हुआ या बिल्कुल नहीं सुनाई दे सकता।",
+    callout: "👉 समाधान ऑपरेटिंग सिस्टम में कैटलन आवाज़ इंस्टॉल करना है:",
+    windows: "<strong>Windows:</strong> Settings → Time & Language → Language & region → भाषा जोड़ें → कैटलन → भाषा विकल्प → «Speech» डाउनलोड करें।",
+    android: "<strong>Android:</strong> Settings → System → Languages & input → Text-to-speech output → Engine settings → Install voice data → कैटलन।",
+    ios: "<strong>iPhone / iPad:</strong> Settings → Accessibility → Spoken Content → Voices → कैटलन → आवाज़ डाउनलोड करें (उदाहरण «Montserrat»)।",
+    mac: "<strong>Mac:</strong> System Settings → Accessibility → Spoken Content → System Voice → आवाज़ें प्रबंधित करें → कैटलन।",
+    outro: "इंस्टॉल होने के बाद, <strong>ब्राउज़र बंद करके दोबारा खोलें</strong> और ऑडियो सही कैटलन उच्चारण के साथ सुनाई देगा। 🎧",
+  },
+};
 
 
 const About = () => {
-  const { helpLang, targetLang } = useLanguages();
+  const { helpLang } = useLanguages();
   const s = STRINGS[helpLang] ?? STRINGS.en!;
-  // "Com fer-ne ús" → render once per learning language (target). Fallback to English when not translated.
-  const targetLangs = Array.from(new Set([targetLang])) as LangCode[];
+  const audio = AUDIO_STRINGS[helpLang] ?? AUDIO_STRINGS.en!;
 
   const stepMeta = [
     { icon: Languages, color: "bg-blue-500" },
@@ -312,41 +464,28 @@ const About = () => {
           <p className="text-muted-foreground">{s.intro}</p>
         </section>
 
-        {targetLangs.map((tl) => {
-          const stepsSrc = STRINGS[tl] ?? STRINGS.en!;
-          const sameAsHelp = tl === helpLang;
-          return (
-            <section key={tl} className="mt-8">
-              {!sameAsHelp && (
-                <div className="mb-4 flex items-center gap-2">
-                  <span className="text-2xl">{LANGUAGES[tl].flag}</span>
-                  <h3 className="text-lg font-extrabold text-foreground">
-                    {s.title} · {langName(tl, helpLang)}
-                  </h3>
-                </div>
-              )}
-              <div className="grid gap-4">
-                {stepsSrc.steps.map((step, i) => {
-                  const Icon = stepMeta[i].icon;
-                  return (
-                    <article
-                      key={step.title}
-                      className="flex gap-4 p-5 rounded-2xl border border-border bg-card hover:shadow-md transition-shadow"
-                    >
-                      <div className={`${stepMeta[i].color} text-white rounded-xl p-3 h-fit shrink-0`}>
-                        <Icon className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <h4 className="font-extrabold text-foreground">{step.title}</h4>
-                        <p className="text-sm text-muted-foreground mt-1">{step.text}</p>
-                      </div>
-                    </article>
-                  );
-                })}
-              </div>
-            </section>
-          );
-        })}
+        <section className="mt-8">
+          <div className="grid gap-4">
+            {s.steps.map((step, i) => {
+              const Icon = stepMeta[i].icon;
+              return (
+                <article
+                  key={step.title}
+                  className="flex gap-4 p-5 rounded-2xl border border-border bg-card hover:shadow-md transition-shadow"
+                >
+                  <div className={`${stepMeta[i].color} text-white rounded-xl p-3 h-fit shrink-0`}>
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-extrabold text-foreground">{step.title}</h4>
+                    <p className="text-sm text-muted-foreground mt-1">{step.text}</p>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+
 
 
         <section className="mt-12 p-6 rounded-2xl bg-gradient-to-br from-primary/10 via-accent/10 to-background border border-border">
@@ -387,24 +526,18 @@ const About = () => {
 
         <section className="mt-10 rounded-2xl border-2 border-blue-300 bg-blue-50 p-6">
           <h2 className="text-xl font-extrabold text-blue-900 mb-3 flex items-center gap-2">
-            🔊 L'àudio en català no sona bé al meu dispositiu?
+            {audio.title}
           </h2>
           <div className="space-y-3 text-sm text-blue-950 leading-relaxed">
-            <p>
-              L'aplicació fa servir la <strong>síntesi de veu del teu propi dispositiu</strong> (sistema operatiu o navegador) per llegir les paraules en català. Si el dispositiu <strong>no té instal·lada cap veu catalana nativa</strong>, l'àudio pot sonar robòtic, tallat o no sonar gens.
-            </p>
-            <p className="font-semibold">
-              👉 La solució és instal·lar la veu catalana al sistema operatiu:
-            </p>
+            <p dangerouslySetInnerHTML={{ __html: audio.intro }} />
+            <p className="font-semibold">{audio.callout}</p>
             <ul className="list-disc list-inside space-y-1 ml-2">
-              <li><strong>Windows:</strong> Configuració → Hora i idioma → Idioma i regió → Afegeix idioma → Català → Opcions d'idioma → Descarrega «Veu».</li>
-              <li><strong>Android:</strong> Configuració → Sistema → Idiomes i introducció → Sortida de síntesi de veu → Configuració del motor → Instal·la dades de veu → Català.</li>
-              <li><strong>iPhone / iPad:</strong> Configuració → Accessibilitat → Contingut llegit → Veus → Català → Descarrega una veu (per exemple «Montserrat»).</li>
-              <li><strong>Mac:</strong> Configuració del sistema → Accessibilitat → Contingut llegit → Veu del sistema → Gestiona les veus → Català.</li>
+              <li dangerouslySetInnerHTML={{ __html: audio.windows }} />
+              <li dangerouslySetInnerHTML={{ __html: audio.android }} />
+              <li dangerouslySetInnerHTML={{ __html: audio.ios }} />
+              <li dangerouslySetInnerHTML={{ __html: audio.mac }} />
             </ul>
-            <p>
-              Un cop instal·lada, <strong>tanca i torna a obrir el navegador</strong> i l'àudio sonarà amb pronúncia catalana correcta. 🎧
-            </p>
+            <p dangerouslySetInnerHTML={{ __html: audio.outro }} />
           </div>
         </section>
 
