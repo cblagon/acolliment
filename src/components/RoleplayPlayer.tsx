@@ -16,23 +16,23 @@ export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
   const synthRef = useRef(typeof window !== "undefined" ? window.speechSynthesis : null);
   const voiceRef = useRef<SpeechSynthesisVoice | null>(null);
 
-  // Find best Catalan voice — retry until found
+  // Find best Catalan voice — wait for voiceschanged event
   useEffect(() => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
     const findVoice = () => {
       const voices = speechSynthesis.getVoices();
       if (voices.length > 0) {
-        voiceRef.current = selectBestVoice(voices);
+        voiceRef.current = selectBestVoice(voices, "ca-ES");
       }
     };
-    findVoice();
-    speechSynthesis.addEventListener("voiceschanged", findVoice);
-    // Some browsers need a small delay for voices to load
-    const retryTimer = setTimeout(findVoice, 500);
-    const retryTimer2 = setTimeout(findVoice, 1500);
+    const initial = speechSynthesis.getVoices();
+    if (initial && initial.length > 0) {
+      voiceRef.current = selectBestVoice(initial, "ca-ES");
+    } else {
+      speechSynthesis.addEventListener("voiceschanged", findVoice, { once: true });
+    }
     return () => {
       speechSynthesis.removeEventListener("voiceschanged", findVoice);
-      clearTimeout(retryTimer);
-      clearTimeout(retryTimer2);
     };
   }, []);
 
@@ -40,21 +40,33 @@ export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
     if (!soundOn || !synthRef.current) return;
     synthRef.current.cancel();
 
-    // Re-check voices just before speaking in case they loaded late
-    if (!voiceRef.current) {
-      const voices = speechSynthesis.getVoices();
-      voiceRef.current = selectBestVoice(voices);
-    }
+    const doSpeak = () => {
+      const utterance = new SpeechSynthesisUtterance(text);
+      if (voiceRef.current) utterance.voice = voiceRef.current;
+      utterance.lang = "ca-ES";
+      utterance.rate = 0.78;
+      utterance.pitch = 1.0;
+      synthRef.current!.speak(utterance);
+    };
 
-    const utterance = new SpeechSynthesisUtterance(text);
     if (voiceRef.current) {
-      utterance.voice = voiceRef.current;
+      doSpeak();
+    } else {
+      const voices = speechSynthesis.getVoices();
+      if (voices.length > 0) {
+        voiceRef.current = selectBestVoice(voices, "ca-ES");
+        doSpeak();
+      } else {
+        speechSynthesis.addEventListener(
+          "voiceschanged",
+          () => {
+            voiceRef.current = selectBestVoice(speechSynthesis.getVoices(), "ca-ES");
+            doSpeak();
+          },
+          { once: true }
+        );
+      }
     }
-    // Always force ca-ES to ensure Catalan pronunciation
-    utterance.lang = "ca-ES";
-    utterance.rate = 0.78;
-    utterance.pitch = 1.0;
-    synthRef.current.speak(utterance);
   }, [soundOn]);
 
   const advanceLine = useCallback(() => {

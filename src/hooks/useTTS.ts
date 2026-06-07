@@ -17,7 +17,7 @@ export const LANG_TO_BCP47: Record<LangCode, string | null> = {
   zh: "zh-CN",
   hi: "hi-IN",
   ro: "ro-RO",
-  ha: "ar-SA", // fallback to Arabic
+  ha: "ar-SA",
   wo: null,
   mnk: null,
   snk: null,
@@ -25,9 +25,11 @@ export const LANG_TO_BCP47: Record<LangCode, string | null> = {
 };
 
 function selectBestVoice(voices: SpeechSynthesisVoice[], bcp47: string = "ca-ES"): SpeechSynthesisVoice | null {
+  if (!voices || voices.length === 0) return null;
   const primary = bcp47.toLowerCase();
   const base = primary.split("-")[0];
 
+  // For Catalan, always prioritize any ca* voice strongly.
   const scored = voices
     .filter((v) => {
       const l = v.lang.toLowerCase();
@@ -40,25 +42,55 @@ function selectBestVoice(voices: SpeechSynthesisVoice[], bcp47: string = "ca-ES"
       else if (l.startsWith(base + "-")) score += 60;
       else if (l === base) score += 40;
       if (!v.localService) score += 50;
-      if (v.name.toLowerCase().includes("google")) score += 30;
-      if (v.name.toLowerCase().includes("microsoft")) score += 20;
+      const n = v.name.toLowerCase();
+      if (n.includes("google")) score += 30;
+      if (n.includes("microsoft")) score += 20;
+      if (n.includes("natural") || n.includes("neural")) score += 25;
       return { voice: v, score };
     })
     .sort((a, b) => b.score - a.score);
 
-  return scored[0]?.voice ?? null;
+  if (scored[0]) return scored[0].voice;
+  // Fallback: browser default
+  return voices.find((v) => v.default) ?? voices[0] ?? null;
+}
+
+/** Wait until voices are loaded (or timeout). Safari/iOS often need the event. */
+function loadVoices(): Promise<SpeechSynthesisVoice[]> {
+  return new Promise((resolve) => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) {
+      resolve([]);
+      return;
+    }
+    const existing = speechSynthesis.getVoices();
+    if (existing && existing.length > 0) {
+      resolve(existing);
+      return;
+    }
+    const handler = () => {
+      resolve(speechSynthesis.getVoices() || []);
+    };
+    speechSynthesis.addEventListener("voiceschanged", handler, { once: true });
+    // Safety timeout in case the event never fires
+    setTimeout(() => {
+      resolve(speechSynthesis.getVoices() || []);
+    }, 1500);
+  });
 }
 
 /**
  * Returns a `speak(text, lang?)` function plus `isAvailable(lang)`.
  * Default lang = 'ca' for backward compatibility.
+ * IMPORTANT: only call speak() from a user-triggered event (click/tap).
  */
 export function useTTS() {
   const voicesRef = useRef<SpeechSynthesisVoice[]>([]);
 
   useEffect(() => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
     const refresh = () => {
-      voicesRef.current = speechSynthesis.getVoices();
+      const v = speechSynthesis.getVoices();
+      if (v && v.length > 0) voicesRef.current = v;
     };
     refresh();
     speechSynthesis.addEventListener("voiceschanged", refresh);
@@ -66,32 +98,35 @@ export function useTTS() {
   }, []);
 
   const isAvailable = useCallback((lang: LangCode = "ca") => {
-    // If we have a BCP-47 mapping and the browser supports speechSynthesis,
-    // consider TTS available. Voices may load lazily; selectBestVoice falls
-    // back to the browser default if no exact match exists.
     if (typeof window === "undefined" || !("speechSynthesis" in window)) return false;
     return LANG_TO_BCP47[lang] != null;
   }, []);
 
   const speak = useCallback((text: string, lang: LangCode = "ca") => {
-    const bcp47 = LANG_TO_BCP47[lang];
-    if (!bcp47) return; // unsupported language — silent no-op
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+    const bcp47 = LANG_TO_BCP47[lang] || "ca-ES";
     speechSynthesis.cancel();
 
-    if (voicesRef.current.length === 0) voicesRef.current = speechSynthesis.getVoices();
-    const voice = selectBestVoice(voicesRef.current, bcp47);
-
-    setTimeout(() => {
+    const doSpeak = (voices: SpeechSynthesisVoice[]) => {
+      const voice = selectBestVoice(voices, bcp47);
       const utter = new SpeechSynthesisUtterance(text);
       if (voice) utter.voice = voice;
       utter.lang = bcp47;
       utter.rate = lang === "ca" ? 0.78 : 0.85;
       utter.pitch = 1.0;
       speechSynthesis.speak(utter);
-    }, 100);
+    };
+
+    if (voicesRef.current.length > 0) {
+      doSpeak(voicesRef.current);
+    } else {
+      loadVoices().then((v) => {
+        voicesRef.current = v;
+        doSpeak(v);
+      });
+    }
   }, []);
 
-  // Backward-compat: allow `speak("hola")` calls — they default to Catalan.
   return Object.assign(speak, { isAvailable }) as ((text: string, lang?: LangCode) => void) & {
     isAvailable: (lang?: LangCode) => boolean;
   };
