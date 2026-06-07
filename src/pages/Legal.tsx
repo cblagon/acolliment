@@ -268,12 +268,13 @@ export default function LegalPage({ kind }: LegalPageProps) {
   );
 }
 
-/** Returns the localized navigation labels for the three legal pages, based on helpLang. */
-export function useLegalLabels() {
+/** Returns the localized navigation labels for the three legal pages, based on the given helpLang. */
+export function useLegalLabels(helpLangOverride?: LangCode) {
   const { helpLang } = useLanguages();
+  const lang = helpLangOverride ?? helpLang;
   return {
-    privacy: getContent("privacy", helpLang).title,
-    cookies: getContent("cookies", helpLang).title,
-    legal: getContent("legal", helpLang).title,
+    privacy: getContent("privacy", lang).title,
+    cookies: getContent("cookies", lang).title,
+    legal: getContent("legal", lang).title,
   };
 }

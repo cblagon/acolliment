@@ -350,14 +350,15 @@ const Index = () => {
             <img src="https://mirrors.creativecommons.org/presskit/icons/nd.svg" alt="ND" className="w-4 h-4 mx-0.5" />
           </span>
         </div>
-        <LegalLinks />
+        <LegalLinks helpLang={helpLang} />
       </footer>
     </div>
   );
 };
 
-function LegalLinks() {
-  const labels = useLegalLabels();
+import type { LangCode } from "@/hooks/useLanguage";
+function LegalLinks({ helpLang }: { helpLang: LangCode }) {
+  const labels = useLegalLabels(helpLang);
   return (
     <nav className="flex flex-wrap justify-center gap-x-4 gap-y-1">
       <Link to="/privacitat" className="hover:underline">{labels.privacy}</Link>
