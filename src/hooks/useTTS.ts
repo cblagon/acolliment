@@ -66,10 +66,11 @@ export function useTTS() {
   }, []);
 
   const isAvailable = useCallback((lang: LangCode = "ca") => {
-    const bcp47 = LANG_TO_BCP47[lang];
-    if (!bcp47) return false;
-    if (voicesRef.current.length === 0) voicesRef.current = speechSynthesis.getVoices();
-    return selectBestVoice(voicesRef.current, bcp47) !== null;
+    // If we have a BCP-47 mapping and the browser supports speechSynthesis,
+    // consider TTS available. Voices may load lazily; selectBestVoice falls
+    // back to the browser default if no exact match exists.
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return false;
+    return LANG_TO_BCP47[lang] != null;
   }, []);
 
   const speak = useCallback((text: string, lang: LangCode = "ca") => {
