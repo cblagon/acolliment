@@ -1,0 +1,93 @@
+// Edge function: Catalan spell checker + translator via Lovable AI Gateway
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
+
+Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+
+  try {
+    const { action, text, targetLang } = await req.json();
+    if (!text || typeof text !== "string") {
+      return new Response(JSON.stringify({ error: "Falta el text" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    if (!LOVABLE_API_KEY) {
+      return new Response(JSON.stringify({ error: "LOVABLE_API_KEY no configurat" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    let system = "";
+    let user = "";
+
+    if (action === "spellcheck") {
+      system =
+        "Ets un corrector ortogràfic i gramatical de català. Corregeix només els errors ortogràfics, gramaticals i de puntuació. Mantén el sentit i l'estil originals. Respon NOMÉS amb el text corregit, sense explicacions, sense cometes, sense prefixos.";
+      user = text;
+    } else if (action === "translate") {
+      const langName: Record<string, string> = {
+        ca: "català", es: "castellà", en: "anglès", fr: "francès",
+        ar: "àrab", it: "italià", pt: "portuguès", de: "alemany",
+        uk: "ucraïnès", ro: "romanès", zh: "xinès", hi: "hindi", ur: "urdú",
+      };
+      const target = langName[targetLang] ?? targetLang ?? "castellà";
+      system = `Ets un traductor professional. Tradueix el text al ${target}. Respon NOMÉS amb la traducció, sense explicacions ni cometes.`;
+      user = text;
+    } else {
+      return new Response(JSON.stringify({ error: "Acció no vàlida" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: "google/gemini-2.5-flash",
+        messages: [
+          { role: "system", content: system },
+          { role: "user", content: user },
+        ],
+      }),
+    });
+
+    if (!resp.ok) {
+      const errText = await resp.text();
+      if (resp.status === 429) {
+        return new Response(JSON.stringify({ error: "Massa peticions. Torna-ho a provar d'aquí una estona." }), {
+          status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      if (resp.status === 402) {
+        return new Response(JSON.stringify({ error: "S'han esgotat els crèdits d'IA. Afegeix-ne al workspace." }), {
+          status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      return new Response(JSON.stringify({ error: `Error IA: ${errText}` }), {
+        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const data = await resp.json();
+    const result = data?.choices?.[0]?.message?.content ?? "";
+    return new Response(JSON.stringify({ result }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  } catch (e) {
+    return new Response(JSON.stringify({ error: String((e as Error).message ?? e) }), {
+      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+});
