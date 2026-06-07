@@ -15,6 +15,7 @@ import { LanguageSelector } from "@/components/LanguageSelector";
 import { VisitorCounter } from "@/components/VisitorCounter";
 import { exportAllToPDF } from "@/hooks/useExportPDF";
 import { t, langName } from "@/i18n/ui";
+import { useLegalLabels } from "@/pages/Legal";
 import { Download, HelpCircle, LogIn, LogOut, ShieldCheck } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -335,21 +336,38 @@ const Index = () => {
       </main>
 
       {/* Footer */}
-      <footer className="py-6 text-center text-xs text-muted-foreground border-t border-border">
-        <a href="https://acolliment.vercel.app/" className="hover:underline font-semibold">Acolliment</a>
-        {" "}© 2026 by{" "}
-        <a href="https://dossier.xtec.cat/cblaya/" className="hover:underline">Cristina Blaya Góngora</a>
-        {" "}is licensed under{" "}
-        <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" className="hover:underline">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International</a>
-        <span className="inline-flex items-center ml-1 align-middle">
-          <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="CC" className="w-4 h-4 mx-0.5" />
-          <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="BY" className="w-4 h-4 mx-0.5" />
-          <img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="NC" className="w-4 h-4 mx-0.5" />
-          <img src="https://mirrors.creativecommons.org/presskit/icons/nd.svg" alt="ND" className="w-4 h-4 mx-0.5" />
-        </span>
+      <footer className="py-6 text-center text-xs text-muted-foreground border-t border-border space-y-2">
+        <div>
+          <a href="https://acolliment.vercel.app/" className="hover:underline font-semibold">Acolliment</a>
+          {" "}© 2026 by{" "}
+          <a href="https://dossier.xtec.cat/cblaya/" className="hover:underline">Cristina Blaya Góngora</a>
+          {" "}is licensed under{" "}
+          <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" className="hover:underline">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International</a>
+          <span className="inline-flex items-center ml-1 align-middle">
+            <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="CC" className="w-4 h-4 mx-0.5" />
+            <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="BY" className="w-4 h-4 mx-0.5" />
+            <img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="NC" className="w-4 h-4 mx-0.5" />
+            <img src="https://mirrors.creativecommons.org/presskit/icons/nd.svg" alt="ND" className="w-4 h-4 mx-0.5" />
+          </span>
+        </div>
+        <LegalLinks helpLang={helpLang} />
       </footer>
     </div>
   );
 };
+
+import type { LangCode } from "@/hooks/useLanguage";
+function LegalLinks({ helpLang }: { helpLang: LangCode }) {
+  const labels = useLegalLabels(helpLang);
+  return (
+    <nav className="flex flex-wrap justify-center gap-x-4 gap-y-1">
+      <Link to="/privacitat" className="hover:underline">{labels.privacy}</Link>
+      <span aria-hidden>·</span>
+      <Link to="/galetes" className="hover:underline">{labels.cookies}</Link>
+      <span aria-hidden>·</span>
+      <Link to="/avis-legal" className="hover:underline">{labels.legal}</Link>
+    </nav>
+  );
+}
 
 export default Index;

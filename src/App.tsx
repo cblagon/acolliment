@@ -8,6 +8,7 @@ import About from "./pages/About.tsx";
 import Auth from "./pages/Auth.tsx";
 import Admin from "./pages/Admin.tsx";
 import HelpModeracio from "./pages/HelpModeracio.tsx";
+import LegalPage from "./pages/Legal.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,9 @@ const App = () => (
         <Route path="/ajuda/moderacio" element={<HelpModeracio />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/privacitat" element={<LegalPage kind="privacy" />} />
+        <Route path="/galetes" element={<LegalPage kind="cookies" />} />
+        <Route path="/avis-legal" element={<LegalPage kind="legal" />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
