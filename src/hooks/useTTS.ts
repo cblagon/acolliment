@@ -132,8 +132,7 @@ export function useTTS() {
 
     const doSpeak = (voices: SpeechSynthesisVoice[]) => {
       const voice = selectBestVoice(voices, bcp47);
-      // Strict Catalan rule: if no Catalan voice, skip rather than mispronounce.
-      if (!voice && bcp47.startsWith("ca")) return;
+
 
       // Guard against double-fire (e.g. Android voiceschanged firing twice).
       if (speakingRef.current) speechSynthesis.cancel();
