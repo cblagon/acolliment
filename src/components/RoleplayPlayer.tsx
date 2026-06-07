@@ -41,13 +41,8 @@ export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
     synthRef.current.cancel();
 
     const doSpeak = () => {
-      // Strict: skip if no Catalan voice — avoids Spanish mispronunciation.
-      if (!voiceRef.current) {
-        console.warn("No Catalan voice found on this device");
-        return;
-      }
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.voice = voiceRef.current;
+      if (voiceRef.current) utterance.voice = voiceRef.current;
       utterance.lang = "ca-ES";
       utterance.rate = 0.9;
       utterance.pitch = 1;
