@@ -42,13 +42,12 @@ function selectBestVoice(voices: SpeechSynthesisVoice[], bcp47: string = "ca-ES"
 
   if (matches.length === 0) {
     if (base === "ca") {
-      // Strict: never use Spanish for Catalan — it mispronounces words.
-      console.warn("No Catalan voice found on this device");
-      return null;
+      console.warn("No Catalan voice found on this device — using default voice with lang=ca-ES");
     }
-    // For other languages, allow the browser default as last resort.
-    return voices.find((v) => v.default) ?? null;
+    // Fall back to browser default. utterance.lang stays as requested so cloud engines may still try Catalan.
+    return voices.find((v) => v.default) ?? voices[0] ?? null;
   }
+
 
   const scored = matches
     .map((v) => {
