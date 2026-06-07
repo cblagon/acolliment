@@ -526,24 +526,18 @@ const About = () => {
 
         <section className="mt-10 rounded-2xl border-2 border-blue-300 bg-blue-50 p-6">
           <h2 className="text-xl font-extrabold text-blue-900 mb-3 flex items-center gap-2">
-            🔊 L'àudio en català no sona bé al meu dispositiu?
+            {audio.title}
           </h2>
           <div className="space-y-3 text-sm text-blue-950 leading-relaxed">
-            <p>
-              L'aplicació fa servir la <strong>síntesi de veu del teu propi dispositiu</strong> (sistema operatiu o navegador) per llegir les paraules en català. Si el dispositiu <strong>no té instal·lada cap veu catalana nativa</strong>, l'àudio pot sonar robòtic, tallat o no sonar gens.
-            </p>
-            <p className="font-semibold">
-              👉 La solució és instal·lar la veu catalana al sistema operatiu:
-            </p>
+            <p dangerouslySetInnerHTML={{ __html: audio.intro }} />
+            <p className="font-semibold">{audio.callout}</p>
             <ul className="list-disc list-inside space-y-1 ml-2">
-              <li><strong>Windows:</strong> Configuració → Hora i idioma → Idioma i regió → Afegeix idioma → Català → Opcions d'idioma → Descarrega «Veu».</li>
-              <li><strong>Android:</strong> Configuració → Sistema → Idiomes i introducció → Sortida de síntesi de veu → Configuració del motor → Instal·la dades de veu → Català.</li>
-              <li><strong>iPhone / iPad:</strong> Configuració → Accessibilitat → Contingut llegit → Veus → Català → Descarrega una veu (per exemple «Montserrat»).</li>
-              <li><strong>Mac:</strong> Configuració del sistema → Accessibilitat → Contingut llegit → Veu del sistema → Gestiona les veus → Català.</li>
+              <li dangerouslySetInnerHTML={{ __html: audio.windows }} />
+              <li dangerouslySetInnerHTML={{ __html: audio.android }} />
+              <li dangerouslySetInnerHTML={{ __html: audio.ios }} />
+              <li dangerouslySetInnerHTML={{ __html: audio.mac }} />
             </ul>
-            <p>
-              Un cop instal·lada, <strong>tanca i torna a obrir el navegador</strong> i l'àudio sonarà amb pronúncia catalana correcta. 🎧
-            </p>
+            <p dangerouslySetInnerHTML={{ __html: audio.outro }} />
           </div>
         </section>
 
