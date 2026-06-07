@@ -464,41 +464,28 @@ const About = () => {
           <p className="text-muted-foreground">{s.intro}</p>
         </section>
 
-        {targetLangs.map((tl) => {
-          const stepsSrc = STRINGS[tl] ?? STRINGS.en!;
-          const sameAsHelp = tl === helpLang;
-          return (
-            <section key={tl} className="mt-8">
-              {!sameAsHelp && (
-                <div className="mb-4 flex items-center gap-2">
-                  <span className="text-2xl">{LANGUAGES[tl].flag}</span>
-                  <h3 className="text-lg font-extrabold text-foreground">
-                    {s.title} · {langName(tl, helpLang)}
-                  </h3>
-                </div>
-              )}
-              <div className="grid gap-4">
-                {stepsSrc.steps.map((step, i) => {
-                  const Icon = stepMeta[i].icon;
-                  return (
-                    <article
-                      key={step.title}
-                      className="flex gap-4 p-5 rounded-2xl border border-border bg-card hover:shadow-md transition-shadow"
-                    >
-                      <div className={`${stepMeta[i].color} text-white rounded-xl p-3 h-fit shrink-0`}>
-                        <Icon className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <h4 className="font-extrabold text-foreground">{step.title}</h4>
-                        <p className="text-sm text-muted-foreground mt-1">{step.text}</p>
-                      </div>
-                    </article>
-                  );
-                })}
-              </div>
-            </section>
-          );
-        })}
+        <section className="mt-8">
+          <div className="grid gap-4">
+            {s.steps.map((step, i) => {
+              const Icon = stepMeta[i].icon;
+              return (
+                <article
+                  key={step.title}
+                  className="flex gap-4 p-5 rounded-2xl border border-border bg-card hover:shadow-md transition-shadow"
+                >
+                  <div className={`${stepMeta[i].color} text-white rounded-xl p-3 h-fit shrink-0`}>
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="font-extrabold text-foreground">{step.title}</h4>
+                    <p className="text-sm text-muted-foreground mt-1">{step.text}</p>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+
 
 
         <section className="mt-12 p-6 rounded-2xl bg-gradient-to-br from-primary/10 via-accent/10 to-background border border-border">
