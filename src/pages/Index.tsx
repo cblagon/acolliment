@@ -44,6 +44,7 @@ const Index = () => {
   const { isAdmin } = useIsAdmin();
   const { submissions, submit } = useBlocSubmissions();
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
   const [view, setView] = useState<View>({ type: "grid" });
 
   // IDs that belong to the "Presentacions orals" section (rendered separately), per level
@@ -179,6 +180,14 @@ const Index = () => {
               <HelpCircle className="w-4 h-4" />
               <span className="hidden sm:inline">Ajuda</span>
             </Link>
+            <button
+              onClick={toggleTheme}
+              title={theme === "dark" ? "Mode clar (dia)" : "Mode fosc (nit)"}
+              aria-label="Canvia el tema"
+              className="flex items-center justify-center w-9 h-9 rounded-xl bg-muted text-foreground hover:bg-muted/80 transition-all active:scale-95"
+            >
+              {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
             {isAdmin && (
               <Link
                 to="/admin"
