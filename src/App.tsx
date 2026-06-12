@@ -11,10 +11,13 @@ import HelpModeracio from "./pages/HelpModeracio.tsx";
 import LegalPage from "./pages/Legal.tsx";
 import Eines from "./pages/Eines.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import { useTheme } from "./hooks/useTheme";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+const App = () => {
+  useTheme(); // initialise theme class on <html>
+  return (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
@@ -36,6 +39,7 @@ const App = () => (
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
-);
+  );
+};
 
 export default App;

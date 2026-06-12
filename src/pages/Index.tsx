@@ -16,7 +16,8 @@ import { VisitorCounter } from "@/components/VisitorCounter";
 import { exportAllToPDF } from "@/hooks/useExportPDF";
 import { t, langName } from "@/i18n/ui";
 import { useLegalLabels } from "@/pages/Legal";
-import { Download, HelpCircle, LogIn, LogOut, ShieldCheck, Wand2 } from "lucide-react";
+import { Download, HelpCircle, LogIn, LogOut, Moon, ShieldCheck, Sun, Wand2 } from "lucide-react";
+import { useTheme } from "@/hooks/useTheme";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
