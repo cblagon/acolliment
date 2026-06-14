@@ -288,12 +288,12 @@ const eso1_cientific: Ambit = {
       f("Ecosistema", "Ecosystem", "🌳", "El bosc és un ecosistema."),
     ]),
     mk("eso1-ct-cos-huma", "El cos humà", "🫀", "bg-bloom-purple", [
-      f("Sistema digestiu", "Digestive system", "🍽️", "El sistema digestiu digereix els aliments."),
-      f("Sistema respiratori", "Respiratory system", "🫁", "El sistema respiratori porta oxigen."),
-      f("Sistema circulatori", "Circulatory system", "❤️", "El sistema circulatori transporta la sang."),
+      f("Sistema digestiu", "Digestive system", "👄→🫃", "El sistema digestiu digereix els aliments."),
+      f("Sistema respiratori", "Respiratory system", "👃→🫁", "El sistema respiratori porta oxigen."),
+      f("Sistema circulatori", "Circulatory system", "❤️🩸", "El sistema circulatori transporta la sang."),
       f("Cor", "Heart", "❤️", "El cor batega."),
-      f("Pulmons", "Lungs", "🫁", "Respira amb els pulmons."),
-      f("Estómac", "Stomach", "🫃", "L'estómac digereix els aliments."),
+      f("Pulmons", "Lungs", "🫁🫁", "Respira amb els pulmons."),
+      f("Estómac", "Stomach", "🥣", "L'estómac digereix els aliments."),
       f("Cervell", "Brain", "🧠", "El cervell pensa."),
     ]),
     mk("eso1-ct-materia", "La matèria", "⚗️", "bg-primary", [
