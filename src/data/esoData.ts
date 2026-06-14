@@ -213,7 +213,7 @@ const eso1_matematic: Ambit = {
       f("Probabilitat", "Probability", "🎲", "Quina probabilitat hi ha?"),
       f("Atzar", "Chance", "🎰", "Un joc d'atzar."),
       f("Dau", "Die", "🎲", "Tira el dau."),
-      f("Moneda", "Coin", "🪙", "Llança la moneda a l'aire."),
+      f("Moneda", "Coin", "💰", "Llança la moneda a l'aire."),
     ]),
     mk("eso1-mat-algebra", "Mòdul 8 · Àlgebra bàsica", "🔣", "bg-primary", [
       f("Incògnita", "Unknown", "❓", "La x és la incògnita."),
