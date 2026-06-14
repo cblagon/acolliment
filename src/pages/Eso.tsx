@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft, GraduationCap } from "lucide-react";
+import { ArrowLeft, GraduationCap, Construction } from "lucide-react";
 import { cursos } from "@/data/esoData";
 
 export default function Eso() {
@@ -23,17 +23,26 @@ export default function Eso() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {cursos.map((c, i) => {
             const totalBlocs = c.ambits.reduce((s, a) => s + a.blocs.length, 0);
+            const enConstruccio = totalBlocs === 0;
             return (
               <Link
                 key={c.id}
                 to={`/eso/${c.id}`}
-                className="group flex flex-col items-center justify-center gap-3 rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 active:scale-[0.97] bg-primary text-primary-foreground animate-reveal-up"
+                className="group relative flex flex-col items-center justify-center gap-3 rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 active:scale-[0.97] bg-primary text-primary-foreground animate-reveal-up"
                 style={{ animationDelay: `${i * 60}ms` }}
               >
+                {enConstruccio && (
+                  <span
+                    title="En construcció"
+                    className="absolute top-2 right-2 flex items-center gap-1 rounded-full bg-bloom-yellow text-foreground text-[10px] font-bold px-2 py-1 shadow"
+                  >
+                    <Construction className="w-3 h-3" /> En obres
+                  </span>
+                )}
                 <span className="text-5xl drop-shadow-sm transition-transform duration-300 group-hover:scale-110">{c.emoji}</span>
                 <span className="font-bold text-lg leading-tight text-center">{c.nom}</span>
                 <span className="text-xs opacity-90">
-                  {totalBlocs > 0 ? `${totalBlocs} mòduls` : "Properament"}
+                  {enConstruccio ? "Properament" : `${totalBlocs} mòduls`}
                 </span>
               </Link>
             );
