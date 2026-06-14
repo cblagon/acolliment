@@ -205,7 +205,7 @@ const eso1_matematic: Ambit = {
     ]),
     mk("eso1-mat-estadistica", "Mòdul 7 · Estadística i atzar", "📊", "bg-bloom-yellow", [
       f("Gràfic de barres", "Bar chart", "📊", "Fes un gràfic de barres."),
-      f("Diagrama de sectors", "Pie chart", "🥧", "El diagrama de sectors mostra percentatges."),
+      f("Diagrama de sectors", "Pie chart", "◔", "El diagrama de sectors mostra percentatges."),
       f("Taula de freqüències", "Frequency table", "📋", "Omple la taula de freqüències."),
       f("Mitjana", "Mean", "📈", "Calcula la mitjana de les notes."),
       f("Moda", "Mode", "🔝", "La moda és el valor més repetit."),
