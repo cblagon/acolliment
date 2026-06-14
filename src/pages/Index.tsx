@@ -181,6 +181,14 @@ const Index = () => {
               <span className="hidden sm:inline">Cursos ESO</span>
             </Link>
             <Link
+              to="/normes-centre"
+              title="Normes de funcionament del centre"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-bloom-green text-white text-sm font-semibold hover:opacity-90 transition-all active:scale-95"
+            >
+              <ScrollText className="w-4 h-4" />
+              <span className="hidden sm:inline">Normes</span>
+            </Link>
+            <Link
               to="/ajuda"
               title="Com fer-ne ús"
               className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-sm font-semibold hover:bg-muted/80 transition-all active:scale-95"
