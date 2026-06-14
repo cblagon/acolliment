@@ -312,6 +312,21 @@ const eso1_cientific: Ambit = {
       f("Energia no renovable", "Non-renewable energy", "🛢️", "El petroli és energia no renovable."),
       f("Font d'energia", "Energy source", "🔋", "El vent és una font d'energia."),
     ]),
+    mk("eso1-ct-digitalitzacio", "Digitalització", "💻", "bg-bloom-purple", [
+      f("Ordinador", "Computer", "🖥️", "L'ordinador està engegat."),
+      f("Ordinador portàtil", "Laptop", "💻", "Porto l'ordinador portàtil a classe."),
+      f("Pantalla", "Screen", "🖥️", "Mira la pantalla."),
+      f("Teclat", "Keyboard", "⌨️", "Escriu amb el teclat."),
+      f("Ratolí", "Mouse", "🖱️", "Mou el ratolí."),
+      f("USB", "USB drive", "🔌", "Guarda el fitxer al USB."),
+      f("Altaveus", "Speakers", "🔊", "Apuja el volum dels altaveus."),
+      f("Auriculars", "Headphones", "🎧", "Posa't els auriculars."),
+      f("Projector", "Projector", "📽️", "El projector mostra la imatge."),
+      f("Pissarra digital", "Interactive whiteboard", "🖼️", "Escriu a la pissarra digital."),
+      f("Maquinari", "Hardware", "🖲️", "El maquinari són les parts físiques."),
+      f("Programari", "Software", "🧩", "El programari són els programes."),
+      f("Perifèrics", "Peripherals", "🖱️⌨️", "El teclat i el ratolí són perifèrics."),
+    ]),
   ],
 };
 
