@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft, GraduationCap } from "lucide-react";
+import { ArrowLeft, GraduationCap, Construction } from "lucide-react";
 import { cursos } from "@/data/esoData";
 
 export default function Eso() {
