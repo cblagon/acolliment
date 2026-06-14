@@ -235,7 +235,7 @@ const eso1_cientific: Ambit = {
   descripcio: "Ciències, tecnologia, digitalització, laboratori i el món natural.",
   blocs: [
     mk("eso1-ct-materials", "Materials de construcció", "🪵", "bg-primary", [
-      f("Fusta", "Wood", "🪵", "La cadira és de fusta."),
+      f("Fusta", "Wood", "🌳", "La cadira és de fusta."),
       f("Metall", "Metal", "⛓️", "El got de metall."),
       f("Plàstic", "Plastic", "🧴", "L'ampolla és de plàstic."),
       f("Cartró", "Cardboard", "📦", "La caixa és de cartró."),
