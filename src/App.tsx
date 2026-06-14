@@ -37,6 +37,7 @@ const App = () => {
         <Route path="/eso" element={<Eso />} />
         <Route path="/eso/:curs" element={<EsoCurs />} />
         <Route path="/eso/:curs/:ambit" element={<EsoAmbit />} />
+        <Route path="/normes-centre" element={<NormesCentre />} />
         <Route path="/privacitat" element={<LegalPage kind="privacy" />} />
         <Route path="/galetes" element={<LegalPage kind="cookies" />} />
         <Route path="/avis-legal" element={<LegalPage kind="legal" />} />
