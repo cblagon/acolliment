@@ -98,7 +98,10 @@ export default function Admin() {
             <h1 className="text-2xl font-extrabold">🛡️ Panell d'administració</h1>
             <p className="text-xs text-muted-foreground">Modera les aportacions dels usuaris</p>
           </div>
-          <Link to="/" className="text-sm font-semibold text-primary hover:underline">← Inici</Link>
+          <div className="flex items-center gap-3">
+            <Link to="/admin/stats" className="text-sm font-semibold text-primary hover:underline">📊 Estadístiques</Link>
+            <Link to="/" className="text-sm font-semibold text-primary hover:underline">← Inici</Link>
+          </div>
         </div>
       </header>
 
