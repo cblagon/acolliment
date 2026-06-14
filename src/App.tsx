@@ -13,6 +13,7 @@ import Eines from "./pages/Eines.tsx";
 import Eso from "./pages/Eso.tsx";
 import EsoCurs from "./pages/EsoCurs.tsx";
 import EsoAmbit from "./pages/EsoAmbit.tsx";
+import NormesCentre from "./pages/NormesCentre.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { useTheme } from "./hooks/useTheme";
 
@@ -36,6 +37,7 @@ const App = () => {
         <Route path="/eso" element={<Eso />} />
         <Route path="/eso/:curs" element={<EsoCurs />} />
         <Route path="/eso/:curs/:ambit" element={<EsoAmbit />} />
+        <Route path="/normes-centre" element={<NormesCentre />} />
         <Route path="/privacitat" element={<LegalPage kind="privacy" />} />
         <Route path="/galetes" element={<LegalPage kind="cookies" />} />
         <Route path="/avis-legal" element={<LegalPage kind="legal" />} />

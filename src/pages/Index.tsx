@@ -16,7 +16,7 @@ import { VisitorCounter } from "@/components/VisitorCounter";
 import { exportAllToPDF } from "@/hooks/useExportPDF";
 import { t, langName } from "@/i18n/ui";
 import { useLegalLabels } from "@/pages/Legal";
-import { Download, GraduationCap, HelpCircle, LogIn, LogOut, Moon, ShieldCheck, Sun, Wand2 } from "lucide-react";
+import { Download, GraduationCap, HelpCircle, LogIn, LogOut, Moon, ScrollText, ShieldCheck, Sun, Wand2 } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -179,6 +179,14 @@ const Index = () => {
             >
               <GraduationCap className="w-4 h-4" />
               <span className="hidden sm:inline">Cursos ESO</span>
+            </Link>
+            <Link
+              to="/normes-centre"
+              title="Normes de funcionament del centre"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-bloom-green text-white text-sm font-semibold hover:opacity-90 transition-all active:scale-95"
+            >
+              <ScrollText className="w-4 h-4" />
+              <span className="hidden sm:inline">Normes</span>
             </Link>
             <Link
               to="/ajuda"
