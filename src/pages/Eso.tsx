@@ -36,7 +36,7 @@ export default function Eso() {
                     title="En construcció"
                     className="absolute top-2 right-2 flex items-center gap-1 rounded-full bg-bloom-yellow text-foreground text-[10px] font-bold px-2 py-1 shadow"
                   >
-                    <Construction className="w-3 h-3" /> En obres
+                    <Construction className="w-3 h-3" /> En construcció
                   </span>
                 )}
                 <span className="text-5xl drop-shadow-sm transition-transform duration-300 group-hover:scale-110">{c.emoji}</span>
