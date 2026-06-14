@@ -141,8 +141,8 @@ const eso1_matematic: Ambit = {
       f("Hexàgon", "Hexagon", "⬢", "La rajola és un hexàgon."),
       f("Rombe", "Rhombus", "🔷", "El rombe té quatre costats iguals."),
       f("Trapezi", "Trapezium", "⏢", "El trapezi té dos costats paral·lels."),
-      f("Costat", "Side", "📏", "Mesura el costat del triangle."),
-      f("Vèrtex", "Vertex", "📍", "El triangle té tres vèrtexs."),
+      f("Costat", "Side", "△↔", "Mesura el costat del triangle."),
+      f("Vèrtex", "Vertex", "△•", "El triangle té tres vèrtexs."),
       f("Angle", "Angle", "📐", "L'angle recte fa 90 graus."),
     ]),
     mk("eso1-mat-cossos3d", "Mòdul 2 · Cossos geomètrics (3D)", "🧊", "bg-accent", [
