@@ -170,10 +170,10 @@ const eso1_matematic: Ambit = {
     mk("eso1-mat-instruments", "Mòdul 4 · Instruments de dibuix i mesura", "📏", "bg-bloom-pink", [
       f("Regle", "Ruler", "📏", "Mesura amb el regle."),
       f("Escaire", "Set square", "📐", "Dibuixa amb l'escaire."),
-      f("Compàs", "Compass", "🧭", "Fes un cercle amb el compàs."),
-      f("Transportador d'angles", "Protractor", "📐", "Mesura l'angle amb el transportador."),
-      f("Calculadora", "Calculator", "🧮", "Usa la calculadora."),
-      f("Cinta mètrica", "Tape measure", "📏", "Mesura l'aula amb la cinta mètrica."),
+      f("Compàs", "Compass", "✏️◯", "Fes un cercle amb el compàs."),
+      f("Transportador d'angles", "Protractor", "◗", "Mesura l'angle amb el transportador."),
+      f("Calculadora", "Calculator", "🖩", "Usa la calculadora."),
+      f("Flexòmetre", "Tape measure", "📐📏", "Mesura l'aula amb el flexòmetre."),
     ]),
     mk("eso1-mat-nombres", "Mòdul 5 · Nombres i operacions", "➕", "bg-bloom-purple", [
       f("Suma", "Addition", "➕", "Fes la suma."),
