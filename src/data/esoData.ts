@@ -158,14 +158,14 @@ const eso1_matematic: Ambit = {
     ]),
     mk("eso1-mat-propietats", "Mòdul 3 · Elements i propietats", "📐", "bg-secondary", [
       f("Angle recte", "Right angle", "📐", "L'angle recte fa 90°."),
-      f("Angle agut", "Acute angle", "📏", "Un angle agut és menor de 90°."),
-      f("Angle obtús", "Obtuse angle", "📏", "Un angle obtús és major de 90°."),
+      f("Angle agut", "Acute angle", "∠", "Un angle agut és menor de 90°."),
+      f("Angle obtús", "Obtuse angle", "⦦", "Un angle obtús és major de 90°."),
       f("Perímetre", "Perimeter", "🔲", "Calcula el perímetre del quadrat."),
       f("Àrea", "Area", "🟦", "L'àrea és base per altura."),
       f("Volum", "Volume", "📦", "Calcula el volum del cub."),
       f("Simetria", "Symmetry", "🪞", "La papallona té simetria."),
-      f("Paral·lel", "Parallel", "🟰", "Les vies del tren són paral·leles."),
-      f("Perpendicular", "Perpendicular", "➕", "Aquestes línies són perpendiculars."),
+      f("Paral·lel", "Parallel", "‖", "Les vies del tren són paral·leles."),
+      f("Perpendicular", "Perpendicular", "⊥", "Aquestes línies són perpendiculars."),
     ]),
     mk("eso1-mat-instruments", "Mòdul 4 · Instruments de dibuix i mesura", "📏", "bg-bloom-pink", [
       f("Regle", "Ruler", "📏", "Mesura amb el regle."),
