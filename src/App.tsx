@@ -13,6 +13,7 @@ import Eines from "./pages/Eines.tsx";
 import Eso from "./pages/Eso.tsx";
 import EsoCurs from "./pages/EsoCurs.tsx";
 import EsoAmbit from "./pages/EsoAmbit.tsx";
+import NormesCentre from "./pages/NormesCentre.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { useTheme } from "./hooks/useTheme";
 
