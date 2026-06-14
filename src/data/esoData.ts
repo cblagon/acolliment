@@ -234,12 +234,39 @@ const eso1_cientific: Ambit = {
   color: "bg-bloom-teal",
   descripcio: "Ciències, tecnologia, digitalització, laboratori i el món natural.",
   blocs: [
-    mk("eso1-ct-materials", "Materials de construcció", "🪵", "bg-primary", [
+    mk("eso1-ct-materials", "Materials de construcció", "🧱", "bg-primary", [
+      // Pètris i naturals
+      f("Pedra", "Stone", "🪨", "El mur és de pedra."),
+      f("Granit", "Granite", "🪨", "El granit és una roca molt dura."),
+      f("Pissarra", "Slate", "⬛", "La teulada és de pissarra."),
+      f("Calcària", "Limestone", "🤍", "La calcària és una roca sedimentària."),
+      f("Sorra", "Sand", "🏖️", "La sorra es fa servir per fer formigó."),
+      f("Grava", "Gravel", "◽", "La grava forma part del formigó."),
+      // Ceràmics i vidres
+      f("Maó", "Brick", "🧱", "El mur és fet de maons."),
+      f("Teula", "Roof tile", "🏠", "La teulada està feta de teules."),
+      f("Argila", "Clay", "🟫", "Els maons es fan amb argila cuita."),
+      f("Vidre", "Glass", "🪟", "La finestra és de vidre."),
+      // Metàl·lics
+      f("Metall", "Metal", "⛓️", "El metall és resistent."),
+      f("Acer", "Steel", "🔩", "Les bigues són d'acer."),
+      f("Alumini", "Aluminium", "🥫", "Les finestres són d'alumini."),
+      // Aglomerants
+      f("Ciment", "Cement", "🪣", "El ciment s'endureix amb aigua."),
+      f("Formigó", "Concrete", "🏗️", "El pilar és de formigó armat."),
+      f("Morter", "Mortar", "🧱", "Uneix els maons amb morter."),
+      f("Guix", "Plaster", "⚪", "El sostre està arrebossat amb guix."),
+      f("Calç", "Lime", "🤍", "La calç s'usa als arrebossats."),
+      // Orgànics
       f("Fusta", "Wood", "🌳", "La cadira és de fusta."),
-      f("Metall", "Metal", "⛓️", "El got de metall."),
+      f("Suro", "Cork", "🟫", "El suro és un bon aïllant."),
+      f("Lli", "Linen", "🌾", "El lli és una fibra vegetal."),
+      f("Cotó", "Cotton", "☁️", "El cotó és suau i natural."),
+      f("Espart", "Esparto", "🌿", "L'espart s'usa per fer cordes."),
+      f("Llana d'ovella", "Sheep wool", "🐑", "La llana d'ovella aïlla del fred."),
+      // Altres
       f("Plàstic", "Plastic", "🧴", "L'ampolla és de plàstic."),
       f("Cartró", "Cardboard", "📦", "La caixa és de cartró."),
-      f("Vidre", "Glass", "🥛", "El got és de vidre."),
       f("Tela", "Fabric", "🧵", "La samarreta és de tela."),
     ]),
     mk("eso1-ct-dibuix-tecnic", "Dibuix tècnic", "📐", "bg-accent", [
