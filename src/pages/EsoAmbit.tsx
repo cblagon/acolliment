@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ScrollText, ArrowRight } from "lucide-react";
 import { getAmbit } from "@/data/esoData";
 import type { Bloc } from "@/data/blocksData";
 import { FitxaViewer } from "@/components/FitxaViewer";
