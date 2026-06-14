@@ -39,6 +39,22 @@ export default function EsoAmbit() {
         {view.type === "grid" && (
           <>
             <p className="text-muted-foreground mb-6 text-balance">{ambit.descripcio}</p>
+            {ambit.id === "tutoria" && (
+              <Link
+                to="/normes-centre"
+                className="group mb-6 flex items-center gap-4 rounded-2xl p-5 shadow-md hover:shadow-xl transition-all hover:-translate-y-0.5 bg-gradient-to-r from-bloom-green to-bloom-teal text-white"
+              >
+                <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-white/20 flex-shrink-0">
+                  <ScrollText className="w-7 h-7" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-xs uppercase tracking-wider opacity-80 font-semibold">Mòdul especial</p>
+                  <p className="font-extrabold text-lg leading-tight">Normes de funcionament del centre</p>
+                  <p className="text-sm opacity-90">Targetes amb ✅/❌ i àudio per practicar el català.</p>
+                </div>
+                <ArrowRight className="w-6 h-6 transition-transform group-hover:translate-x-1" />
+              </Link>
+            )}
             {ambit.blocs.length === 0 ? (
               <div className="rounded-2xl border-2 border-dashed border-muted-foreground/30 p-12 text-center text-muted-foreground">
                 <p className="text-lg font-semibold">Properament</p>
