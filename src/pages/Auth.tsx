@@ -220,6 +220,26 @@ export default function Auth() {
           >
             {mode === "signup" ? s.toggleToSignIn : s.toggleToSignUp}
           </button>
+
+          {mode === "signin" && (
+            <button
+              type="button"
+              onClick={async () => {
+                const trimmed = email.trim();
+                const ok = z.string().email().safeParse(trimmed).success;
+                if (!ok) { toast.error(s.forgotNeedEmail); return; }
+                const { error } = await supabase.auth.resetPasswordForEmail(trimmed, {
+                  redirectTo: `${window.location.origin}/reset-password`,
+                });
+                if (error) toast.error(error.message);
+                else toast.success(s.forgotSent);
+              }}
+              className="mt-2 w-full text-xs text-muted-foreground hover:text-foreground transition-colors"
+              title={s.forgotPrompt}
+            >
+              {s.forgot}
+            </button>
+          )}
         </div>
       </main>
     </div>
