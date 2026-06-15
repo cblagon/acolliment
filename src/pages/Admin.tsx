@@ -101,6 +101,17 @@ export default function Admin() {
           <div className="flex items-center gap-3">
             <Link to="/admin/stats" className="text-sm font-semibold text-primary hover:underline">📊 Estadístiques</Link>
             <Link to="/" className="text-sm font-semibold text-primary hover:underline">← Inici</Link>
+            <button
+              onClick={async () => {
+                const { supabase } = await import("@/integrations/supabase/client");
+                await supabase.auth.signOut();
+                navigate("/");
+              }}
+              className="flex items-center gap-1 text-sm font-semibold text-destructive hover:underline"
+              title="Tancar sessió"
+            >
+              <LogOut className="w-4 h-4" /> Sortir
+            </button>
           </div>
         </div>
       </header>
