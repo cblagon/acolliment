@@ -47,7 +47,7 @@ const STRINGS: Partial<Record<string, AuthStrings>> = {
     passwordPlaceholder: "Mínim 6 caràcters",
     forgot: "Has oblidat la contrasenya?",
     forgotPrompt: "Introdueix el teu correu i et farem arribar un enllaç per recuperar la contrasenya.",
-    forgotSent: "Correu enviat! Revisa la teva safata d'entrada.",
+    forgotSent: "Correu enviat! Revisa la safata d'entrada i també la de correu brossa (spam o promocions).",
     forgotNeedEmail: "Escriu primer el teu correu electrònic.",
   },
   es: {
@@ -68,7 +68,7 @@ const STRINGS: Partial<Record<string, AuthStrings>> = {
     passwordPlaceholder: "Mínimo 6 caracteres",
     forgot: "¿Has olvidado la contraseña?",
     forgotPrompt: "Introduce tu correo y te enviaremos un enlace para recuperar la contraseña.",
-    forgotSent: "¡Correo enviado! Revisa tu bandeja de entrada.",
+    forgotSent: "¡Correo enviado! Revisa tu bandeja de entrada y también la de spam o promociones.",
     forgotNeedEmail: "Escribe primero tu correo electrónico.",
   },
   en: {
@@ -89,7 +89,7 @@ const STRINGS: Partial<Record<string, AuthStrings>> = {
     passwordPlaceholder: "At least 6 characters",
     forgot: "Forgot your password?",
     forgotPrompt: "Enter your email and we'll send you a link to reset your password.",
-    forgotSent: "Email sent! Check your inbox.",
+    forgotSent: "Email sent! Check your inbox and also your spam or promotions folder.",
     forgotNeedEmail: "Please enter your email first.",
   },
 };

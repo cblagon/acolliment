@@ -16,6 +16,7 @@ import EsoCurs from "./pages/EsoCurs.tsx";
 import EsoAmbit from "./pages/EsoAmbit.tsx";
 import NormesCentre from "./pages/NormesCentre.tsx";
 import ResetPassword from "./pages/ResetPassword.tsx";
+import ChangePassword from "./pages/ChangePassword.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { useTheme } from "./hooks/useTheme";
 import { usePageTracking } from "./hooks/usePageTracking";
@@ -31,6 +32,7 @@ const TrackingRoutes = () => {
       <Route path="/ajuda/moderacio" element={<HelpModeracio />} />
       <Route path="/auth" element={<Auth />} />
       <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/change-password" element={<ChangePassword />} />
       <Route path="/admin" element={<Admin />} />
       <Route path="/admin/stats" element={<AdminStats />} />
       <Route path="/eines" element={<Eines />} />
