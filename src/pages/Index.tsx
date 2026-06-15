@@ -208,14 +208,24 @@ const Index = () => {
             )}
             <VisitorCounter />
             {isAuthenticated ? (
-              <button
-                onClick={async () => { await signOut(); toast.success("Sessió tancada"); }}
-                title={user?.email ?? ""}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-sm font-semibold hover:bg-muted/80 transition-all active:scale-95"
-              >
-                <LogOut className="w-4 h-4" />
-                <span className="hidden sm:inline">Sortir</span>
-              </button>
+              <>
+                <Link
+                  to="/change-password"
+                  title="Canviar contrasenya"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-sm font-semibold hover:bg-muted/80 transition-all active:scale-95"
+                >
+                  🔑
+                  <span className="hidden sm:inline">Contrasenya</span>
+                </Link>
+                <button
+                  onClick={async () => { await signOut(); toast.success("Sessió tancada"); }}
+                  title={user?.email ?? ""}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-sm font-semibold hover:bg-muted/80 transition-all active:scale-95"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span className="hidden sm:inline">Sortir</span>
+                </button>
+              </>
             ) : (
               <Link
                 to="/auth"
