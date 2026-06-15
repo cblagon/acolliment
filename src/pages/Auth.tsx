@@ -22,6 +22,10 @@ type AuthStrings = {
   successSignIn: string;
   emailPlaceholder: string;
   passwordPlaceholder: string;
+  forgot: string;
+  forgotPrompt: string;
+  forgotSent: string;
+  forgotNeedEmail: string;
 };
 
 const STRINGS: Partial<Record<string, AuthStrings>> = {
@@ -41,6 +45,10 @@ const STRINGS: Partial<Record<string, AuthStrings>> = {
     successSignIn: "Sessió iniciada correctament.",
     emailPlaceholder: "el-teu-correu@exemple.com",
     passwordPlaceholder: "Mínim 6 caràcters",
+    forgot: "Has oblidat la contrasenya?",
+    forgotPrompt: "Introdueix el teu correu i et farem arribar un enllaç per recuperar la contrasenya.",
+    forgotSent: "Correu enviat! Revisa la teva safata d'entrada.",
+    forgotNeedEmail: "Escriu primer el teu correu electrònic.",
   },
   es: {
     title: "Iniciar sesión",
@@ -58,6 +66,10 @@ const STRINGS: Partial<Record<string, AuthStrings>> = {
     successSignIn: "Sesión iniciada correctamente.",
     emailPlaceholder: "tu-correo@ejemplo.com",
     passwordPlaceholder: "Mínimo 6 caracteres",
+    forgot: "¿Has olvidado la contraseña?",
+    forgotPrompt: "Introduce tu correo y te enviaremos un enlace para recuperar la contraseña.",
+    forgotSent: "¡Correo enviado! Revisa tu bandeja de entrada.",
+    forgotNeedEmail: "Escribe primero tu correo electrónico.",
   },
   en: {
     title: "Sign in",
@@ -75,6 +87,10 @@ const STRINGS: Partial<Record<string, AuthStrings>> = {
     successSignIn: "Signed in successfully.",
     emailPlaceholder: "your-email@example.com",
     passwordPlaceholder: "At least 6 characters",
+    forgot: "Forgot your password?",
+    forgotPrompt: "Enter your email and we'll send you a link to reset your password.",
+    forgotSent: "Email sent! Check your inbox.",
+    forgotNeedEmail: "Please enter your email first.",
   },
 };
 
