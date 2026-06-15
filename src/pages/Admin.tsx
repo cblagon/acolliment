@@ -6,7 +6,7 @@ import { useBlocSubmissions, submissionToBloc } from "@/hooks/useBlocSubmissions
 import { FitxaViewer } from "@/components/FitxaViewer";
 import { useLanguages } from "@/hooks/useLanguage";
 import { toast } from "sonner";
-import { CheckCircle2, XCircle, Trash2, ArrowLeft, Eye } from "lucide-react";
+import { CheckCircle2, XCircle, Trash2, ArrowLeft, Eye, LogOut } from "lucide-react";
 
 const statusColor: Record<string, string> = {
   pending: "bg-amber-100 text-amber-800 border-amber-300",
