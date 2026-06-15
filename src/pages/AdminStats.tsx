@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, Users, Eye, Activity, Globe } from "lucide-react";
+import { ArrowLeft, Users, Eye, Activity, Globe, LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { supabase } from "@/integrations/supabase/client";
@@ -150,6 +150,13 @@ export default function AdminStats() {
             <Link to="/admin" className="flex items-center gap-1 text-sm font-semibold text-primary hover:underline">
               <ArrowLeft className="w-4 h-4" /> Panell
             </Link>
+            <button
+              onClick={async () => { await supabase.auth.signOut(); navigate("/"); }}
+              className="flex items-center gap-1 text-sm font-semibold text-destructive hover:underline"
+              title="Tancar sessió"
+            >
+              <LogOut className="w-4 h-4" /> Sortir
+            </button>
           </div>
         </div>
       </header>

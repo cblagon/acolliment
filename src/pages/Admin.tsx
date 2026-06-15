@@ -6,7 +6,7 @@ import { useBlocSubmissions, submissionToBloc } from "@/hooks/useBlocSubmissions
 import { FitxaViewer } from "@/components/FitxaViewer";
 import { useLanguages } from "@/hooks/useLanguage";
 import { toast } from "sonner";
-import { CheckCircle2, XCircle, Trash2, ArrowLeft, Eye } from "lucide-react";
+import { CheckCircle2, XCircle, Trash2, ArrowLeft, Eye, LogOut } from "lucide-react";
 
 const statusColor: Record<string, string> = {
   pending: "bg-amber-100 text-amber-800 border-amber-300",
@@ -101,6 +101,17 @@ export default function Admin() {
           <div className="flex items-center gap-3">
             <Link to="/admin/stats" className="text-sm font-semibold text-primary hover:underline">📊 Estadístiques</Link>
             <Link to="/" className="text-sm font-semibold text-primary hover:underline">← Inici</Link>
+            <button
+              onClick={async () => {
+                const { supabase } = await import("@/integrations/supabase/client");
+                await supabase.auth.signOut();
+                navigate("/");
+              }}
+              className="flex items-center gap-1 text-sm font-semibold text-destructive hover:underline"
+              title="Tancar sessió"
+            >
+              <LogOut className="w-4 h-4" /> Sortir
+            </button>
           </div>
         </div>
       </header>
