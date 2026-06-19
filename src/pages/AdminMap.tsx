@@ -157,7 +157,7 @@ export default function AdminMap() {
                       key={i}
                       center={[p.lat, p.lng]}
                       radius={radius}
-                      pathOptions={{ color: "hsl(var(--primary))", fillColor: "hsl(var(--primary))", fillOpacity: 0.45, weight: 2 }}
+                      pathOptions={{ color: "hsl(24, 95%, 53%)", fillColor: "hsl(24, 95%, 53%)", fillOpacity: 0.45, weight: 2 }}
                     >
                       <Popup>
                         <div className="text-sm">
