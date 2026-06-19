@@ -17,7 +17,7 @@ import { CentreBanner } from "@/components/CentreBanner";
 import { exportAllToPDF } from "@/hooks/useExportPDF";
 import { t, langName } from "@/i18n/ui";
 import { useLegalLabels } from "@/pages/Legal";
-import { Download, GraduationCap, HelpCircle, LogIn, LogOut, MapPin, Moon, ScrollText, ShieldCheck, Sun, Wand2 } from "lucide-react";
+import { Download, GraduationCap, HelpCircle, LogIn, LogOut, Mail, MapPin, Moon, ScrollText, ShieldCheck, Sun, Wand2 } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
