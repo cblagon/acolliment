@@ -19,6 +19,7 @@ import NormesCentre from "./pages/NormesCentre.tsx";
 import ResetPassword from "./pages/ResetPassword.tsx";
 import ChangePassword from "./pages/ChangePassword.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import CentresMapa from "./pages/CentresMapa.tsx";
 import { useTheme } from "./hooks/useTheme";
 import { usePageTracking } from "./hooks/usePageTracking";
 
@@ -42,6 +43,7 @@ const TrackingRoutes = () => {
       <Route path="/eso/:curs" element={<EsoCurs />} />
       <Route path="/eso/:curs/:ambit" element={<EsoAmbit />} />
       <Route path="/normes-centre" element={<NormesCentre />} />
+      <Route path="/centres-mapa" element={<CentresMapa />} />
       <Route path="/privacitat" element={<LegalPage kind="privacy" />} />
       <Route path="/galetes" element={<LegalPage kind="cookies" />} />
       <Route path="/avis-legal" element={<LegalPage kind="legal" />} />
