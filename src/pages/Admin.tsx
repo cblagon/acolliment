@@ -100,6 +100,7 @@ export default function Admin() {
           </div>
           <div className="flex items-center gap-3">
             <Link to="/admin/stats" className="text-sm font-semibold text-primary hover:underline">📊 Estadístiques</Link>
+            <Link to="/admin/map" className="text-sm font-semibold text-primary hover:underline">🗺️ Mapa</Link>
             <Link to="/" className="text-sm font-semibold text-primary hover:underline">← Inici</Link>
             <button
               onClick={async () => {

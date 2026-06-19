@@ -8,6 +8,7 @@ import About from "./pages/About.tsx";
 import Auth from "./pages/Auth.tsx";
 import Admin from "./pages/Admin.tsx";
 import AdminStats from "./pages/AdminStats.tsx";
+import AdminMap from "./pages/AdminMap.tsx";
 import HelpModeracio from "./pages/HelpModeracio.tsx";
 import LegalPage from "./pages/Legal.tsx";
 import Eines from "./pages/Eines.tsx";
@@ -35,6 +36,7 @@ const TrackingRoutes = () => {
       <Route path="/change-password" element={<ChangePassword />} />
       <Route path="/admin" element={<Admin />} />
       <Route path="/admin/stats" element={<AdminStats />} />
+      <Route path="/admin/map" element={<AdminMap />} />
       <Route path="/eines" element={<Eines />} />
       <Route path="/eso" element={<Eso />} />
       <Route path="/eso/:curs" element={<EsoCurs />} />

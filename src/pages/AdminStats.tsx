@@ -147,6 +147,7 @@ export default function AdminStats() {
             <p className="text-xs text-muted-foreground">Qui es connecta, què visita i quan</p>
           </div>
           <div className="flex items-center gap-2">
+            <Link to="/admin/map" className="text-sm font-semibold text-primary hover:underline">🗺️ Mapa</Link>
             <Link to="/admin" className="flex items-center gap-1 text-sm font-semibold text-primary hover:underline">
               <ArrowLeft className="w-4 h-4" /> Panell
             </Link>

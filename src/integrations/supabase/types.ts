@@ -67,31 +67,49 @@ export type Database = {
       }
       page_events: {
         Row: {
+          centre: string | null
+          city: string | null
+          country: string | null
           created_at: string
           id: string
           language: string | null
+          lat: number | null
+          lng: number | null
           path: string
           referrer: string | null
+          region: string | null
           session_id: string
           user_agent: string | null
           user_id: string | null
         }
         Insert: {
+          centre?: string | null
+          city?: string | null
+          country?: string | null
           created_at?: string
           id?: string
           language?: string | null
+          lat?: number | null
+          lng?: number | null
           path: string
           referrer?: string | null
+          region?: string | null
           session_id: string
           user_agent?: string | null
           user_id?: string | null
         }
         Update: {
+          centre?: string | null
+          city?: string | null
+          country?: string | null
           created_at?: string
           id?: string
           language?: string | null
+          lat?: number | null
+          lng?: number | null
           path?: string
           referrer?: string | null
+          region?: string | null
           session_id?: string
           user_agent?: string | null
           user_id?: string | null
@@ -100,6 +118,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          centre: string | null
           created_at: string
           display_name: string | null
           email: string | null
@@ -107,6 +126,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          centre?: string | null
           created_at?: string
           display_name?: string | null
           email?: string | null
@@ -114,6 +134,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          centre?: string | null
           created_at?: string
           display_name?: string | null
           email?: string | null
