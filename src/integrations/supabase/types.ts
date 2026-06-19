@@ -127,6 +127,60 @@ export type Database = {
           },
         ]
       }
+      contact_messages: {
+        Row: {
+          assumpte: string
+          correu_electronic: string
+          created_at: string
+          id: string
+          ip_address: string | null
+          llegit: boolean
+          missatge: string
+          nom: string
+          user_agent: string | null
+        }
+        Insert: {
+          assumpte: string
+          correu_electronic: string
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          llegit?: boolean
+          missatge: string
+          nom: string
+          user_agent?: string | null
+        }
+        Update: {
+          assumpte?: string
+          correu_electronic?: string
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          llegit?: boolean
+          missatge?: string
+          nom?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
+      contact_rate_limit: {
+        Row: {
+          count: number
+          ip_address: string
+          window_start: string
+        }
+        Insert: {
+          count?: number
+          ip_address: string
+          window_start?: string
+        }
+        Update: {
+          count?: number
+          ip_address?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
       page_events: {
         Row: {
           centre: string | null
