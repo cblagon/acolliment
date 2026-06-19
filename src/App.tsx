@@ -20,6 +20,7 @@ import ResetPassword from "./pages/ResetPassword.tsx";
 import ChangePassword from "./pages/ChangePassword.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import CentresMapa from "./pages/CentresMapa.tsx";
+import Contacte from "./pages/Contacte.tsx";
 import { useTheme } from "./hooks/useTheme";
 import { usePageTracking } from "./hooks/usePageTracking";
 
