@@ -197,6 +197,14 @@ const Index = () => {
               <HelpCircle className="w-4 h-4" />
               <span className="hidden sm:inline">Ajuda</span>
             </Link>
+            <Link
+              to="/contacte"
+              title="Escriu a l'autora"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-sm font-semibold hover:bg-muted/80 transition-all active:scale-95"
+            >
+              <Mail className="w-4 h-4" />
+              <span className="hidden sm:inline">Contacte</span>
+            </Link>
             <button
               onClick={toggleTheme}
               title={theme === "dark" ? "Mode clar (dia)" : "Mode fosc (nit)"}
