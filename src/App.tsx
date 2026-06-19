@@ -45,6 +45,7 @@ const TrackingRoutes = () => {
       <Route path="/eso/:curs/:ambit" element={<EsoAmbit />} />
       <Route path="/normes-centre" element={<NormesCentre />} />
       <Route path="/centres-mapa" element={<CentresMapa />} />
+      <Route path="/contacte" element={<Contacte />} />
       <Route path="/privacitat" element={<LegalPage kind="privacy" />} />
       <Route path="/galetes" element={<LegalPage kind="cookies" />} />
       <Route path="/avis-legal" element={<LegalPage kind="legal" />} />
