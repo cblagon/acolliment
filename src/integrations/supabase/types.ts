@@ -74,6 +74,7 @@ export type Database = {
           id: string
           lat: number | null
           lng: number | null
+          status: string
         }
         Insert: {
           centre: string
@@ -83,6 +84,7 @@ export type Database = {
           id?: string
           lat?: number | null
           lng?: number | null
+          status?: string
         }
         Update: {
           centre?: string
@@ -92,8 +94,38 @@ export type Database = {
           id?: string
           lat?: number | null
           lng?: number | null
+          status?: string
         }
         Relationships: []
+      }
+      centre_visits_log: {
+        Row: {
+          centre_visit_id: string | null
+          created_at: string
+          id: string
+          ip: string
+        }
+        Insert: {
+          centre_visit_id?: string | null
+          created_at?: string
+          id?: string
+          ip: string
+        }
+        Update: {
+          centre_visit_id?: string | null
+          created_at?: string
+          id?: string
+          ip?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "centre_visits_log_centre_visit_id_fkey"
+            columns: ["centre_visit_id"]
+            isOneToOne: false
+            referencedRelation: "centre_visits"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       page_events: {
         Row: {
