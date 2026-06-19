@@ -65,6 +65,36 @@ export type Database = {
         }
         Relationships: []
       }
+      centre_visits: {
+        Row: {
+          centre: string
+          city: string | null
+          country: string | null
+          created_at: string
+          id: string
+          lat: number | null
+          lng: number | null
+        }
+        Insert: {
+          centre: string
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          id?: string
+          lat?: number | null
+          lng?: number | null
+        }
+        Update: {
+          centre?: string
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          id?: string
+          lat?: number | null
+          lng?: number | null
+        }
+        Relationships: []
+      }
       page_events: {
         Row: {
           centre: string | null
