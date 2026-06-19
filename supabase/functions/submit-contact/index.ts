@@ -126,18 +126,67 @@ Deno.serve(async (req) => {
     return json(500, { error: "No s'ha pogut enviar el missatge." });
   }
 
-  // Intent d'enviament per email (si l'email infra està configurat)
+  // Enviament de la notificació via Gmail API (connector)
   try {
-    await supabase.functions.invoke("send-transactional-email", {
-      body: {
-        templateName: "contact-notification",
-        recipientEmail: "cblagon@gmail.com",
-        idempotencyKey: `contact-${ip}-${now}`,
-        templateData: { nom: N, correu: C, assumpte: A, missatge: M },
-      },
-    });
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    const GOOGLE_MAIL_API_KEY = Deno.env.get("GOOGLE_MAIL_API_KEY");
+    if (LOVABLE_API_KEY && GOOGLE_MAIL_API_KEY) {
+      const TO = "cblagon@gmail.com";
+      const subject = `[Contacte web] ${A}`;
+      const bodyText = [
+        `Nou missatge des del formulari de contacte`,
+        ``,
+        `Nom: ${N}`,
+        `Correu: ${C}`,
+        `Assumpte: ${A}`,
+        ``,
+        `Missatge:`,
+        M,
+        ``,
+        `---`,
+        `IP: ${ip}`,
+        `User-Agent: ${ua}`,
+      ].join("\r\n");
+
+      // Codifiquem el subject en UTF-8 (RFC 2047) per accents
+      const subjEncoded = `=?UTF-8?B?${btoa(unescape(encodeURIComponent(subject)))}?=`;
+      const rfc2822 = [
+        `To: ${TO}`,
+        `Reply-To: ${N} <${C}>`,
+        `Subject: ${subjEncoded}`,
+        `Content-Type: text/plain; charset="UTF-8"`,
+        `MIME-Version: 1.0`,
+        ``,
+        bodyText,
+      ].join("\r\n");
+
+      // base64url
+      const raw = btoa(unescape(encodeURIComponent(rfc2822)))
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/, "");
+
+      const res = await fetch(
+        "https://connector-gateway.lovable.dev/google_mail/gmail/v1/users/me/messages/send",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${LOVABLE_API_KEY}`,
+            "X-Connection-Api-Key": GOOGLE_MAIL_API_KEY,
+          },
+          body: JSON.stringify({ raw }),
+        }
+      );
+      if (!res.ok) {
+        const txt = await res.text();
+        console.error("Gmail send failed:", res.status, txt);
+      }
+    } else {
+      console.warn("Gmail connector secrets missing");
+    }
   } catch (e) {
-    console.warn("Email send skipped:", e);
+    console.warn("Gmail send skipped:", e);
   }
 
   return json(200, { ok: true });
