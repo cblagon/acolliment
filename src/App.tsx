@@ -21,6 +21,7 @@ import ChangePassword from "./pages/ChangePassword.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import CentresMapa from "./pages/CentresMapa.tsx";
 import Contacte from "./pages/Contacte.tsx";
+import Recomanacions from "./pages/Recomanacions.tsx";
 import { useTheme } from "./hooks/useTheme";
 import { usePageTracking } from "./hooks/usePageTracking";
 
@@ -46,6 +47,7 @@ const TrackingRoutes = () => {
       <Route path="/normes-centre" element={<NormesCentre />} />
       <Route path="/centres-mapa" element={<CentresMapa />} />
       <Route path="/contacte" element={<Contacte />} />
+      <Route path="/recomanacions" element={<Recomanacions />} />
       <Route path="/privacitat" element={<LegalPage kind="privacy" />} />
       <Route path="/galetes" element={<LegalPage kind="cookies" />} />
       <Route path="/avis-legal" element={<LegalPage kind="legal" />} />
