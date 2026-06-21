@@ -1,40 +1,119 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Play, Pause, RotateCcw, Volume2, VolumeX } from "lucide-react";
+import { Play, Pause, RotateCcw, Volume2, VolumeX, Loader2, Languages } from "lucide-react";
 import { type RoleplayData } from "@/data/roleplayData";
 import { selectBestVoice } from "@/hooks/useTTS";
+import { supabase } from "@/integrations/supabase/client";
 
 interface RoleplayPlayerProps {
   data: RoleplayData;
 }
+
+// Target learning languages: code → { label, bcp47 }
+const TARGET_LANGS: Record<string, { label: string; bcp47: string }> = {
+  ca: { label: "Català", bcp47: "ca-ES" },
+  es: { label: "Español", bcp47: "es-ES" },
+  en: { label: "English", bcp47: "en-US" },
+  fr: { label: "Français", bcp47: "fr-FR" },
+  it: { label: "Italiano", bcp47: "it-IT" },
+  pt: { label: "Português", bcp47: "pt-PT" },
+  de: { label: "Deutsch", bcp47: "de-DE" },
+  ar: { label: "العربية", bcp47: "ar-SA" },
+  ur: { label: "اردو", bcp47: "ur-PK" },
+  ro: { label: "Română", bcp47: "ro-RO" },
+  uk: { label: "Українська", bcp47: "uk-UA" },
+  zh: { label: "中文", bcp47: "zh-CN" },
+  hi: { label: "हिन्दी", bcp47: "hi-IN" },
+};
+
+const CACHE_PREFIX = "roleplay-translation:";
 
 export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
   const [currentLine, setCurrentLine] = useState(-1);
   const [isPlaying, setIsPlaying] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
   const [finished, setFinished] = useState(false);
+  const [targetLang, setTargetLang] = useState<string>("ca");
+  const [translatedLines, setTranslatedLines] = useState<string[] | null>(null);
+  const [translating, setTranslating] = useState(false);
+  const [translateError, setTranslateError] = useState<string | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
   const synthRef = useRef(typeof window !== "undefined" ? window.speechSynthesis : null);
   const voiceRef = useRef<SpeechSynthesisVoice | null>(null);
 
-  // Find best Catalan voice — wait for voiceschanged event
+  const bcp47 = TARGET_LANGS[targetLang]?.bcp47 ?? "ca-ES";
+
+  // Pick best voice for current target language
   useEffect(() => {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-    const findVoice = () => {
+    const pick = () => {
       const voices = speechSynthesis.getVoices();
       if (voices.length > 0) {
-        voiceRef.current = selectBestVoice(voices, "ca-ES");
+        voiceRef.current = selectBestVoice(voices, bcp47);
       }
     };
     const initial = speechSynthesis.getVoices();
     if (initial && initial.length > 0) {
-      voiceRef.current = selectBestVoice(initial, "ca-ES");
+      voiceRef.current = selectBestVoice(initial, bcp47);
     } else {
-      speechSynthesis.addEventListener("voiceschanged", findVoice, { once: true });
+      speechSynthesis.addEventListener("voiceschanged", pick, { once: true });
     }
     return () => {
-      speechSynthesis.removeEventListener("voiceschanged", findVoice);
+      speechSynthesis.removeEventListener("voiceschanged", pick);
     };
-  }, []);
+  }, [bcp47]);
+
+  // Fetch translation when target lang changes
+  useEffect(() => {
+    setTranslateError(null);
+    if (targetLang === "ca") {
+      setTranslatedLines(null);
+      return;
+    }
+    const cacheKey = `${CACHE_PREFIX}${data.id}:${targetLang}`;
+    try {
+      const cached = localStorage.getItem(cacheKey);
+      if (cached) {
+        const parsed = JSON.parse(cached) as string[];
+        if (Array.isArray(parsed) && parsed.length === data.lines.length) {
+          setTranslatedLines(parsed);
+          return;
+        }
+      }
+    } catch { /* ignore */ }
+
+    let cancelled = false;
+    setTranslating(true);
+    setTranslatedLines(null);
+    (async () => {
+      try {
+        const { data: resp, error } = await supabase.functions.invoke("ai-text-tools", {
+          body: {
+            action: "translate-lines",
+            targetLang,
+            lines: data.lines.map((l) => l.text),
+          },
+        });
+        if (cancelled) return;
+        if (error) throw error;
+        const outLines: string[] = resp?.lines ?? [];
+        if (outLines.length !== data.lines.length) {
+          throw new Error("Traducció incompleta");
+        }
+        setTranslatedLines(outLines);
+        try { localStorage.setItem(cacheKey, JSON.stringify(outLines)); } catch { /* ignore */ }
+      } catch (e) {
+        if (!cancelled) setTranslateError((e as Error).message ?? "Error de traducció");
+      } finally {
+        if (!cancelled) setTranslating(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [targetLang, data.id, data.lines]);
+
+  const getLineText = useCallback((idx: number) => {
+    if (targetLang === "ca" || !translatedLines) return data.lines[idx]?.text ?? "";
+    return translatedLines[idx] ?? data.lines[idx]?.text ?? "";
+  }, [targetLang, translatedLines, data.lines]);
 
   const speak = useCallback((text: string) => {
     if (!soundOn || !synthRef.current) return;
@@ -43,8 +122,8 @@ export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
     const doSpeak = () => {
       const utterance = new SpeechSynthesisUtterance(text);
       if (voiceRef.current) utterance.voice = voiceRef.current;
-      utterance.lang = "ca-ES";
-      utterance.rate = 0.9;
+      utterance.lang = bcp47;
+      utterance.rate = bcp47.startsWith("ca") ? 0.78 : 0.9;
       utterance.pitch = 1;
       synthRef.current!.speak(utterance);
     };
@@ -54,20 +133,20 @@ export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
     } else {
       const voices = speechSynthesis.getVoices();
       if (voices.length > 0) {
-        voiceRef.current = selectBestVoice(voices, "ca-ES");
+        voiceRef.current = selectBestVoice(voices, bcp47);
         doSpeak();
       } else {
         speechSynthesis.addEventListener(
           "voiceschanged",
           () => {
-            voiceRef.current = selectBestVoice(speechSynthesis.getVoices(), "ca-ES");
+            voiceRef.current = selectBestVoice(speechSynthesis.getVoices(), bcp47);
             doSpeak();
           },
           { once: true }
         );
       }
     }
-  }, [soundOn]);
+  }, [soundOn, bcp47]);
 
   const advanceLine = useCallback(() => {
     setCurrentLine((prev) => {
@@ -86,19 +165,18 @@ export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
     if (!isPlaying) return;
     if (currentLine >= data.lines.length) return;
 
-    // Speak current line
     if (currentLine >= 0) {
-      speak(data.lines[currentLine].text);
+      speak(getLineText(currentLine));
     }
 
     const delay = currentLine === -1 ? 2000 : 3500;
     timerRef.current = setTimeout(advanceLine, delay);
     return () => clearTimeout(timerRef.current);
-  }, [isPlaying, currentLine, advanceLine, speak, data.lines]);
+  }, [isPlaying, currentLine, advanceLine, speak, getLineText, data.lines.length]);
 
   const handlePlayPause = () => {
+    if (translating) return;
     if (finished) {
-      // Restart
       setFinished(false);
       setCurrentLine(-1);
       setIsPlaying(true);
@@ -122,6 +200,8 @@ export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
       : data.speakerB
     : null;
   const isLeft = line?.speaker === "A";
+  const displayText = line ? getLineText(currentLine) : "";
+  const targetLabel = TARGET_LANGS[targetLang]?.label ?? "Català";
 
   return (
     <div
@@ -130,26 +210,61 @@ export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
         background: `linear-gradient(135deg, ${data.bgColor1}, ${data.bgColor2})`,
       }}
     >
+      {/* Language selector */}
+      <div className="absolute top-2 right-2 z-10 flex items-center gap-1 bg-white/20 backdrop-blur-sm rounded-full pl-2 pr-1 py-1">
+        <Languages className="w-3.5 h-3.5 text-white" />
+        <select
+          aria-label="Llengua a aprendre"
+          value={targetLang}
+          onChange={(e) => {
+            handleRestart();
+            setTargetLang(e.target.value);
+          }}
+          className="bg-transparent text-white text-xs font-bold outline-none cursor-pointer pr-1"
+        >
+          {Object.entries(TARGET_LANGS).map(([code, { label }]) => (
+            <option key={code} value={code} className="text-gray-800">
+              {label}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {/* Title screen */}
-      {currentLine === -1 && (
+      {currentLine === -1 && !translating && !translateError && (
         <div className="flex flex-col items-center gap-2 animate-fade-in text-center px-4">
           <span className="text-5xl">{data.emoji}</span>
           <h3 className="text-xl font-extrabold text-white drop-shadow-md">
             {data.title}
           </h3>
           <span className="text-xs text-white/80 font-semibold">
-            🎭 Roleplay en català
+            🎭 Roleplay en {targetLabel}
           </span>
         </div>
       )}
 
+      {/* Translation loading */}
+      {translating && (
+        <div className="flex flex-col items-center gap-2 text-white">
+          <Loader2 className="w-8 h-8 animate-spin" />
+          <span className="text-xs font-semibold">Traduint a {targetLabel}…</span>
+        </div>
+      )}
+
+      {/* Translation error */}
+      {translateError && !translating && (
+        <div className="flex flex-col items-center gap-2 text-white text-center px-4">
+          <span className="text-3xl">⚠️</span>
+          <span className="text-xs font-semibold">No s'ha pogut traduir. Torna-ho a provar.</span>
+        </div>
+      )}
+
       {/* Dialogue */}
-      {line && speaker && (
+      {line && speaker && !translating && (
         <div
           key={currentLine}
           className="flex flex-col items-center gap-3 px-4 w-full animate-fade-in"
         >
-          {/* Speaker */}
           <div className="flex items-center gap-2">
             <div
               className="w-10 h-10 rounded-full flex items-center justify-center text-xl shadow-lg"
@@ -162,14 +277,14 @@ export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
             </span>
           </div>
 
-          {/* Bubble */}
           <div
             className={`bg-white/95 rounded-2xl px-4 py-3 max-w-[90%] shadow-xl ${
               isLeft ? "self-start" : "self-end"
             }`}
+            dir={bcp47.startsWith("ar") || bcp47.startsWith("ur") ? "rtl" : "ltr"}
           >
             <p className="text-sm font-bold text-gray-800 leading-relaxed">
-              {line.text}
+              {displayText}
             </p>
             {line.emoji && (
               <span className="text-2xl mt-1 inline-block animate-bounce">
@@ -178,7 +293,6 @@ export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
             )}
           </div>
 
-          {/* Progress */}
           <div className="flex gap-1 mt-1">
             {data.lines.map((_, i) => (
               <div
@@ -210,7 +324,8 @@ export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
         <div className="flex gap-1.5">
           <button
             onClick={handlePlayPause}
-            className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+            disabled={translating}
+            className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/30 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {finished ? (
               <RotateCcw className="w-4 h-4" />
