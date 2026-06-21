@@ -11,6 +11,7 @@ Deno.serve(async (req) => {
   try {
     const body = await req.json();
     const { action, text, targetLang, lines } = body;
+    console.log("ai-text-tools action:", action, "linesCount:", Array.isArray(lines) ? lines.length : 0, "hasText:", typeof text === "string");
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
