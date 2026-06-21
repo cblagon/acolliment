@@ -71,8 +71,10 @@ Deno.serve(async (req) => {
           { role: "system", content: system },
           { role: "user", content: user },
         ],
+        ...(action === "translate-lines" ? { response_format: { type: "json_object" } } : {}),
       }),
     });
+
 
     if (!resp.ok) {
       const errText = await resp.text();
