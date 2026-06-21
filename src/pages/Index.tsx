@@ -17,7 +17,7 @@ import { CentreBanner } from "@/components/CentreBanner";
 import { exportAllToPDF } from "@/hooks/useExportPDF";
 import { t, langName } from "@/i18n/ui";
 import { useLegalLabels } from "@/pages/Legal";
-import { Download, GraduationCap, HelpCircle, LogIn, LogOut, Mail, MapPin, Moon, ScrollText, ShieldCheck, Sun, Wand2 } from "lucide-react";
+import { Chrome, Download, GraduationCap, HelpCircle, LogIn, LogOut, Mail, MapPin, Moon, ScrollText, ShieldCheck, Sun, Wand2 } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -196,6 +196,14 @@ const Index = () => {
             >
               <HelpCircle className="w-4 h-4" />
               <span className="hidden sm:inline">Ajuda</span>
+            </Link>
+            <Link
+              to="/recomanacions"
+              title="Recomanacions: per què Chrome sona millor"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-sm font-semibold hover:bg-muted/80 transition-all active:scale-95"
+            >
+              <Chrome className="w-4 h-4" />
+              <span className="hidden sm:inline">Recomanacions</span>
             </Link>
             <Link
               to="/contacte"
