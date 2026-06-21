@@ -94,10 +94,24 @@ Deno.serve(async (req) => {
     }
 
     const data = await resp.json();
-    const result = data?.choices?.[0]?.message?.content ?? "";
-    return new Response(JSON.stringify({ result }), {
+    const content = data?.choices?.[0]?.message?.content ?? "";
+    if (action === "translate-lines") {
+      try {
+        const parsed = JSON.parse(content);
+        const outLines: string[] = Array.isArray(parsed?.lines) ? parsed.lines : [];
+        return new Response(JSON.stringify({ lines: outLines }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      } catch {
+        return new Response(JSON.stringify({ error: "Resposta IA no vàlida", raw: content }), {
+          status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+    return new Response(JSON.stringify({ result: content }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
+
   } catch (e) {
     return new Response(JSON.stringify({ error: String((e as Error).message ?? e) }), {
       status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
