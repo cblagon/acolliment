@@ -209,11 +209,31 @@ export default function CentresMapa() {
                   pathOptions={{ color: "hsl(24, 95%, 53%)", fillColor: "hsl(24, 95%, 53%)", fillOpacity: 0.5, weight: 2 }}
                 >
                   <Popup>
-                    <div className="text-sm space-y-1">
+                    <div className="text-sm space-y-1 min-w-[200px]">
                       {p.entries.slice(0, 12).map((e) => (
-                        <div key={e.id} className="flex items-center gap-2">
-                          <span className="font-semibold">{e.centre}</span>
-                          {e.city && <span className="text-muted-foreground">· {e.city}</span>}
+                        <div key={e.id} className="flex items-center gap-2 justify-between">
+                          <div className="min-w-0">
+                            <span className="font-semibold">{e.centre}</span>
+                            {e.city && <span className="text-muted-foreground"> · {e.city}</span>}
+                          </div>
+                          {isAdmin && (
+                            <div className="flex items-center gap-1 shrink-0">
+                              <button
+                                onClick={() => setStatus(e.id, "hidden")}
+                                title="Amagar del mapa"
+                                className="p-1 rounded hover:bg-amber-100 hover:text-amber-700"
+                              >
+                                <EyeOff className="w-3.5 h-3.5" />
+                              </button>
+                              <button
+                                onClick={() => remove(e.id)}
+                                title="Esborrar"
+                                className="p-1 rounded hover:bg-red-100 hover:text-red-700"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          )}
                         </div>
                       ))}
                       {p.entries.length > 12 && (
