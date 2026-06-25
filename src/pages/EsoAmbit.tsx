@@ -7,6 +7,7 @@ import { FitxaViewer } from "@/components/FitxaViewer";
 import { QuizGame } from "@/components/QuizGame";
 import { useLanguages } from "@/hooks/useLanguage";
 import { t } from "@/i18n/ui";
+import { tBlocName } from "@/i18n/blocNames";
 
 type View =
   | { type: "grid" }

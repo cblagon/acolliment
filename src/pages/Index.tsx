@@ -16,6 +16,7 @@ import { VisitorCounter } from "@/components/VisitorCounter";
 import { CentreBanner } from "@/components/CentreBanner";
 import { exportAllToPDF } from "@/hooks/useExportPDF";
 import { t, langName } from "@/i18n/ui";
+import { tBlocName } from "@/i18n/blocNames";
 import { useLegalLabels } from "@/pages/Legal";
 import { Chrome, Download, GraduationCap, HelpCircle, LogIn, LogOut, Mail, MapPin, Moon, ScrollText, ShieldCheck, Sun, Wand2 } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
