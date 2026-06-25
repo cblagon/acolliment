@@ -335,7 +335,7 @@ const Index = () => {
                             <span className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-red-400 text-red-900 text-[10px] font-bold border border-red-600 shadow-sm">❌ Rebutjat</span>
                           )}
                           <span className="text-5xl drop-shadow-sm transition-transform duration-300 group-hover:scale-110">{bloc.emoji}</span>
-                          <span className="font-bold text-base leading-tight text-center">{bloc.nom}</span>
+                          <span className="font-bold text-base leading-tight text-center">{tBlocName(bloc.nom, helpLang)}</span>
                           <span className="text-xs opacity-80">{bloc.fitxes.length} {t(helpLang, "fitxesCount")}</span>
                         </button>
                       );
