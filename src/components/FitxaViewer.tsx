@@ -4,6 +4,7 @@ import { type LangCode } from "@/hooks/useLanguage";
 import { getTraduccio, getWord } from "@/data/translations";
 import { useTTS } from "@/hooks/useTTS";
 import { t } from "@/i18n/ui";
+import { tBlocName } from "@/i18n/blocNames";
 import { Volume2, VolumeX, ChevronLeft, ChevronRight, ArrowLeft, Gamepad2, Music } from "lucide-react";
 import { SpeechCheck } from "@/components/SpeechCheck";
 
@@ -41,7 +42,7 @@ export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, o
           <span className="font-semibold text-sm">{t(helpLang, "back")}</span>
         </button>
         <h2 className="text-xl font-extrabold flex items-center gap-2">
-          <span>{bloc.emoji}</span> {bloc.nom}
+          <span>{bloc.emoji}</span> {tBlocName(bloc.nom, helpLang)}
         </h2>
         <div className="flex items-center gap-3">
           <button onClick={onStartQuiz} className="flex items-center gap-1 text-primary hover:text-primary/80 transition-colors font-semibold text-sm active:scale-95">
