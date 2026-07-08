@@ -1,7 +1,10 @@
-import { useRef, useState } from "react";
-import { Play, Upload, X, Film } from "lucide-react";
+import { useRef, useState, useEffect } from "react";
+import { Play, Upload, X, Film, Languages, Loader2 } from "lucide-react";
 import { RoleplayPlayer } from "./RoleplayPlayer";
 import { type RoleplayData } from "@/data/roleplayData";
+import { useLanguages, LANGUAGES } from "@/hooks/useLanguage";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface VideoBlocProps {
   index: number;
@@ -17,7 +20,23 @@ export function VideoBloc({ index, videoUrl, title, description, onVideoChange, 
   const fileRef = useRef<HTMLInputElement>(null);
   const [playing, setPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
   const [useCustomVideo, setUseCustomVideo] = useState(!!videoUrl);
+
+  const { targetLang } = useLanguages();
+  const [dubbing, setDubbing] = useState(false);
+  const [dubbedUrl, setDubbedUrl] = useState<string | null>(null);
+  const [dubbedLang, setDubbedLang] = useState<string | null>(null);
+  const [dubbedText, setDubbedText] = useState<string | null>(null);
+
+  // Reset dubbing when the video source changes
+  useEffect(() => {
+    if (dubbedUrl) URL.revokeObjectURL(dubbedUrl);
+    setDubbedUrl(null);
+    setDubbedLang(null);
+    setDubbedText(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [videoUrl]);
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -37,16 +56,79 @@ export function VideoBloc({ index, videoUrl, title, description, onVideoChange, 
     if (!videoRef.current) return;
     if (videoRef.current.paused) {
       videoRef.current.play();
+      if (dubbedUrl && audioRef.current) {
+        audioRef.current.currentTime = videoRef.current.currentTime;
+        audioRef.current.play().catch(() => {});
+      }
       setPlaying(true);
     } else {
       videoRef.current.pause();
+      audioRef.current?.pause();
       setPlaying(false);
+    }
+  };
+
+  const handleDub = async () => {
+    if (!videoUrl || dubbing) return;
+    if (targetLang === "ca") {
+      toast.info("Tria una llengua d'aprenentatge diferent del català per doblar el vídeo.");
+      return;
+    }
+    setDubbing(true);
+    try {
+      const res = await fetch(videoUrl);
+      if (!res.ok) throw new Error("No s'ha pogut llegir el vídeo");
+      const blob = await res.blob();
+      const sizeMB = blob.size / (1024 * 1024);
+      if (sizeMB > 20) {
+        toast.error(`El vídeo pesa ${sizeMB.toFixed(1)} MB. Cal que sigui inferior a 20 MB.`);
+        setDubbing(false);
+        return;
+      }
+      const ext = (blob.type.split("/")[1] || "mp4").split(";")[0];
+      const file = new File([blob], `video.${ext}`, { type: blob.type || "video/mp4" });
+
+      const form = new FormData();
+      form.append("file", file);
+      form.append("targetLang", targetLang);
+
+      const { data: sess } = await supabase.auth.getSession();
+      const token = sess.session?.access_token;
+      const supaUrl = import.meta.env.VITE_SUPABASE_URL;
+      const anon = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+      const dubRes = await fetch(`${supaUrl}/functions/v1/dub-video`, {
+        method: "POST",
+        headers: {
+          apikey: anon,
+          Authorization: `Bearer ${token ?? anon}`,
+        },
+        body: form,
+      });
+
+      if (!dubRes.ok) {
+        const txt = await dubRes.text();
+        throw new Error(`Error del doblatge: ${dubRes.status} — ${txt.slice(0, 200)}`);
+      }
+      const audioBlob = await dubRes.blob();
+      const url = URL.createObjectURL(audioBlob);
+      const translation = decodeURIComponent(dubRes.headers.get("X-Translation") ?? "");
+      setDubbedUrl(url);
+      setDubbedLang(targetLang);
+      setDubbedText(translation || null);
+      toast.success(`Vídeo doblat a ${LANGUAGES[targetLang]?.name ?? targetLang}`);
+    } catch (err) {
+      console.error(err);
+      toast.error(err instanceof Error ? err.message : "No s'ha pogut doblar el vídeo");
+    } finally {
+      setDubbing(false);
     }
   };
 
   const showCustomVideo = videoUrl && useCustomVideo;
   const showRoleplay = !!roleplayData;
   const showBoth = showCustomVideo && showRoleplay;
+  const hasDub = !!dubbedUrl;
 
   const VideoPanel = (
     <div className="relative aspect-video bg-muted/50 flex items-center justify-center overflow-hidden">
@@ -54,9 +136,13 @@ export function VideoBloc({ index, videoUrl, title, description, onVideoChange, 
         ref={videoRef}
         src={videoUrl ?? undefined}
         className="w-full h-full object-contain bg-card"
-        onEnded={() => setPlaying(false)}
+        onEnded={() => { setPlaying(false); if (audioRef.current) audioRef.current.pause(); }}
+        onPause={() => audioRef.current?.pause()}
+        onSeeked={() => { if (audioRef.current && hasDub) audioRef.current.currentTime = videoRef.current?.currentTime ?? 0; }}
+        muted={hasDub}
         playsInline
       />
+      {hasDub && <audio ref={audioRef} src={dubbedUrl!} preload="auto" />}
       {!playing && (
         <button
           onClick={togglePlay}
@@ -74,6 +160,11 @@ export function VideoBloc({ index, videoUrl, title, description, onVideoChange, 
       >
         <X className="w-4 h-4" />
       </button>
+      {hasDub && (
+        <div className="absolute bottom-2 left-2 px-2 py-1 rounded-md bg-black/60 text-white text-xs font-semibold">
+          🔊 {LANGUAGES[dubbedLang!]?.flag} {LANGUAGES[dubbedLang!]?.nativeName}
+        </div>
+      )}
     </div>
   );
 
@@ -141,6 +232,31 @@ export function VideoBloc({ index, videoUrl, title, description, onVideoChange, 
               </span>
             )}
           </div>
+
+          {showCustomVideo && (
+            <div className="mt-3 flex flex-col gap-2">
+              <button
+                onClick={handleDub}
+                disabled={dubbing}
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-bold hover:bg-primary/90 disabled:opacity-60 transition-colors self-start"
+              >
+                {dubbing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Languages className="w-4 h-4" />}
+                {dubbing
+                  ? "Doblant… (pot trigar uns segons)"
+                  : hasDub && dubbedLang === targetLang
+                    ? `Refer doblatge (${LANGUAGES[targetLang]?.name})`
+                    : `Doblar en ${LANGUAGES[targetLang]?.name ?? targetLang}`}
+              </button>
+              {hasDub && dubbedText && (
+                <p className="text-xs text-muted-foreground italic border-l-2 border-primary/40 pl-2">
+                  "{dubbedText}"
+                </p>
+              )}
+              <p className="text-[11px] text-muted-foreground">
+                🎙️ Es tradueix la veu i es reprodueix en la llengua d'aprenentatge escollida (màx. 20 MB).
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
