@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { useLanguages, LANGUAGES, type LangCode } from "@/hooks/useLanguage";
+import { LanguageSelector } from "@/components/LanguageSelector";
 
 type Tense = "present" | "passat" | "futur";
 type Family = "1a" | "2a" | "3a" | "irregular";
@@ -18,12 +20,15 @@ const FAMILIES: Record<Family, { label: string; ending: string; color: string; r
   irregular: { label: "Irregulars", ending: "especials", color: "bg-amber-500", ring: "ring-amber-500", bg: "bg-amber-50 dark:bg-amber-950/30", example: "ser, anar, fer" },
 };
 
+type Translations = Partial<Record<LangCode, string>>;
+
 type VerbData = {
   infinitive: string;
   family: Family;
-  meaning: string;
-  present: string[]; // jo, tu, ell, nosaltres, vosaltres, ells
-  passat: string[]; // perfet perifràstic: vaig + inf
+  emoji: string;
+  translations: Translations;
+  present: string[];
+  passat: string[];
   futur: string[];
 };
 
@@ -31,7 +36,14 @@ const VERBS: VerbData[] = [
   {
     infinitive: "CANTAR",
     family: "1a",
-    meaning: "cantar 🎤",
+    emoji: "🎤",
+    translations: {
+      ca: "cantar", es: "cantar", en: "to sing", fr: "chanter",
+      ar: "يغني", ur: "گانا گانا", wo: "woy", uk: "співати",
+      mnk: "donkili la", it: "cantare", el: "τραγουδώ",
+      ptBR: "cantar", pt: "cantar", ha: "يغني", zh: "唱歌",
+      hi: "गाना", snk: "dòŋi", ro: "a cânta", srk: "donkili",
+    },
     present: ["canto", "cantes", "canta", "cantem", "canteu", "canten"],
     passat: ["vaig cantar", "vas cantar", "va cantar", "vam cantar", "vau cantar", "van cantar"],
     futur: ["cantaré", "cantaràs", "cantarà", "cantarem", "cantareu", "cantaran"],
@@ -39,7 +51,14 @@ const VERBS: VerbData[] = [
   {
     infinitive: "PARLAR",
     family: "1a",
-    meaning: "hablar / to speak 💬",
+    emoji: "💬",
+    translations: {
+      ca: "parlar", es: "hablar", en: "to speak", fr: "parler",
+      ar: "يتكلم", ur: "بولنا", wo: "wax", uk: "говорити",
+      mnk: "diyaamu", it: "parlare", el: "μιλάω",
+      ptBR: "falar", pt: "falar", ha: "يهدر", zh: "说话",
+      hi: "बोलना", snk: "sefene", ro: "a vorbi", srk: "sefe",
+    },
     present: ["parlo", "parles", "parla", "parlem", "parleu", "parlen"],
     passat: ["vaig parlar", "vas parlar", "va parlar", "vam parlar", "vau parlar", "van parlar"],
     futur: ["parlaré", "parlaràs", "parlarà", "parlarem", "parlareu", "parlaran"],
@@ -47,7 +66,14 @@ const VERBS: VerbData[] = [
   {
     infinitive: "TÉMER",
     family: "2a",
-    meaning: "témer / to fear 😨",
+    emoji: "😨",
+    translations: {
+      ca: "témer", es: "temer", en: "to fear", fr: "craindre",
+      ar: "يخاف", ur: "ڈرنا", wo: "ragal", uk: "боятися",
+      mnk: "silan", it: "temere", el: "φοβάμαι",
+      ptBR: "temer", pt: "temer", ha: "يخاف", zh: "害怕",
+      hi: "डरना", snk: "gaajine", ro: "a se teme", srk: "gaajine",
+    },
     present: ["temo", "tems", "tem", "temem", "temeu", "temen"],
     passat: ["vaig témer", "vas témer", "va témer", "vam témer", "vau témer", "van témer"],
     futur: ["temeré", "temeràs", "temerà", "temerem", "temereu", "temeran"],
@@ -55,7 +81,14 @@ const VERBS: VerbData[] = [
   {
     infinitive: "BEURE",
     family: "2a",
-    meaning: "beber / to drink 🥤",
+    emoji: "🥤",
+    translations: {
+      ca: "beure", es: "beber", en: "to drink", fr: "boire",
+      ar: "يشرب", ur: "پینا", wo: "naan", uk: "пити",
+      mnk: "mii", it: "bere", el: "πίνω",
+      ptBR: "beber", pt: "beber", ha: "يشرب", zh: "喝",
+      hi: "पीना", snk: "min", ro: "a bea", srk: "min",
+    },
     present: ["bec", "beus", "beu", "bevem", "beveu", "beuen"],
     passat: ["vaig beure", "vas beure", "va beure", "vam beure", "vau beure", "van beure"],
     futur: ["beuré", "beuràs", "beurà", "beurem", "beureu", "beuran"],
@@ -63,7 +96,14 @@ const VERBS: VerbData[] = [
   {
     infinitive: "DORMIR",
     family: "3a",
-    meaning: "dormir / to sleep 😴",
+    emoji: "😴",
+    translations: {
+      ca: "dormir", es: "dormir", en: "to sleep", fr: "dormir",
+      ar: "ينام", ur: "سونا", wo: "nelaw", uk: "спати",
+      mnk: "siinoo", it: "dormire", el: "κοιμάμαι",
+      ptBR: "dormir", pt: "dormir", ha: "ينعس", zh: "睡觉",
+      hi: "सोना", snk: "xara", ro: "a dormi", srk: "xara",
+    },
     present: ["dormo", "dorms", "dorm", "dormim", "dormiu", "dormen"],
     passat: ["vaig dormir", "vas dormir", "va dormir", "vam dormir", "vau dormir", "van dormir"],
     futur: ["dormiré", "dormiràs", "dormirà", "dormirem", "dormireu", "dormiran"],
@@ -71,7 +111,14 @@ const VERBS: VerbData[] = [
   {
     infinitive: "SERVIR",
     family: "3a",
-    meaning: "servir / to serve 🍽️",
+    emoji: "🍽️",
+    translations: {
+      ca: "servir", es: "servir", en: "to serve", fr: "servir",
+      ar: "يخدم", ur: "خدمت کرنا", wo: "liggéey", uk: "служити",
+      mnk: "dookuu", it: "servire", el: "υπηρετώ",
+      ptBR: "servir", pt: "servir", ha: "يخدم", zh: "服务",
+      hi: "सेवा करना", snk: "golle", ro: "a servi", srk: "golle",
+    },
     present: ["serveixo", "serveixes", "serveix", "servim", "serviu", "serveixen"],
     passat: ["vaig servir", "vas servir", "va servir", "vam servir", "vau servir", "van servir"],
     futur: ["serviré", "serviràs", "servirà", "servirem", "servireu", "serviran"],
@@ -79,7 +126,14 @@ const VERBS: VerbData[] = [
   {
     infinitive: "SER",
     family: "irregular",
-    meaning: "ser / to be ⭐",
+    emoji: "⭐",
+    translations: {
+      ca: "ser", es: "ser", en: "to be", fr: "être",
+      ar: "يكون", ur: "ہونا", wo: "nekk", uk: "бути",
+      mnk: "mu", it: "essere", el: "είμαι",
+      ptBR: "ser", pt: "ser", ha: "يكون", zh: "是",
+      hi: "होना", snk: "ni", ro: "a fi", srk: "ni",
+    },
     present: ["sóc", "ets", "és", "som", "sou", "són"],
     passat: ["vaig ser", "vas ser", "va ser", "vam ser", "vau ser", "van ser"],
     futur: ["seré", "seràs", "serà", "serem", "sereu", "seran"],
@@ -87,23 +141,44 @@ const VERBS: VerbData[] = [
   {
     infinitive: "ANAR",
     family: "irregular",
-    meaning: "ir / to go 🚶",
+    emoji: "🚶",
+    translations: {
+      ca: "anar", es: "ir", en: "to go", fr: "aller",
+      ar: "يذهب", ur: "جانا", wo: "dem", uk: "йти",
+      mnk: "taa", it: "andare", el: "πηγαίνω",
+      ptBR: "ir", pt: "ir", ha: "يمشي", zh: "去",
+      hi: "जाना", snk: "doonu", ro: "a merge", srk: "doonu",
+    },
     present: ["vaig", "vas", "va", "anem", "aneu", "van"],
     passat: ["vaig anar", "vas anar", "va anar", "vam anar", "vau anar", "van anar"],
-    futur: ["aniré", "aniràs", "anirà", "anirem, ", "anireu", "aniran"],
+    futur: ["aniré", "aniràs", "anirà", "anirem", "anireu", "aniran"],
   },
   {
     infinitive: "FER",
     family: "irregular",
-    meaning: "hacer / to do 🛠️",
+    emoji: "🛠️",
+    translations: {
+      ca: "fer", es: "hacer", en: "to do / make", fr: "faire",
+      ar: "يفعل", ur: "کرنا", wo: "def", uk: "робити",
+      mnk: "ke", it: "fare", el: "κάνω",
+      ptBR: "fazer", pt: "fazer", ha: "يسوي", zh: "做",
+      hi: "करना", snk: "ke", ro: "a face", srk: "ke",
+    },
     present: ["faig", "fas", "fa", "fem", "feu", "fan"],
     passat: ["vaig fer", "vas fer", "va fer", "vam fer", "vau fer", "van fer"],
-    futur: ["faré", "faràs", "farà", "farem", "fareu, ", "faran"],
+    futur: ["faré", "faràs", "farà", "farem", "fareu", "faran"],
   },
   {
     infinitive: "TENIR",
     family: "irregular",
-    meaning: "tener / to have 🤲",
+    emoji: "🤲",
+    translations: {
+      ca: "tenir", es: "tener", en: "to have", fr: "avoir",
+      ar: "يملك", ur: "رکھنا", wo: "am", uk: "мати",
+      mnk: "soto", it: "avere", el: "έχω",
+      ptBR: "ter", pt: "ter", ha: "عنده", zh: "有",
+      hi: "पास होना", snk: "bara", ro: "a avea", srk: "bara",
+    },
     present: ["tinc", "tens", "té", "tenim", "teniu", "tenen"],
     passat: ["vaig tenir", "vas tenir", "va tenir", "vam tenir", "vau tenir", "van tenir"],
     futur: ["tindré", "tindràs", "tindrà", "tindrem", "tindreu", "tindran"],
@@ -122,9 +197,12 @@ const MapesVerbs = () => {
   const [tense, setTense] = useState<Tense>("present");
   const [familyFilter, setFamilyFilter] = useState<Family | "all">("all");
   const [expanded, setExpanded] = useState<string | null>(null);
+  const { targetLang, helpLang, setTargetLang, setHelpLang } = useLanguages();
 
   const filtered = familyFilter === "all" ? VERBS : VERBS.filter((v) => v.family === familyFilter);
   const currentTense = TENSES.find((t) => t.id === tense)!;
+
+  const trFor = (v: VerbData, lang: LangCode) => v.translations[lang] ?? v.translations.en ?? v.infinitive.toLowerCase();
 
   return (
     <div className="min-h-screen bg-background">
@@ -137,12 +215,25 @@ const MapesVerbs = () => {
             <span className="text-2xl">🗺️</span>
             <h1 className="text-xl font-extrabold">Mapes conceptuals dels temps verbals</h1>
           </div>
-          <div className="w-16" />
+          <div className="flex items-center gap-2 flex-wrap">
+            <LanguageSelector
+              lang={targetLang}
+              onChange={setTargetLang}
+              label="🎯 Aprenc:"
+              exclude={helpLang}
+              title="Idioma que aprenc"
+            />
+            <LanguageSelector
+              lang={helpLang}
+              onChange={setHelpLang}
+              label="🌍 Ajuda:"
+              title="Idioma d'ajuda"
+            />
+          </div>
         </div>
       </header>
 
       <main className="container py-8 space-y-8 max-w-6xl">
-        {/* Tense selector — the center of the conceptual map */}
         <section className="text-center space-y-4">
           <h2 className="text-lg font-bold text-muted-foreground">Tria un temps verbal</h2>
           <div className="flex justify-center gap-3 flex-wrap">
@@ -162,7 +253,7 @@ const MapesVerbs = () => {
               </button>
             ))}
           </div>
-          <div className="flex justify-center gap-2 text-sm">
+          <div className="flex justify-center gap-2 text-sm flex-wrap">
             <span className="font-semibold">Marcadors temporals:</span>
             {TENSE_MARKERS[tense].keywords.map((k) => (
               <span key={k} className={`font-bold ${TENSE_MARKERS[tense].color}`}>
@@ -172,7 +263,6 @@ const MapesVerbs = () => {
           </div>
         </section>
 
-        {/* Family legend */}
         <section className="rounded-2xl border-2 border-border bg-card p-5 shadow-sm">
           <h3 className="font-bold mb-3 text-center">🎨 Famílies de verbs (colors)</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -209,9 +299,7 @@ const MapesVerbs = () => {
           </div>
         </section>
 
-        {/* Conceptual map: central tense node + verb branches */}
         <section className="relative rounded-3xl border-2 border-border bg-card p-6 md:p-10 shadow-lg overflow-hidden">
-          {/* Central node */}
           <div className="flex justify-center mb-8">
             <div className="relative">
               <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full" />
@@ -222,12 +310,13 @@ const MapesVerbs = () => {
             </div>
           </div>
 
-          {/* Branches: one card per verb, colored by family */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filtered.map((v) => {
               const info = FAMILIES[v.family];
               const forms = v[tense];
               const isOpen = expanded === v.infinitive;
+              const helpTr = trFor(v, helpLang);
+              const targetTr = trFor(v, targetLang);
               return (
                 <div
                   key={v.infinitive}
@@ -235,21 +324,32 @@ const MapesVerbs = () => {
                     isOpen ? `ring-4 ${info.ring} ring-opacity-40` : ""
                   }`}
                 >
-                  {/* Family color bar */}
                   <div className={`absolute top-0 left-0 right-0 h-1.5 rounded-t-2xl ${info.color}`} />
                   <button
                     onClick={() => setExpanded(isOpen ? null : v.infinitive)}
                     className="w-full text-left"
                   >
-                    <div className="flex items-center justify-between mt-1">
-                      <div>
+                    <div className="flex items-center justify-between mt-1 gap-2">
+                      <div className="min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className={`w-3 h-3 rounded-full ${info.color}`} />
-                          <h4 className="font-extrabold text-lg">{v.infinitive}</h4>
+                          <span className={`w-3 h-3 rounded-full shrink-0 ${info.color}`} />
+                          <h4 className="font-extrabold text-lg truncate">{v.infinitive}</h4>
+                          <span className="text-xl">{v.emoji}</span>
                         </div>
-                        <p className="text-xs text-muted-foreground mt-0.5">{v.meaning}</p>
+                        <div className="mt-1 space-y-0.5">
+                          {targetLang !== "ca" && (
+                            <p className="text-sm font-bold text-primary">
+                              {LANGUAGES[targetLang].flag} {targetTr}
+                            </p>
+                          )}
+                          {helpLang !== targetLang && helpLang !== "ca" && (
+                            <p className="text-xs text-muted-foreground">
+                              {LANGUAGES[helpLang].flag} {helpTr}
+                            </p>
+                          )}
+                        </div>
                       </div>
-                      <span className="text-xs font-bold px-2 py-1 rounded-full bg-background/60">
+                      <span className="text-xs font-bold px-2 py-1 rounded-full bg-background/60 shrink-0">
                         {info.ending}
                       </span>
                     </div>
@@ -266,13 +366,27 @@ const MapesVerbs = () => {
                       </div>
                     ))}
                   </div>
+
+                  {isOpen && (
+                    <details open className="mt-3 rounded-lg bg-background/60 p-3 text-xs">
+                      <summary className="font-bold cursor-pointer">🌐 Traduccions a totes les llengües</summary>
+                      <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-1">
+                        {(Object.keys(LANGUAGES) as LangCode[]).map((lc) => (
+                          <div key={lc} className="flex items-center gap-1.5">
+                            <span>{LANGUAGES[lc].flag}</span>
+                            <span className="text-muted-foreground">{LANGUAGES[lc].name}:</span>
+                            <span className="font-semibold text-foreground">{trFor(v, lc)}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </details>
+                  )}
                 </div>
               );
             })}
           </div>
         </section>
 
-        {/* Pattern summary per family */}
         <section className="rounded-2xl border-2 border-border bg-card p-5 shadow-sm">
           <h3 className="font-bold text-lg mb-4">🧩 Patró general — {currentTense.label}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -314,7 +428,7 @@ const MapesVerbs = () => {
         </section>
 
         <p className="text-center text-xs text-muted-foreground">
-          💡 Clica els verbs per veure la conjugació completa. Canvia de temps o filtra per família per comparar patrons.
+          💡 Clica un verb per veure la conjugació completa i les traduccions a totes les llengües (del wolof a l'ucraïnès).
         </p>
       </main>
     </div>
