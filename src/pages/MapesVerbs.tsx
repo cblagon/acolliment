@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Languages, Loader2 } from "lucide-react";
 import { useLanguages, LANGUAGES, type LangCode } from "@/hooks/useLanguage";
 import { LanguageSelector } from "@/components/LanguageSelector";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 type Tense = "present" | "passat" | "futur";
 type Family = "1a" | "2a" | "3a" | "irregular";
@@ -193,16 +195,54 @@ const TENSE_MARKERS: Record<Tense, { keywords: string[]; color: string }> = {
   futur: { keywords: ["demà", "després", "l'any que ve", "aviat"], color: "text-sky-600 dark:text-sky-400" },
 };
 
+const CONJ_CACHE_KEY = "mapes-verbs-conj-cache-v1";
+type ConjCache = Record<string, string[]>; // key: `${infinitive}|${tense}|${lang}`
+
+function loadCache(): ConjCache {
+  try { return JSON.parse(localStorage.getItem(CONJ_CACHE_KEY) || "{}"); } catch { return {}; }
+}
+function saveCache(c: ConjCache) {
+  try { localStorage.setItem(CONJ_CACHE_KEY, JSON.stringify(c)); } catch {}
+}
+
 const MapesVerbs = () => {
   const [tense, setTense] = useState<Tense>("present");
   const [familyFilter, setFamilyFilter] = useState<Family | "all">("all");
   const [expanded, setExpanded] = useState<string | null>(null);
   const { targetLang, helpLang, setTargetLang, setHelpLang } = useLanguages();
+  const [conjCache, setConjCache] = useState<ConjCache>(() => loadCache());
+  const [loadingKey, setLoadingKey] = useState<string | null>(null);
 
   const filtered = familyFilter === "all" ? VERBS : VERBS.filter((v) => v.family === familyFilter);
   const currentTense = TENSES.find((t) => t.id === tense)!;
 
   const trFor = (v: VerbData, lang: LangCode) => v.translations[lang] ?? v.translations.en ?? v.infinitive.toLowerCase();
+
+  const conjKey = (inf: string, t: Tense, lang: LangCode) => `${inf}|${t}|${lang}`;
+
+  const fetchConjugation = useCallback(async (v: VerbData, t: Tense, lang: LangCode) => {
+    const key = conjKey(v.infinitive, t, lang);
+    if (conjCache[key] || lang === "ca") return;
+    setLoadingKey(key);
+    try {
+      const { data, error } = await supabase.functions.invoke("ai-text-tools", {
+        body: { action: "conjugate-verb", infinitive: v.infinitive.toLowerCase(), tense: t, targetLang: lang },
+      });
+      if (error) throw error;
+      const forms: string[] = Array.isArray(data?.forms) ? data.forms : [];
+      if (forms.length === 6) {
+        const next = { ...conjCache, [key]: forms };
+        setConjCache(next);
+        saveCache(next);
+      } else {
+        toast.error("No s'han pogut obtenir les 6 formes");
+      }
+    } catch (e: any) {
+      toast.error("Error traduint: " + (e?.message ?? "desconegut"));
+    } finally {
+      setLoadingKey(null);
+    }
+  }, [conjCache]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -355,17 +395,65 @@ const MapesVerbs = () => {
                     </div>
                   </button>
 
-                  <div className="mt-3 grid grid-cols-1 gap-1.5">
-                    {forms.map((form, i) => (
-                      <div
-                        key={i}
-                        className="flex items-baseline gap-2 text-sm bg-background/70 rounded-lg px-2.5 py-1.5"
-                      >
-                        <span className="text-xs text-muted-foreground w-20 shrink-0">{PRONOUNS[i]}</span>
-                        <span className="font-bold text-foreground">{form.trim()}</span>
-                      </div>
-                    ))}
-                  </div>
+                  {(() => {
+                    const tKey = conjKey(v.infinitive, tense, targetLang);
+                    const hKey = conjKey(v.infinitive, tense, helpLang);
+                    const tForms = targetLang !== "ca" ? conjCache[tKey] : undefined;
+                    const hForms = helpLang !== "ca" && helpLang !== targetLang ? conjCache[hKey] : undefined;
+                    const isLoading = loadingKey === tKey || loadingKey === hKey;
+                    const needsFetch =
+                      (targetLang !== "ca" && !tForms) ||
+                      (helpLang !== "ca" && helpLang !== targetLang && !hForms);
+                    return (
+                      <>
+                        <div className="mt-3 grid grid-cols-1 gap-1.5">
+                          {forms.map((form, i) => (
+                            <div
+                              key={i}
+                              className="grid grid-cols-[5rem_1fr] gap-2 text-sm bg-background/70 rounded-lg px-2.5 py-1.5"
+                            >
+                              <span className="text-xs text-muted-foreground pt-0.5">{PRONOUNS[i]}</span>
+                              <div className="space-y-0.5">
+                                <div className="font-bold text-foreground flex items-baseline gap-1.5">
+                                  <span className="text-[10px] opacity-60">🏴󠁥󠁳󠁣󠁴󠁿</span>
+                                  <span>{form.trim()}</span>
+                                </div>
+                                {tForms && targetLang !== "ca" && (
+                                  <div className="text-primary font-semibold flex items-baseline gap-1.5">
+                                    <span className="text-[10px] opacity-70">{LANGUAGES[targetLang].flag}</span>
+                                    <span>{tForms[i]}</span>
+                                  </div>
+                                )}
+                                {hForms && helpLang !== "ca" && helpLang !== targetLang && (
+                                  <div className="text-muted-foreground flex items-baseline gap-1.5">
+                                    <span className="text-[10px] opacity-70">{LANGUAGES[helpLang].flag}</span>
+                                    <span>{hForms[i]}</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        {needsFetch && (
+                          <button
+                            onClick={async () => {
+                              if (targetLang !== "ca" && !tForms) await fetchConjugation(v, tense, targetLang);
+                              if (helpLang !== "ca" && helpLang !== targetLang && !conjCache[hKey])
+                                await fetchConjugation(v, tense, helpLang);
+                            }}
+                            disabled={isLoading}
+                            className="mt-2 w-full flex items-center justify-center gap-2 text-xs font-bold px-3 py-2 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-all disabled:opacity-50"
+                          >
+                            {isLoading ? (
+                              <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Traduint…</>
+                            ) : (
+                              <><Languages className="w-3.5 h-3.5" /> Tradueix les formes</>
+                            )}
+                          </button>
+                        )}
+                      </>
+                    );
+                  })()}
 
                   {isOpen && (
                     <details open className="mt-3 rounded-lg bg-background/60 p-3 text-xs">
