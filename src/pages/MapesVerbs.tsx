@@ -187,7 +187,29 @@ const VERBS: VerbData[] = [
   },
 ];
 
-const PRONOUNS = ["jo", "tu", "ell/ella", "nosaltres", "vosaltres", "ells/elles"];
+const PRONOUNS_CA = ["jo", "tu", "ell/ella", "nosaltres", "vosaltres", "ells/elles"];
+const PRONOUNS_BY_LANG: Partial<Record<LangCode, string[]>> = {
+  ca: PRONOUNS_CA,
+  es: ["yo", "tú", "él/ella", "nosotros", "vosotros", "ellos/ellas"],
+  en: ["I", "you", "he/she", "we", "you (pl.)", "they"],
+  fr: ["je", "tu", "il/elle", "nous", "vous", "ils/elles"],
+  it: ["io", "tu", "lui/lei", "noi", "voi", "loro"],
+  pt: ["eu", "tu", "ele/ela", "nós", "vós", "eles/elas"],
+  ptBR: ["eu", "você", "ele/ela", "nós", "vocês", "eles/elas"],
+  ro: ["eu", "tu", "el/ea", "noi", "voi", "ei/ele"],
+  el: ["εγώ", "εσύ", "αυτός/αυτή", "εμείς", "εσείς", "αυτοί/αυτές"],
+  uk: ["я", "ти", "він/вона", "ми", "ви", "вони"],
+  ar: ["أنا", "أنتَ/أنتِ", "هو/هي", "نحن", "أنتم", "هم/هن"],
+  ha: ["أنا", "انت", "هو/هي", "احنا", "انتم", "هم"],
+  ur: ["میں", "تم", "وہ", "ہم", "تم لوگ", "وہ لوگ"],
+  hi: ["मैं", "तुम", "वह", "हम", "आप", "वे"],
+  zh: ["我", "你", "他/她", "我们", "你们", "他们/她们"],
+  wo: ["man", "yow", "moom", "ñun", "yeen", "ñoom"],
+  mnk: ["nte", "ite", "ate", "ntolu", "altolu", "itolu"],
+  snk: ["in", "an", "a", "o", "xa", "i"],
+  srk: ["in", "an", "a", "o", "xa", "i"],
+};
+const pronounsFor = (lang: LangCode) => PRONOUNS_BY_LANG[lang] ?? PRONOUNS_CA;
 
 const TENSE_MARKERS: Record<Tense, { keywords: string[]; color: string }> = {
   present: { keywords: ["ara", "avui", "cada dia", "sempre", "normalment"], color: "text-emerald-600 dark:text-emerald-400" },
