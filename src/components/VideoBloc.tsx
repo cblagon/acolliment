@@ -1,10 +1,13 @@
 import { useRef, useState, useEffect } from "react";
 import { Play, Upload, X, Film, Languages, Loader2 } from "lucide-react";
 import { RoleplayPlayer } from "./RoleplayPlayer";
+import { VideoOptimizer } from "./VideoOptimizer";
 import { type RoleplayData } from "@/data/roleplayData";
 import { useLanguages, LANGUAGES } from "@/hooks/useLanguage";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+
+const MAX_UPLOAD_MB = 20;
 
 interface VideoBlocProps {
   index: number;
