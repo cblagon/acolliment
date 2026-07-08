@@ -87,66 +87,102 @@ export function VideoBloc({ index, videoUrl, title, description, onVideoChange, 
     }
   };
 
-  const handleDub = async () => {
+  const runDub = async (silent: boolean) => {
     if (!videoUrl || dubbing) return;
     if (targetLang === "ca") {
-      toast.info("Tria una llengua d'aprenentatge diferent del català per doblar el vídeo.");
+      if (!silent) toast.info("Tria una llengua d'aprenentatge diferent del català per doblar el vídeo.");
       return;
     }
+
+    const cacheKey = `${videoUrl}::${targetLang}`;
+    const cached = dubCache.get(cacheKey);
+    if (cached) {
+      setDubbedUrl(cached.url);
+      setDubbedLang(targetLang);
+      setDubbedText(cached.text || null);
+      return;
+    }
+
     setDubbing(true);
     try {
-      const res = await fetch(videoUrl);
-      if (!res.ok) throw new Error("No s'ha pogut llegir el vídeo");
-      const blob = await res.blob();
-      const sizeMB = blob.size / (1024 * 1024);
-      const ext = (blob.type.split("/")[1] || "mp4").split(";")[0];
-      if (sizeMB > MAX_UPLOAD_MB) {
-        setDubbing(false);
-        const large = new File([blob], `video.${ext}`, { type: blob.type || "video/mp4" });
-        setPendingFile(large);
-        toast.info(
-          `El vídeo pesa ${sizeMB.toFixed(1)} MB (màx. ${MAX_UPLOAD_MB} MB). Retalla o comprimeix-lo abans de doblar.`
-        );
-        return;
+      let promise = inflightDubs.get(cacheKey);
+      if (!promise) {
+        promise = (async () => {
+          const res = await fetch(videoUrl);
+          if (!res.ok) throw new Error("No s'ha pogut llegir el vídeo");
+          const blob = await res.blob();
+          const sizeMB = blob.size / (1024 * 1024);
+          const ext = (blob.type.split("/")[1] || "mp4").split(";")[0];
+          if (sizeMB > MAX_UPLOAD_MB) {
+            const large = new File([blob], `video.${ext}`, { type: blob.type || "video/mp4" });
+            setPendingFile(large);
+            throw new Error(
+              `El vídeo pesa ${sizeMB.toFixed(1)} MB (màx. ${MAX_UPLOAD_MB} MB). Retalla o comprimeix-lo abans de doblar.`
+            );
+          }
+          const file = new File([blob], `video.${ext}`, { type: blob.type || "video/mp4" });
+
+          const form = new FormData();
+          form.append("file", file);
+          form.append("targetLang", targetLang);
+
+          const { data: sess } = await supabase.auth.getSession();
+          const token = sess.session?.access_token;
+          const supaUrl = import.meta.env.VITE_SUPABASE_URL;
+          const anon = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+          const dubRes = await fetch(`${supaUrl}/functions/v1/dub-video`, {
+            method: "POST",
+            headers: { apikey: anon, Authorization: `Bearer ${token ?? anon}` },
+            body: form,
+          });
+          if (!dubRes.ok) {
+            const txt = await dubRes.text();
+            throw new Error(`Error del doblatge: ${dubRes.status} — ${txt.slice(0, 200)}`);
+          }
+          const audioBlob = await dubRes.blob();
+          const url = URL.createObjectURL(audioBlob);
+          const translation = decodeURIComponent(dubRes.headers.get("X-Translation") ?? "");
+          const entry = { url, text: translation };
+          dubCache.set(cacheKey, entry);
+          return entry;
+        })();
+        inflightDubs.set(cacheKey, promise);
+        promise.finally(() => inflightDubs.delete(cacheKey));
       }
-      const file = new File([blob], `video.${ext}`, { type: blob.type || "video/mp4" });
 
-      const form = new FormData();
-      form.append("file", file);
-      form.append("targetLang", targetLang);
-
-      const { data: sess } = await supabase.auth.getSession();
-      const token = sess.session?.access_token;
-      const supaUrl = import.meta.env.VITE_SUPABASE_URL;
-      const anon = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-
-      const dubRes = await fetch(`${supaUrl}/functions/v1/dub-video`, {
-        method: "POST",
-        headers: {
-          apikey: anon,
-          Authorization: `Bearer ${token ?? anon}`,
-        },
-        body: form,
-      });
-
-      if (!dubRes.ok) {
-        const txt = await dubRes.text();
-        throw new Error(`Error del doblatge: ${dubRes.status} — ${txt.slice(0, 200)}`);
-      }
-      const audioBlob = await dubRes.blob();
-      const url = URL.createObjectURL(audioBlob);
-      const translation = decodeURIComponent(dubRes.headers.get("X-Translation") ?? "");
-      setDubbedUrl(url);
+      const entry = await promise;
+      setDubbedUrl(entry.url);
       setDubbedLang(targetLang);
-      setDubbedText(translation || null);
-      toast.success(`Vídeo doblat a ${LANGUAGES[targetLang]?.name ?? targetLang}`);
+      setDubbedText(entry.text || null);
+      if (!silent) toast.success(`Vídeo doblat a ${LANGUAGES[targetLang]?.name ?? targetLang}`);
     } catch (err) {
       console.error(err);
-      toast.error(err instanceof Error ? err.message : "No s'ha pogut doblar el vídeo");
+      if (!silent) toast.error(err instanceof Error ? err.message : "No s'ha pogut doblar el vídeo");
     } finally {
       setDubbing(false);
     }
   };
+
+  const handleDub = () => runDub(false);
+
+  // Auto-dub when a learning language different from Catalan is selected.
+  useEffect(() => {
+    if (!videoUrl) return;
+    if (targetLang === "ca") return;
+    if (dubbedLang === targetLang && dubbedUrl) return;
+    const cacheKey = `${videoUrl}::${targetLang}`;
+    const cached = dubCache.get(cacheKey);
+    if (cached) {
+      setDubbedUrl(cached.url);
+      setDubbedLang(targetLang);
+      setDubbedText(cached.text || null);
+      return;
+    }
+    runDub(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [videoUrl, targetLang]);
+
 
   const showCustomVideo = videoUrl && useCustomVideo;
   const showRoleplay = !!roleplayData;
