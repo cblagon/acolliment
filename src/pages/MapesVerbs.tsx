@@ -395,17 +395,65 @@ const MapesVerbs = () => {
                     </div>
                   </button>
 
-                  <div className="mt-3 grid grid-cols-1 gap-1.5">
-                    {forms.map((form, i) => (
-                      <div
-                        key={i}
-                        className="flex items-baseline gap-2 text-sm bg-background/70 rounded-lg px-2.5 py-1.5"
-                      >
-                        <span className="text-xs text-muted-foreground w-20 shrink-0">{PRONOUNS[i]}</span>
-                        <span className="font-bold text-foreground">{form.trim()}</span>
-                      </div>
-                    ))}
-                  </div>
+                  {(() => {
+                    const tKey = conjKey(v.infinitive, tense, targetLang);
+                    const hKey = conjKey(v.infinitive, tense, helpLang);
+                    const tForms = targetLang !== "ca" ? conjCache[tKey] : undefined;
+                    const hForms = helpLang !== "ca" && helpLang !== targetLang ? conjCache[hKey] : undefined;
+                    const isLoading = loadingKey === tKey || loadingKey === hKey;
+                    const needsFetch =
+                      (targetLang !== "ca" && !tForms) ||
+                      (helpLang !== "ca" && helpLang !== targetLang && !hForms);
+                    return (
+                      <>
+                        <div className="mt-3 grid grid-cols-1 gap-1.5">
+                          {forms.map((form, i) => (
+                            <div
+                              key={i}
+                              className="grid grid-cols-[5rem_1fr] gap-2 text-sm bg-background/70 rounded-lg px-2.5 py-1.5"
+                            >
+                              <span className="text-xs text-muted-foreground pt-0.5">{PRONOUNS[i]}</span>
+                              <div className="space-y-0.5">
+                                <div className="font-bold text-foreground flex items-baseline gap-1.5">
+                                  <span className="text-[10px] opacity-60">🏴󠁥󠁳󠁣󠁴󠁿</span>
+                                  <span>{form.trim()}</span>
+                                </div>
+                                {tForms && targetLang !== "ca" && (
+                                  <div className="text-primary font-semibold flex items-baseline gap-1.5">
+                                    <span className="text-[10px] opacity-70">{LANGUAGES[targetLang].flag}</span>
+                                    <span>{tForms[i]}</span>
+                                  </div>
+                                )}
+                                {hForms && helpLang !== "ca" && helpLang !== targetLang && (
+                                  <div className="text-muted-foreground flex items-baseline gap-1.5">
+                                    <span className="text-[10px] opacity-70">{LANGUAGES[helpLang].flag}</span>
+                                    <span>{hForms[i]}</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        {needsFetch && (
+                          <button
+                            onClick={async () => {
+                              if (targetLang !== "ca" && !tForms) await fetchConjugation(v, tense, targetLang);
+                              if (helpLang !== "ca" && helpLang !== targetLang && !conjCache[hKey])
+                                await fetchConjugation(v, tense, helpLang);
+                            }}
+                            disabled={isLoading}
+                            className="mt-2 w-full flex items-center justify-center gap-2 text-xs font-bold px-3 py-2 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-all disabled:opacity-50"
+                          >
+                            {isLoading ? (
+                              <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Traduint…</>
+                            ) : (
+                              <><Languages className="w-3.5 h-3.5" /> Tradueix les formes</>
+                            )}
+                          </button>
+                        )}
+                      </>
+                    );
+                  })()}
 
                   {isOpen && (
                     <details open className="mt-3 rounded-lg bg-background/60 p-3 text-xs">
