@@ -48,6 +48,13 @@ export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
   const synthRef = useRef(typeof window !== "undefined" ? window.speechSynthesis : null);
   const voiceRef = useRef<SpeechSynthesisVoice | null>(null);
 
+  // Sync with app-wide target language selection
+  useEffect(() => {
+    const mapped = mapAppLang(appTargetLang);
+    setTargetLang((prev) => (prev === mapped ? prev : mapped));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [appTargetLang]);
+
   const bcp47 = TARGET_LANGS[targetLang]?.bcp47 ?? "ca-ES";
 
   // Pick best voice for current target language
