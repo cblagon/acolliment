@@ -288,6 +288,19 @@ export function VideoBloc({ index, videoUrl, title, description, onVideoChange, 
           )}
         </div>
       </div>
+
+      {pendingFile && (
+        <VideoOptimizer
+          file={pendingFile}
+          maxMB={MAX_UPLOAD_MB}
+          onCancel={() => setPendingFile(null)}
+          onReady={(optimized) => {
+            setPendingFile(null);
+            if (videoUrl) URL.revokeObjectURL(videoUrl);
+            acceptFile(optimized);
+          }}
+        />
+      )}
     </div>
   );
 }
