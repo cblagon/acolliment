@@ -9,6 +9,11 @@ import { toast } from "sonner";
 
 const MAX_UPLOAD_MB = 20;
 
+// Module-level cache of dubbed audio Blob URLs keyed by `${videoUrl}::${lang}`.
+// Persists across component remounts so switching languages back and forth is instant.
+const dubCache = new Map<string, { url: string; text: string }>();
+const inflightDubs = new Map<string, Promise<{ url: string; text: string }>>();
+
 interface VideoBlocProps {
   index: number;
   videoUrl: string | null;
