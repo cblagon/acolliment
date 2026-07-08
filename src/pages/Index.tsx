@@ -13,6 +13,7 @@ import { SongViewer } from "@/components/SongViewer";
 import { BlocEditor } from "@/components/BlocEditor";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { VisitorCounter } from "@/components/VisitorCounter";
+import { DubbedVideoPlayer } from "@/components/DubbedVideoPlayer";
 import { CentreBanner } from "@/components/CentreBanner";
 import { exportAllToPDF } from "@/hooks/useExportPDF";
 import { t, langName } from "@/i18n/ui";
@@ -343,13 +344,8 @@ const Index = () => {
                     })}
                   </div>
                   {oralVideoSrc && (
-                    <div className="lg:col-span-2 rounded-2xl overflow-hidden border-2 border-primary/20 bg-card shadow-lg flex items-center justify-center">
-                      <video
-                        src={oralVideoSrc}
-                        controls
-                        playsInline
-                        className="max-h-[70vh] w-auto h-auto max-w-full"
-                      />
+                    <div className="lg:col-span-2 rounded-2xl overflow-hidden border-2 border-primary/20 bg-card shadow-lg">
+                      <DubbedVideoPlayer src={oralVideoSrc} />
                     </div>
                   )}
                 </div>
