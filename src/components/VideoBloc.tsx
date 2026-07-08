@@ -37,24 +37,13 @@ export function VideoBloc({ index, videoUrl, title, description, onVideoChange, 
   const [dubbedLang, setDubbedLang] = useState<string | null>(null);
   const [dubbedText, setDubbedText] = useState<string | null>(null);
 
-  // Reset dubbing when the video source changes
-  useEffect(() => {
-    if (dubbedUrl) URL.revokeObjectURL(dubbedUrl);
-    setDubbedUrl(null);
-    setDubbedLang(null);
-    setDubbedText(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [videoUrl]);
-
   const [pendingFile, setPendingFile] = useState<File | null>(null);
 
-  // Reset dubbing when the video source changes
+  // When the source video changes, reset any active dubbing.
   useEffect(() => {
-    if (dubbedUrl) URL.revokeObjectURL(dubbedUrl);
     setDubbedUrl(null);
     setDubbedLang(null);
     setDubbedText(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [videoUrl]);
 
   const acceptFile = (file: File) => {
