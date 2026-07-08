@@ -105,12 +105,16 @@ export function VideoBloc({ index, videoUrl, title, description, onVideoChange, 
       if (!res.ok) throw new Error("No s'ha pogut llegir el vídeo");
       const blob = await res.blob();
       const sizeMB = blob.size / (1024 * 1024);
-      if (sizeMB > 20) {
-        toast.error(`El vídeo pesa ${sizeMB.toFixed(1)} MB. Cal que sigui inferior a 20 MB.`);
+      const ext = (blob.type.split("/")[1] || "mp4").split(";")[0];
+      if (sizeMB > MAX_UPLOAD_MB) {
         setDubbing(false);
+        const large = new File([blob], `video.${ext}`, { type: blob.type || "video/mp4" });
+        setPendingFile(large);
+        toast.info(
+          `El vídeo pesa ${sizeMB.toFixed(1)} MB (màx. ${MAX_UPLOAD_MB} MB). Retalla o comprimeix-lo abans de doblar.`
+        );
         return;
       }
-      const ext = (blob.type.split("/")[1] || "mp4").split(";")[0];
       const file = new File([blob], `video.${ext}`, { type: blob.type || "video/mp4" });
 
       const form = new FormData();
