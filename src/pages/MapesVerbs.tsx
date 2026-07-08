@@ -187,7 +187,29 @@ const VERBS: VerbData[] = [
   },
 ];
 
-const PRONOUNS = ["jo", "tu", "ell/ella", "nosaltres", "vosaltres", "ells/elles"];
+const PRONOUNS_CA = ["jo", "tu", "ell/ella", "nosaltres", "vosaltres", "ells/elles"];
+const PRONOUNS_BY_LANG: Partial<Record<LangCode, string[]>> = {
+  ca: PRONOUNS_CA,
+  es: ["yo", "tú", "él/ella", "nosotros", "vosotros", "ellos/ellas"],
+  en: ["I", "you", "he/she", "we", "you (pl.)", "they"],
+  fr: ["je", "tu", "il/elle", "nous", "vous", "ils/elles"],
+  it: ["io", "tu", "lui/lei", "noi", "voi", "loro"],
+  pt: ["eu", "tu", "ele/ela", "nós", "vós", "eles/elas"],
+  ptBR: ["eu", "você", "ele/ela", "nós", "vocês", "eles/elas"],
+  ro: ["eu", "tu", "el/ea", "noi", "voi", "ei/ele"],
+  el: ["εγώ", "εσύ", "αυτός/αυτή", "εμείς", "εσείς", "αυτοί/αυτές"],
+  uk: ["я", "ти", "він/вона", "ми", "ви", "вони"],
+  ar: ["أنا", "أنتَ/أنتِ", "هو/هي", "نحن", "أنتم", "هم/هن"],
+  ha: ["أنا", "انت", "هو/هي", "احنا", "انتم", "هم"],
+  ur: ["میں", "تم", "وہ", "ہم", "تم لوگ", "وہ لوگ"],
+  hi: ["मैं", "तुम", "वह", "हम", "आप", "वे"],
+  zh: ["我", "你", "他/她", "我们", "你们", "他们/她们"],
+  wo: ["man", "yow", "moom", "ñun", "yeen", "ñoom"],
+  mnk: ["nte", "ite", "ate", "ntolu", "altolu", "itolu"],
+  snk: ["in", "an", "a", "o", "xa", "i"],
+  srk: ["in", "an", "a", "o", "xa", "i"],
+};
+const pronounsFor = (lang: LangCode) => PRONOUNS_BY_LANG[lang] ?? PRONOUNS_CA;
 
 const TENSE_MARKERS: Record<Tense, { keywords: string[]; color: string }> = {
   present: { keywords: ["ara", "avui", "cada dia", "sempre", "normalment"], color: "text-emerald-600 dark:text-emerald-400" },
@@ -404,35 +426,49 @@ const MapesVerbs = () => {
                     const needsFetch =
                       (targetLang !== "ca" && !tForms) ||
                       (helpLang !== "ca" && helpLang !== targetLang && !hForms);
+                    const targetPron = pronounsFor(targetLang);
+                    const helpPron = pronounsFor(helpLang);
+                    const caPron = PRONOUNS_CA;
+                    // Primary display: target language (what the student learns)
+                    // Fallback to Catalan if target is Catalan.
                     return (
                       <>
                         <div className="mt-3 grid grid-cols-1 gap-1.5">
-                          {forms.map((form, i) => (
-                            <div
-                              key={i}
-                              className="grid grid-cols-[5rem_1fr] gap-2 text-sm bg-background/70 rounded-lg px-2.5 py-1.5"
-                            >
-                              <span className="text-xs text-muted-foreground pt-0.5">{PRONOUNS[i]}</span>
-                              <div className="space-y-0.5">
-                                <div className="font-bold text-foreground flex items-baseline gap-1.5">
-                                  <span className="text-[10px] opacity-60">🏴󠁥󠁳󠁣󠁴󠁿</span>
-                                  <span>{form.trim()}</span>
+                          {forms.map((form, i) => {
+                            const mainPron = targetLang === "ca" ? caPron[i] : targetPron[i];
+                            const mainForm = targetLang === "ca" ? form.trim() : tForms?.[i];
+                            const mainFlag = LANGUAGES[targetLang].flag;
+                            return (
+                              <div
+                                key={i}
+                                className="grid grid-cols-[6rem_1fr] gap-2 text-sm bg-background/70 rounded-lg px-2.5 py-1.5"
+                              >
+                                <span className="text-xs font-bold text-foreground pt-0.5 flex items-baseline gap-1">
+                                  <span className="text-[10px] opacity-70">{mainFlag}</span>
+                                  <span className="truncate">{mainPron}</span>
+                                </span>
+                                <div className="space-y-0.5">
+                                  <div className="font-bold text-primary text-base">
+                                    {mainForm ?? <span className="italic text-muted-foreground/60 text-xs">— tradueix per veure-ho —</span>}
+                                  </div>
+                                  {helpLang !== targetLang && (
+                                    <div className="text-xs text-muted-foreground flex items-baseline gap-1.5">
+                                      <span className="opacity-70">{LANGUAGES[helpLang].flag}</span>
+                                      <span className="font-semibold">{helpPron[i]}</span>
+                                      <span>·</span>
+                                      <span>{helpLang === "ca" ? form.trim() : hForms?.[i] ?? "…"}</span>
+                                    </div>
+                                  )}
+                                  {targetLang !== "ca" && helpLang !== "ca" && (
+                                    <div className="text-[11px] text-muted-foreground/70 flex items-baseline gap-1.5">
+                                      <span className="opacity-60">🏴󠁥󠁳󠁣󠁴󠁿</span>
+                                      <span>{caPron[i]} · {form.trim()}</span>
+                                    </div>
+                                  )}
                                 </div>
-                                {tForms && targetLang !== "ca" && (
-                                  <div className="text-primary font-semibold flex items-baseline gap-1.5">
-                                    <span className="text-[10px] opacity-70">{LANGUAGES[targetLang].flag}</span>
-                                    <span>{tForms[i]}</span>
-                                  </div>
-                                )}
-                                {hForms && helpLang !== "ca" && helpLang !== targetLang && (
-                                  <div className="text-muted-foreground flex items-baseline gap-1.5">
-                                    <span className="text-[10px] opacity-70">{LANGUAGES[helpLang].flag}</span>
-                                    <span>{hForms[i]}</span>
-                                  </div>
-                                )}
                               </div>
-                            </div>
-                          ))}
+                            );
+                          })}
                         </div>
                         {needsFetch && (
                           <button
@@ -447,7 +483,7 @@ const MapesVerbs = () => {
                             {isLoading ? (
                               <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Traduint…</>
                             ) : (
-                              <><Languages className="w-3.5 h-3.5" /> Tradueix les formes</>
+                              <><Languages className="w-3.5 h-3.5" /> Tradueix les formes al {LANGUAGES[targetLang].name}{helpLang !== targetLang && helpLang !== "ca" ? ` i ${LANGUAGES[helpLang].name}` : ""}</>
                             )}
                           </button>
                         )}
