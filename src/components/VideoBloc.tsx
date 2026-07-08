@@ -41,12 +41,34 @@ export function VideoBloc({ index, videoUrl, title, description, onVideoChange, 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [videoUrl]);
 
-  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const [pendingFile, setPendingFile] = useState<File | null>(null);
+
+  // Reset dubbing when the video source changes
+  useEffect(() => {
+    if (dubbedUrl) URL.revokeObjectURL(dubbedUrl);
+    setDubbedUrl(null);
+    setDubbedLang(null);
+    setDubbedText(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [videoUrl]);
+
+  const acceptFile = (file: File) => {
     const url = URL.createObjectURL(file);
     onVideoChange(url);
     setUseCustomVideo(true);
+  };
+
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    // Reset the input so re-selecting the same file still triggers change
+    e.target.value = "";
+    const sizeMB = file.size / (1024 * 1024);
+    if (sizeMB > MAX_UPLOAD_MB) {
+      setPendingFile(file);
+      return;
+    }
+    acceptFile(file);
   };
 
   const handleRemove = () => {
