@@ -437,32 +437,23 @@ const MapesVerbs = () => {
                           {forms.map((form, i) => {
                             const mainPron = targetLang === "ca" ? caPron[i] : targetPron[i];
                             const mainForm = targetLang === "ca" ? form.trim() : tForms?.[i];
-                            const mainFlag = LANGUAGES[targetLang].flag;
+                            const helpForm = helpLang === "ca" ? form.trim() : hForms?.[i];
                             return (
                               <div
                                 key={i}
-                                className="grid grid-cols-[6rem_1fr] gap-2 text-sm bg-background/70 rounded-lg px-2.5 py-1.5"
+                                className="grid grid-cols-[5rem_1fr] gap-2 items-baseline text-sm bg-background/70 rounded-lg px-2.5 py-1.5"
                               >
-                                <span className="text-xs font-bold text-foreground pt-0.5 flex items-baseline gap-1">
-                                  <span className="text-[10px] opacity-70">{mainFlag}</span>
-                                  <span className="truncate">{mainPron}</span>
+                                <span className="text-xs font-bold text-foreground truncate">
+                                  {mainPron}
                                 </span>
                                 <div className="space-y-0.5">
-                                  <div className="font-bold text-primary text-base">
+                                  <div className="font-bold text-primary text-base leading-tight">
                                     {mainForm ?? <span className="italic text-muted-foreground/60 text-xs">— tradueix per veure-ho —</span>}
                                   </div>
                                   {helpLang !== targetLang && (
-                                    <div className="text-xs text-muted-foreground flex items-baseline gap-1.5">
+                                    <div className="text-xs text-muted-foreground flex items-baseline gap-1">
                                       <span className="opacity-70">{LANGUAGES[helpLang].flag}</span>
-                                      <span className="font-semibold">{helpPron[i]}</span>
-                                      <span>·</span>
-                                      <span>{helpLang === "ca" ? form.trim() : hForms?.[i] ?? "…"}</span>
-                                    </div>
-                                  )}
-                                  {targetLang !== "ca" && helpLang !== "ca" && (
-                                    <div className="text-[11px] text-muted-foreground/70 flex items-baseline gap-1.5">
-                                      <span className="opacity-60">🏴󠁥󠁳󠁣󠁴󠁿</span>
-                                      <span>{caPron[i]} · {form.trim()}</span>
+                                      <span>{helpForm ?? "…"}</span>
                                     </div>
                                   )}
                                 </div>
@@ -470,6 +461,7 @@ const MapesVerbs = () => {
                             );
                           })}
                         </div>
+
                         {needsFetch && (
                           <button
                             onClick={async () => {
