@@ -176,6 +176,14 @@ const Index = () => {
               <span className="hidden sm:inline">Eines</span>
             </Link>
             <Link
+              to="/penjat"
+              title="El joc del penjat"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-bloom-pink text-white text-sm font-semibold hover:opacity-90 transition-all active:scale-95"
+            >
+              🎯
+              <span className="hidden sm:inline">Penjat</span>
+            </Link>
+            <Link
               to="/eso"
               title="Vocabulari per cursos d'ESO i àmbits"
               className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-accent text-accent-foreground text-sm font-semibold hover:bg-accent/80 transition-all active:scale-95"
