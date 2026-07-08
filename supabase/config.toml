@@ -2,3 +2,6 @@ project_id = "eikvkrzlzfawiuzfdxxb"
 
 [functions.ai-text-tools]
 verify_jwt = false
+
+[functions.dub-video]
+verify_jwt = false
