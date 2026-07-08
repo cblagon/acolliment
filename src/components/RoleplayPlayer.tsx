@@ -3,6 +3,7 @@ import { Play, Pause, RotateCcw, Volume2, VolumeX, Loader2, Languages } from "lu
 import { type RoleplayData } from "@/data/roleplayData";
 import { selectBestVoice } from "@/hooks/useTTS";
 import { supabase } from "@/integrations/supabase/client";
+import { useLanguages } from "@/hooks/useLanguage";
 
 interface RoleplayPlayerProps {
   data: RoleplayData;
@@ -28,17 +29,31 @@ const TARGET_LANGS: Record<string, { label: string; bcp47: string }> = {
 const CACHE_PREFIX = "roleplay-translation:";
 
 export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
+  const { targetLang: appTargetLang } = useLanguages();
+  // Map app LangCode → RoleplayPlayer target language code
+  const mapAppLang = (code: string): string => {
+    if (code === "ptBR") return "pt";
+    if (TARGET_LANGS[code]) return code;
+    return "ca";
+  };
   const [currentLine, setCurrentLine] = useState(-1);
   const [isPlaying, setIsPlaying] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
   const [finished, setFinished] = useState(false);
-  const [targetLang, setTargetLang] = useState<string>("ca");
+  const [targetLang, setTargetLang] = useState<string>(() => mapAppLang(appTargetLang));
   const [translatedLines, setTranslatedLines] = useState<string[] | null>(null);
   const [translating, setTranslating] = useState(false);
   const [translateError, setTranslateError] = useState<string | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
   const synthRef = useRef(typeof window !== "undefined" ? window.speechSynthesis : null);
   const voiceRef = useRef<SpeechSynthesisVoice | null>(null);
+
+  // Sync with app-wide target language selection
+  useEffect(() => {
+    const mapped = mapAppLang(appTargetLang);
+    setTargetLang((prev) => (prev === mapped ? prev : mapped));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [appTargetLang]);
 
   const bcp47 = TARGET_LANGS[targetLang]?.bcp47 ?? "ca-ES";
 
