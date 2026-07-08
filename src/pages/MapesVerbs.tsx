@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Languages, Loader2 } from "lucide-react";
 import { useLanguages, LANGUAGES, type LangCode } from "@/hooks/useLanguage";
 import { LanguageSelector } from "@/components/LanguageSelector";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 type Tense = "present" | "passat" | "futur";
 type Family = "1a" | "2a" | "3a" | "irregular";
@@ -193,16 +195,54 @@ const TENSE_MARKERS: Record<Tense, { keywords: string[]; color: string }> = {
   futur: { keywords: ["demà", "després", "l'any que ve", "aviat"], color: "text-sky-600 dark:text-sky-400" },
 };
 
+const CONJ_CACHE_KEY = "mapes-verbs-conj-cache-v1";
+type ConjCache = Record<string, string[]>; // key: `${infinitive}|${tense}|${lang}`
+
+function loadCache(): ConjCache {
+  try { return JSON.parse(localStorage.getItem(CONJ_CACHE_KEY) || "{}"); } catch { return {}; }
+}
+function saveCache(c: ConjCache) {
+  try { localStorage.setItem(CONJ_CACHE_KEY, JSON.stringify(c)); } catch {}
+}
+
 const MapesVerbs = () => {
   const [tense, setTense] = useState<Tense>("present");
   const [familyFilter, setFamilyFilter] = useState<Family | "all">("all");
   const [expanded, setExpanded] = useState<string | null>(null);
   const { targetLang, helpLang, setTargetLang, setHelpLang } = useLanguages();
+  const [conjCache, setConjCache] = useState<ConjCache>(() => loadCache());
+  const [loadingKey, setLoadingKey] = useState<string | null>(null);
 
   const filtered = familyFilter === "all" ? VERBS : VERBS.filter((v) => v.family === familyFilter);
   const currentTense = TENSES.find((t) => t.id === tense)!;
 
   const trFor = (v: VerbData, lang: LangCode) => v.translations[lang] ?? v.translations.en ?? v.infinitive.toLowerCase();
+
+  const conjKey = (inf: string, t: Tense, lang: LangCode) => `${inf}|${t}|${lang}`;
+
+  const fetchConjugation = useCallback(async (v: VerbData, t: Tense, lang: LangCode) => {
+    const key = conjKey(v.infinitive, t, lang);
+    if (conjCache[key] || lang === "ca") return;
+    setLoadingKey(key);
+    try {
+      const { data, error } = await supabase.functions.invoke("ai-text-tools", {
+        body: { action: "conjugate-verb", infinitive: v.infinitive.toLowerCase(), tense: t, targetLang: lang },
+      });
+      if (error) throw error;
+      const forms: string[] = Array.isArray(data?.forms) ? data.forms : [];
+      if (forms.length === 6) {
+        const next = { ...conjCache, [key]: forms };
+        setConjCache(next);
+        saveCache(next);
+      } else {
+        toast.error("No s'han pogut obtenir les 6 formes");
+      }
+    } catch (e: any) {
+      toast.error("Error traduint: " + (e?.message ?? "desconegut"));
+    } finally {
+      setLoadingKey(null);
+    }
+  }, [conjCache]);
 
   return (
     <div className="min-h-screen bg-background">
