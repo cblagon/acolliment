@@ -29,11 +29,18 @@ const TARGET_LANGS: Record<string, { label: string; bcp47: string }> = {
 const CACHE_PREFIX = "roleplay-translation:";
 
 export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
+  const { targetLang: appTargetLang } = useLanguages();
+  // Map app LangCode → RoleplayPlayer target language code
+  const mapAppLang = (code: string): string => {
+    if (code === "ptBR") return "pt";
+    if (TARGET_LANGS[code]) return code;
+    return "ca";
+  };
   const [currentLine, setCurrentLine] = useState(-1);
   const [isPlaying, setIsPlaying] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
   const [finished, setFinished] = useState(false);
-  const [targetLang, setTargetLang] = useState<string>("ca");
+  const [targetLang, setTargetLang] = useState<string>(() => mapAppLang(appTargetLang));
   const [translatedLines, setTranslatedLines] = useState<string[] | null>(null);
   const [translating, setTranslating] = useState(false);
   const [translateError, setTranslateError] = useState<string | null>(null);
