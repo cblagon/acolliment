@@ -3,6 +3,7 @@ import { Play, Pause, RotateCcw, Volume2, VolumeX, Loader2, Languages } from "lu
 import { type RoleplayData } from "@/data/roleplayData";
 import { selectBestVoice } from "@/hooks/useTTS";
 import { supabase } from "@/integrations/supabase/client";
+import { useLanguages } from "@/hooks/useLanguage";
 
 interface RoleplayPlayerProps {
   data: RoleplayData;
