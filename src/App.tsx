@@ -24,6 +24,7 @@ import Contacte from "./pages/Contacte.tsx";
 import Recomanacions from "./pages/Recomanacions.tsx";
 import Penjat from "./pages/Penjat.tsx";
 import MapesVerbs from "./pages/MapesVerbs.tsx";
+import Jocs from "./pages/Jocs.tsx";
 import { useTheme } from "./hooks/useTheme";
 import { usePageTracking } from "./hooks/usePageTracking";
 
