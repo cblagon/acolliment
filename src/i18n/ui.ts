@@ -44,7 +44,8 @@ type StringKey =
   | "hangman"
   | "comingSoon"
   | "play"
-  | "gamesIntro";
+  | "gamesIntro"
+  | "level";
 
 const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
   ca: {
