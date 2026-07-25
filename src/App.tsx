@@ -52,6 +52,7 @@ const TrackingRoutes = () => {
       <Route path="/contacte" element={<Contacte />} />
       <Route path="/recomanacions" element={<Recomanacions />} />
       <Route path="/penjat" element={<Penjat />} />
+      <Route path="/jocs" element={<Jocs />} />
       <Route path="/mapes-verbs" element={<MapesVerbs />} />
       <Route path="/privacitat" element={<LegalPage kind="privacy" />} />
       <Route path="/galetes" element={<LegalPage kind="cookies" />} />
