@@ -39,7 +39,11 @@ type StringKey =
   | "intermediate"
   | "saveBloc"
   | "editBloc"
-  | "newBlocTitle";
+  | "newBlocTitle"
+  | "games"
+  | "hangman"
+  | "comingSoon"
+  | "play";
 
 const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
   ca: {
