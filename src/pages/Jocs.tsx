@@ -91,7 +91,7 @@ const Jocs = () => {
         </div>
 
         <p className="text-center text-sm text-muted-foreground mt-10">
-          Aquí trobaràs jocs per practicar vocabulari i expressió oral mentre aprens.
+          {t(helpLang, "gamesIntro")}
         </p>
       </main>
     </div>
