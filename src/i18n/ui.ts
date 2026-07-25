@@ -87,6 +87,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     hangman: "Penjat",
     comingSoon: "Properament",
     play: "Jugar",
+    gamesIntro: "Jocs per practicar vocabulari i expressió oral mentre aprens.",
   },
   es: {
     appSubtitle: "Programa de acogida lingüística",
@@ -128,6 +129,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     hangman: "Ahorcado",
     comingSoon: "Próximamente",
     play: "Jugar",
+    gamesIntro: "Juegos para practicar vocabulario y expresión oral mientras aprendes.",
   },
   en: {
     appSubtitle: "Language welcome programme",
@@ -169,6 +171,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     hangman: "Hangman",
     comingSoon: "Coming soon",
     play: "Play",
+    gamesIntro: "Games to practice vocabulary and oral expression while you learn.",
   },
   fr: {
     appSubtitle: "Programme d'accueil linguistique",
@@ -210,6 +213,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     hangman: "Pendu",
     comingSoon: "Bientôt",
     play: "Jouer",
+    gamesIntro: "Des jeux pour pratiquer le vocabulaire et l'expression orale pendant que vous apprenez.",
   },
   ar: {
     appSubtitle: "برنامج الاستقبال اللغوي",
@@ -251,6 +255,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     hangman: "الرجل المشنوق",
     comingSoon: "قريباً",
     play: "العب",
+    gamesIntro: "ألعاب لممارسة المفردات والتعبير الشفهي أثناء التعلم.",
   },
   pt: {
     appSubtitle: "Programa de acolhimento linguístico",
@@ -292,6 +297,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     hangman: "Forca",
     comingSoon: "Brevemente",
     play: "Jogar",
+    gamesIntro: "Jogos para praticar vocabulário e expressão oral enquanto aprendes.",
   },
   ptBR: {
     appSubtitle: "Programa de acolhimento linguístico",
@@ -333,6 +339,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     hangman: "Forca",
     comingSoon: "Em breve",
     play: "Jogar",
+    gamesIntro: "Jogos para praticar vocabulário e expressão oral enquanto aprende.",
   },
   it: {
     appSubtitle: "Programma di accoglienza linguistica",
@@ -374,6 +381,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     hangman: "Impiccato",
     comingSoon: "Presto",
     play: "Gioca",
+    gamesIntro: "Giochi per praticare vocabolario ed espressione orale mentre impari.",
   },
   ro: {
     appSubtitle: "Program de primire lingvistică",
@@ -415,6 +423,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     hangman: "Spânzurătoarea",
     comingSoon: "În curând",
     play: "Joacă",
+    gamesIntro: "Jocuri pentru a practica vocabularul și exprimarea orală în timp ce înveți.",
   },
   uk: {
     appSubtitle: "Програма мовної підтримки",
