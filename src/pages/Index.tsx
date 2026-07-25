@@ -127,25 +127,7 @@ const Index = () => {
             </div>
           </button>
           <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-            {/* Level selector */}
-            <div className="flex rounded-xl bg-muted p-0.5 gap-0.5">
-              {levels.map((lv) => (
-                <button
-                  key={lv}
-                  onClick={() => {
-                    setSelectedLevel(lv);
-                    setView({ type: "grid" });
-                  }}
-                  className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                    selectedLevel === lv
-                      ? `${levelColors[lv]} text-white shadow-sm`
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  {lv}
-                </button>
-              ))}
-            </div>
+
             <button
               onClick={() => exportAllToPDF(blocs, targetLang, helpLang)}
               className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-sm font-semibold hover:bg-muted/80 transition-all active:scale-95"
