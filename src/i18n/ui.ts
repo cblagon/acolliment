@@ -44,7 +44,8 @@ type StringKey =
   | "hangman"
   | "comingSoon"
   | "play"
-  | "gamesIntro";
+  | "gamesIntro"
+  | "level";
 
 const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
   ca: {
@@ -88,6 +89,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     comingSoon: "Properament",
     play: "Jugar",
     gamesIntro: "Jocs per practicar vocabulari i expressió oral mentre aprens.",
+    level: "Nivell",
   },
   es: {
     appSubtitle: "Programa de acogida lingüística",
@@ -130,6 +132,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     comingSoon: "Próximamente",
     play: "Jugar",
     gamesIntro: "Juegos para practicar vocabulario y expresión oral mientras aprendes.",
+    level: "Nivel",
   },
   en: {
     appSubtitle: "Language welcome programme",
@@ -172,6 +175,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     comingSoon: "Coming soon",
     play: "Play",
     gamesIntro: "Games to practice vocabulary and oral expression while you learn.",
+    level: "Level",
   },
   fr: {
     appSubtitle: "Programme d'accueil linguistique",
@@ -214,6 +218,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     comingSoon: "Bientôt",
     play: "Jouer",
     gamesIntro: "Des jeux pour pratiquer le vocabulaire et l'expression orale pendant que vous apprenez.",
+    level: "Niveau",
   },
   ar: {
     appSubtitle: "برنامج الاستقبال اللغوي",
@@ -256,6 +261,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     comingSoon: "قريباً",
     play: "العب",
     gamesIntro: "ألعاب لممارسة المفردات والتعبير الشفهي أثناء التعلم.",
+    level: "المستوى",
   },
   pt: {
     appSubtitle: "Programa de acolhimento linguístico",
@@ -298,6 +304,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     comingSoon: "Brevemente",
     play: "Jogar",
     gamesIntro: "Jogos para praticar vocabulário e expressão oral enquanto aprendes.",
+    level: "Nível",
   },
   ptBR: {
     appSubtitle: "Programa de acolhimento linguístico",
@@ -340,6 +347,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     comingSoon: "Em breve",
     play: "Jogar",
     gamesIntro: "Jogos para praticar vocabulário e expressão oral enquanto aprende.",
+    level: "Nível",
   },
   it: {
     appSubtitle: "Programma di accoglienza linguistica",
@@ -382,6 +390,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     comingSoon: "Presto",
     play: "Gioca",
     gamesIntro: "Giochi per praticare vocabolario ed espressione orale mentre impari.",
+    level: "Livello",
   },
   ro: {
     appSubtitle: "Program de primire lingvistică",
@@ -424,6 +433,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     comingSoon: "În curând",
     play: "Joacă",
     gamesIntro: "Jocuri pentru a practica vocabularul și exprimarea orală în timp ce înveți.",
+    level: "Nivel",
   },
   uk: {
     appSubtitle: "Програма мовної підтримки",
