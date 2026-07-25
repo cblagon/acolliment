@@ -24,6 +24,7 @@ import Contacte from "./pages/Contacte.tsx";
 import Recomanacions from "./pages/Recomanacions.tsx";
 import Penjat from "./pages/Penjat.tsx";
 import MapesVerbs from "./pages/MapesVerbs.tsx";
+import Jocs from "./pages/Jocs.tsx";
 import { useTheme } from "./hooks/useTheme";
 import { usePageTracking } from "./hooks/usePageTracking";
 
@@ -51,6 +52,7 @@ const TrackingRoutes = () => {
       <Route path="/contacte" element={<Contacte />} />
       <Route path="/recomanacions" element={<Recomanacions />} />
       <Route path="/penjat" element={<Penjat />} />
+      <Route path="/jocs" element={<Jocs />} />
       <Route path="/mapes-verbs" element={<MapesVerbs />} />
       <Route path="/privacitat" element={<LegalPage kind="privacy" />} />
       <Route path="/galetes" element={<LegalPage kind="cookies" />} />
