@@ -208,6 +208,18 @@ const tools: { id: Tool; label: string; icon: ReactNode }[] = [
 ];
 
 export default function Eines() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialTab = (searchParams.get("tab") ?? "corrector") as Tool;
+  const [activeTab, setActiveTab] = useState<Tool>(
+    tools.some((t) => t.id === initialTab) ? initialTab : "corrector"
+  );
+
+  const handleTabChange = (value: string) => {
+    const tab = value as Tool;
+    setActiveTab(tab);
+    setSearchParams({ tab }, { replace: true });
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto max-w-4xl px-4 py-8">
@@ -221,7 +233,7 @@ export default function Eines() {
           Selecciona una eina per practicar i millorar el teu català.
         </p>
 
-        <Tabs defaultValue="corrector" className="w-full">
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
           <TabsList className="mb-6 flex h-auto w-full flex-wrap justify-start gap-1 bg-muted p-1.5">
             {tools.map((tool) => (
               <TabsTrigger
