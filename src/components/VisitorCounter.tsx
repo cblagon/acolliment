@@ -31,7 +31,7 @@ export const VisitorCounter = () => {
 
   return (
     <div
-      className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-sm font-semibold"
+      className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-base font-semibold"
       title="Visitants totals"
     >
       <Eye className="w-4 h-4 text-primary" />
