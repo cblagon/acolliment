@@ -176,6 +176,27 @@ function VerbMapsCard() {
   );
 }
 
+function JocsCard() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Gamepad2 className="h-5 w-5 text-primary" />
+          Jocs
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <p className="text-sm text-muted-foreground">
+          Practica català amb el penjat i altres jocs que afegirem properament.
+        </p>
+        <Button asChild className="w-full sm:w-auto">
+          <Link to="/jocs">Anar a la pàgina de jocs</Link>
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+
 export default function Eines() {
   return (
     <div className="min-h-screen bg-background">
