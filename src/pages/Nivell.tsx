@@ -131,6 +131,14 @@ const Nivell = () => {
                 {lv} · {levelLabels[lv]}
               </button>
             ))}
+            <button
+              onClick={() => navigate("/eso")}
+              className="px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-muted-foreground hover:text-foreground hover:bg-accent flex items-center gap-1"
+            >
+              <GraduationCap className="w-3.5 h-3.5" />
+              ESO
+              <span title="En construcció" className="text-[8px] leading-none">🚧</span>
+            </button>
           </div>
         </div>
       </header>
