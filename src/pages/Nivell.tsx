@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowLeft, Download, GraduationCap } from "lucide-react";
 import { toast } from "sonner";
 import { type Bloc, type Level } from "@/data/blocksData";
