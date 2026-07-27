@@ -208,8 +208,6 @@ const tools: { id: Tool; label: string; icon: ReactNode }[] = [
 ];
 
 export default function Eines() {
-  const [selectedTool, setSelectedTool] = useState<Tool>("corrector");
-
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto max-w-4xl px-4 py-8">
@@ -223,29 +221,33 @@ export default function Eines() {
           Selecciona una eina per practicar i millorar el teu català.
         </p>
 
-        <div className="flex flex-wrap gap-2 mb-8">
-          {tools.map((tool) => (
-            <button
-              key={tool.id}
-              onClick={() => setSelectedTool(tool.id)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${
-                selectedTool === tool.id
-                  ? "bg-primary text-primary-foreground shadow-sm"
-                  : "bg-muted text-muted-foreground hover:text-foreground hover:bg-accent"
-              }`}
-            >
-              {tool.icon}
-              {tool.label}
-            </button>
-          ))}
-        </div>
-
-        <div className="animate-reveal-up">
-          {selectedTool === "corrector" && <SpellChecker />}
-          {selectedTool === "traductor" && <Translator />}
-          {selectedTool === "mapes" && <VerbMapsCard />}
-          {selectedTool === "jocs" && <JocsCard />}
-        </div>
+        <Tabs defaultValue="corrector" className="w-full">
+          <TabsList className="mb-6 flex h-auto w-full flex-wrap justify-start gap-1 bg-muted p-1.5">
+            {tools.map((tool) => (
+              <TabsTrigger
+                key={tool.id}
+                value={tool.id}
+                title={tool.label}
+                className="flex items-center gap-2 whitespace-normal rounded-lg px-3 py-2 text-center text-sm font-bold leading-tight transition-all hover:bg-accent/60 hover:text-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm"
+              >
+                {tool.icon}
+                {tool.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          <TabsContent value="corrector" className="animate-reveal-up">
+            <SpellChecker />
+          </TabsContent>
+          <TabsContent value="traductor" className="animate-reveal-up">
+            <Translator />
+          </TabsContent>
+          <TabsContent value="mapes" className="animate-reveal-up">
+            <VerbMapsCard />
+          </TabsContent>
+          <TabsContent value="jocs" className="animate-reveal-up">
+            <JocsCard />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
