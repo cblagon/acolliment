@@ -232,14 +232,38 @@ const Index = () => {
               <MapPin className="w-4 h-4" />
               <span className="hidden sm:inline">Mapa</span>
             </Link>
-            <Link
-              to="/ajuda"
-              title="Com fer-ne ús"
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-sm font-semibold hover:bg-muted/80 transition-all active:scale-95"
-            >
-              <HelpCircle className="w-4 h-4" />
-              <span className="hidden sm:inline">Ajuda</span>
-            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Link
+                  to="/ajuda"
+                  title="Ajuda"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-sm font-semibold hover:bg-muted/80 transition-all active:scale-95"
+                >
+                  <HelpCircle className="w-4 h-4" />
+                  <span className="hidden sm:inline">Ajuda</span>
+                </Link>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="min-w-[14rem]">
+                <DropdownMenuItem asChild>
+                  <Link to="/ajuda" className="flex cursor-pointer items-center gap-2">
+                    <BookOpen className="h-4 w-4 text-primary" />
+                    Guia d'ús
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/recomanacions" className="flex cursor-pointer items-center gap-2">
+                    <Chrome className="h-4 w-4 text-primary" />
+                    Recomanacions
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/ajuda/moderacio" className="flex cursor-pointer items-center gap-2">
+                    <ShieldCheck className="h-4 w-4 text-primary" />
+                    Com es revisen les aportacions
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Link
               to="/contacte"
               title="Escriu a l'autora"
