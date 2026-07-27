@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, GraduationCap, Construction } from "lucide-react";
+import { ArrowLeft, GraduationCap } from "lucide-react";
 import { toast } from "sonner";
 import { type Bloc, type Level } from "@/data/blocksData";
 import { useBlocs } from "@/hooks/useBlocs";
