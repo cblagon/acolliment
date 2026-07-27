@@ -42,7 +42,11 @@ const ORAL_VIDEO_BY_LEVEL: Partial<Record<Level, string>> = {
 };
 
 const Nivell = () => {
-  const [selectedLevel, setSelectedLevel] = useState<Level>("A1");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialLevel = searchParams.get("level") as Level | null;
+  const [selectedLevel, setSelectedLevel] = useState<Level>(
+    initialLevel && levels.includes(initialLevel) ? initialLevel : "A1"
+  );
   const { blocs: defaultBlocs } = useBlocs(selectedLevel);
   const { videoSlots, setVideoUrl } = useVideoBlocs(selectedLevel);
   const { targetLang, helpLang } = useLanguages();
@@ -50,6 +54,14 @@ const Nivell = () => {
   const { submissions, submit } = useBlocSubmissions();
   const navigate = useNavigate();
   const [view, setView] = useState<View>({ type: "grid" });
+
+  useEffect(() => {
+    const lvl = searchParams.get("level") as Level | null;
+    if (lvl && levels.includes(lvl) && lvl !== selectedLevel) {
+      setSelectedLevel(lvl);
+      setView({ type: "grid" });
+    }
+  }, [searchParams, selectedLevel]);
 
   const { blocs, oralBlocs, pendingIds, rejectedIds } = useMemo(() => {
     const levelSubs = submissions.filter((s) => s.level === selectedLevel);
