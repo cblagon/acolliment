@@ -52,7 +52,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     appSubtitle: "Programa d'acollida lingüística",
     learnTitle: "Aprèn {lang}!",
     learning: "Aprenc",
-    helpIn: "Ajuda en",
+    helpIn: "amb ajuda en",
     allBlocs: "Tots els blocs",
     back: "Tornar",
     game: "Joc",

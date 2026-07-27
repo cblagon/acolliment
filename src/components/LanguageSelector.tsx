@@ -11,7 +11,7 @@ interface LanguageSelectorProps {
 export function LanguageSelector({ lang, onChange, label, exclude, title }: LanguageSelectorProps) {
   return (
     <label className="flex items-center gap-1.5" title={title}>
-      {label && <span className="text-xs font-bold text-muted-foreground hidden md:inline">{label}</span>}
+      {label && <span className="text-sm font-bold text-muted-foreground hidden md:inline">{label}</span>}
       <div className="relative">
         <select
           value={lang}
