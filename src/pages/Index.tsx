@@ -191,7 +191,7 @@ const Index = () => {
                 <Link
                   to="/eines"
                   title="Corrector i traductor"
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-secondary text-secondary-foreground text-sm font-semibold hover:bg-secondary/80 transition-all active:scale-95"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-secondary text-secondary-foreground text-base font-semibold hover:bg-secondary/80 transition-all active:scale-95"
                 >
                   <Wand2 className="w-4 h-4" />
                   <span className="hidden sm:inline">Eines</span>
@@ -227,7 +227,7 @@ const Index = () => {
             <Link
               to="/centres-mapa"
               title="D'on ens visiten"
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-sm font-semibold hover:bg-muted/80 transition-all active:scale-95"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-base font-semibold hover:bg-muted/80 transition-all active:scale-95"
             >
               <MapPin className="w-4 h-4" />
               <span className="hidden sm:inline">Mapa</span>
@@ -237,7 +237,7 @@ const Index = () => {
                 <Link
                   to="/ajuda"
                   title="Ajuda"
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-sm font-semibold hover:bg-muted/80 transition-all active:scale-95"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-base font-semibold hover:bg-muted/80 transition-all active:scale-95"
                 >
                   <HelpCircle className="w-4 h-4" />
                   <span className="hidden sm:inline">Ajuda</span>
@@ -267,7 +267,7 @@ const Index = () => {
             <Link
               to="/contacte"
               title="Escriu a l'autora"
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-sm font-semibold hover:bg-muted/80 transition-all active:scale-95"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-base font-semibold hover:bg-muted/80 transition-all active:scale-95"
             >
               <Mail className="w-4 h-4" />
               <span className="hidden sm:inline">Contacte</span>
@@ -284,7 +284,7 @@ const Index = () => {
               <Link
                 to="/admin"
                 title="Panell d'administració"
-                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500 text-white text-sm font-semibold hover:bg-amber-600 transition-all active:scale-95"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500 text-white text-base font-semibold hover:bg-amber-600 transition-all active:scale-95"
               >
                 <ShieldCheck className="w-4 h-4" />
                 <span className="hidden sm:inline">Admin</span>
