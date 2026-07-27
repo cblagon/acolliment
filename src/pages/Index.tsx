@@ -25,7 +25,7 @@ import { exportAllToPDF } from "@/hooks/useExportPDF";
 import { t, langName } from "@/i18n/ui";
 import { tBlocName } from "@/i18n/blocNames";
 import { useLegalLabels } from "@/pages/Legal";
-import { BarChart3, CheckCircle2, Gamepad2, HelpCircle, Languages, LogIn, LogOut, Mail, Map, MapPin, Moon, ScrollText, ShieldCheck, Sun, Wand2 } from "lucide-react";
+import { BarChart3, CheckCircle2, Gamepad2, GraduationCap, HelpCircle, Languages, LogIn, LogOut, Mail, Map, MapPin, Moon, ScrollText, ShieldCheck, Sun, Wand2 } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -134,14 +134,45 @@ const Index = () => {
           </button>
           <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
 
-            <Link
-              to="/nivell"
-              title="Nivell"
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-bloom-purple text-white text-sm font-semibold hover:opacity-90 transition-all active:scale-95"
-            >
-              <BarChart3 className="w-4 h-4" />
-              <span className="hidden sm:inline">Nivell</span>
-            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Link
+                  to="/nivell"
+                  title="Nivell"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-bloom-purple text-white text-sm font-semibold hover:opacity-90 transition-all active:scale-95"
+                >
+                  <BarChart3 className="w-4 h-4" />
+                  <span className="hidden sm:inline">Nivell</span>
+                </Link>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="min-w-[12rem]">
+                <DropdownMenuItem asChild>
+                  <Link to="/nivell?level=A1" className="flex cursor-pointer items-center gap-2">
+                    <span className="inline-flex w-6 items-center justify-center rounded bg-green-500 text-xs font-bold text-white">A1</span>
+                    {t(helpLang, "basic")}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/nivell?level=A2" className="flex cursor-pointer items-center gap-2">
+                    <span className="inline-flex w-6 items-center justify-center rounded bg-amber-500 text-xs font-bold text-white">A2</span>
+                    {t(helpLang, "elemental")}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/nivell?level=B1" className="flex cursor-pointer items-center gap-2">
+                    <span className="inline-flex w-6 items-center justify-center rounded bg-blue-500 text-xs font-bold text-white">B1</span>
+                    {t(helpLang, "intermediate")}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/eso" className="flex cursor-pointer items-center gap-2">
+                    <GraduationCap className="h-4 w-4 text-primary" />
+                    ESO
+                    <span className="ml-auto text-xs">🚧</span>
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <LanguageSelector
               lang={targetLang}
               onChange={setTargetLang}
