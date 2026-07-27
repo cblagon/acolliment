@@ -134,6 +134,7 @@ const Nivell = () => {
                 onClick={() => {
                   setSelectedLevel(lv);
                   setView({ type: "grid" });
+                  setSearchParams({ level: lv }, { replace: true });
                 }}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                   selectedLevel === lv
