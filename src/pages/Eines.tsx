@@ -199,7 +199,7 @@ function JocsCard() {
 
 type Tool = "corrector" | "traductor" | "mapes" | "jocs";
 
-const tools: { id: Tool; label: string; icon: React.ReactNode }[] = [
+const tools: { id: Tool; label: string; icon: ReactNode }[] = [
   { id: "corrector", label: "Corrector ortogràfic català", icon: <CheckCircle2 className="h-4 w-4" /> },
   { id: "traductor", label: "Traductor", icon: <Languages className="h-4 w-4" /> },
   { id: "mapes", label: "Mapes conceptuals dels temps verbals", icon: <Map className="h-4 w-4" /> },
