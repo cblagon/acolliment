@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { ArrowLeft, CheckCircle2, Languages, Loader2, Copy, Map } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Languages, Loader2, Copy, Map, Gamepad2 } from "lucide-react";
 
 const TRANSLATE_LANGS = [
   { code: "es", label: "Castellà" },
