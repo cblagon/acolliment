@@ -19,7 +19,7 @@ import { exportAllToPDF } from "@/hooks/useExportPDF";
 import { t, langName } from "@/i18n/ui";
 import { tBlocName } from "@/i18n/blocNames";
 import { useLegalLabels } from "@/pages/Legal";
-import { BarChart3, Chrome, Download, Gamepad2, HelpCircle, LogIn, LogOut, Mail, MapPin, Moon, ScrollText, ShieldCheck, Sun, Wand2 } from "lucide-react";
+import { BarChart3, Chrome, Download, HelpCircle, LogIn, LogOut, Mail, MapPin, Moon, ScrollText, ShieldCheck, Sun, Wand2 } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -164,14 +164,6 @@ const Index = () => {
             >
               <Wand2 className="w-4 h-4" />
               <span className="hidden sm:inline">Eines</span>
-            </Link>
-            <Link
-              to="/jocs"
-              title="Jocs"
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-bloom-pink text-white text-sm font-semibold hover:opacity-90 transition-all active:scale-95"
-            >
-              <Gamepad2 className="w-4 h-4" />
-              <span className="hidden sm:inline">Jocs</span>
             </Link>
             <Link
               to="/centres-mapa"
