@@ -19,7 +19,7 @@ import { exportAllToPDF } from "@/hooks/useExportPDF";
 import { t, langName } from "@/i18n/ui";
 import { tBlocName } from "@/i18n/blocNames";
 import { useLegalLabels } from "@/pages/Legal";
-import { BarChart3, HelpCircle, LogIn, LogOut, Mail, MapPin, Moon, ScrollText, ShieldCheck, Sun, Wand2 } from "lucide-react";
+import { BarChart3, CheckCircle2, Gamepad2, HelpCircle, Languages, LogIn, LogOut, Mail, Map, MapPin, Moon, ScrollText, ShieldCheck, Sun, Wand2 } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
