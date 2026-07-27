@@ -130,8 +130,8 @@ const MapesVerbs = () => {
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-md border-b border-border">
         <div className="container py-4 flex items-center justify-between gap-3 flex-wrap">
-          <Link to="/" className="flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80">
-            <ArrowLeft className="w-4 h-4" /> Tornar
+          <Link to="/eines" className="flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary/80">
+            <ArrowLeft className="w-4 h-4" /> Tornar a Eines
           </Link>
           <div className="flex items-center gap-2">
             <span className="text-2xl">🗺️</span>
