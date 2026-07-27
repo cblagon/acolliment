@@ -7,8 +7,8 @@ export default function Eso() {
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-md border-b border-border">
         <div className="container py-4 flex items-center justify-between gap-3">
-          <Link to="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-semibold text-sm">
-            <ArrowLeft className="w-4 h-4" /> Inici
+          <Link to="/nivell" className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-semibold text-sm">
+            <ArrowLeft className="w-4 h-4" /> Nivell
           </Link>
           <h1 className="text-xl font-extrabold flex items-center gap-2">
             <GraduationCap className="w-6 h-6 text-primary" /> Cursos d'ESO
