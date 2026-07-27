@@ -10,13 +10,13 @@ interface LanguageSelectorProps {
 
 export function LanguageSelector({ lang, onChange, label, exclude, title }: LanguageSelectorProps) {
   return (
-    <label className="flex items-center gap-1.5" title={title}>
-      {label && <span className="text-sm font-bold text-muted-foreground hidden md:inline">{label}</span>}
+    <label className="flex items-center gap-2" title={title}>
+      {label && <span className="text-base font-bold text-muted-foreground hidden md:inline">{label}</span>}
       <div className="relative">
         <select
           value={lang}
           onChange={(e) => onChange(e.target.value as LangCode)}
-          className="appearance-none bg-muted text-foreground text-sm font-semibold rounded-xl px-3 py-2 pr-8 border border-border focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer"
+          className="appearance-none bg-muted text-foreground text-base font-semibold rounded-xl px-3 py-2 pr-8 border border-border focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer"
         >
           {(Object.entries(LANGUAGES) as [LangCode, typeof LANGUAGES[LangCode]][])
             .filter(([code]) => code !== exclude)
@@ -26,7 +26,7 @@ export function LanguageSelector({ lang, onChange, label, exclude, title }: Lang
               </option>
             ))}
         </select>
-        <span className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground text-xs">▼</span>
+        <span className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground text-sm">▼</span>
       </div>
     </label>
   );
