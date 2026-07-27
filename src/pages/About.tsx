@@ -275,6 +275,23 @@ type AudioStrings = {
   outro: string;
 };
 
+const REC_STRINGS: Partial<Record<LangCode, { badge: string; title: string; text: string; link: string }>> = {
+  ca: { badge: "Recomanacions", title: "Per què Chrome sona millor?", text: "Descobreix quin navegador i quins ajustos ofereixen la millor experiència d'àudio, veu i traducció.", link: "Veure recomanacions" },
+  es: { badge: "Recomendaciones", title: "¿Por qué Chrome suena mejor?", text: "Descubre qué navegador y ajustes ofrecen la mejor experiencia de audio, voz y traducción.", link: "Ver recomendaciones" },
+  en: { badge: "Recommendations", title: "Why does Chrome sound better?", text: "Find out which browser and settings give the best audio, voice and translation experience.", link: "See recommendations" },
+  fr: { badge: "Recommandations", title: "Pourquoi Chrome sonne-t-il mieux?", text: "Découvrez quel navigateur et quels réglages offrent la meilleure expérience audio, voix et traduction.", link: "Voir les recommandations" },
+  ar: { badge: "توصيات", title: "لماذا يبدو Chrome أفضل؟", text: "اكتشف أي متصفح وإعدادات توفر أفضل تجربة للصوت والصوت والترجمة.", link: "عرض التوصيات" },
+  it: { badge: "Raccomandazioni", title: "Perché Chrome suona meglio?", text: "Scopri quali browser e impostazioni offrono la migliore esperienza audio, voce e traduzione.", link: "Vedi raccomandazioni" },
+  pt: { badge: "Recomendações", title: "Porque é que o Chrome soa melhor?", text: "Descobre que navegador e definições oferecem a melhor experiência de áudio, voz e tradução.", link: "Ver recomendações" },
+  ptBR: { badge: "Recomendações", title: "Por que o Chrome soa melhor?", text: "Descubra qual navegador e configurações oferecem a melhor experiência de áudio, voz e tradução.", link: "Ver recomendações" },
+  uk: { badge: "Рекомендації", title: "Чому Chrome звучить краще?", text: "Дізнайтеся, який браузер і налаштування забезпечують найкращий досвід аудіо, голосу та перекладу.", link: "Переглянути рекомендації" },
+  ro: { badge: "Recomandări", title: "De ce Chrome sună mai bine?", text: "Află ce browser și setări oferă cea mai bună experiență audio, voce și traducere.", link: "Vezi recomandările" },
+  el: { badge: "Συστάσεις", title: "Γιατί ο Chrome ακούγεται καλύτερα;", text: "Ανακαλύψτε ποιο πρόγραμμα περιήγησης και ρυθμίσεις προσφέρουν την καλύτερη εμπειρία ήχου, φωνής και μετάφρασης.", link: "Δείτε συστάσεις" },
+  ur: { badge: "سفارشات", title: "Chrome کی آواز بہتر کیوں آتی ہے؟", text: "جانیں کہ کون سا براؤزر اور سیٹنگز آڈیو، آواز اور ترجمے کا بہترین تجربہ فراہم کرتے ہیں۔", link: "سفارشات دیکھیں" },
+  zh: { badge: "建议", title: "为什么 Chrome 听起来更好？", text: "了解哪种浏览器和设置能提供最佳音频、语音和翻译体验。", link: "查看建议" },
+  hi: { badge: "सिफारिशें", title: "Chrome की आवाज बेहतर क्यों आती है?", text: "जानें कौन सा ब्राउज़र और सेटिंग्स ऑडियो, आवाज और अनुवाद का सबसे अच्छा अनुभव देते हैं।", link: "सिफारिशें देखें" },
+};
+
 const AUDIO_STRINGS: Partial<Record<LangCode, AudioStrings>> = {
   ca: {
     title: "🔊 L'àudio en català no sona bé al meu dispositiu?",
@@ -423,6 +440,7 @@ const About = () => {
   const { helpLang } = useLanguages();
   const s = STRINGS[helpLang] ?? STRINGS.en!;
   const audio = AUDIO_STRINGS[helpLang] ?? AUDIO_STRINGS.en!;
+  const rec = REC_STRINGS[helpLang] ?? REC_STRINGS.en!;
 
   const stepMeta = [
     { icon: Languages, color: "bg-blue-500" },
