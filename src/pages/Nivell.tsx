@@ -160,27 +160,6 @@ const Nivell = () => {
               </p>
             </div>
 
-            <Link
-              to="/eso"
-              className="group relative flex items-center gap-4 rounded-2xl p-5 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 active:scale-[0.97] bg-primary text-primary-foreground animate-reveal-up"
-            >
-              <span className="flex items-center justify-center w-14 h-14 rounded-xl bg-primary-foreground/10 text-3xl shrink-0">
-                <GraduationCap className="w-8 h-8 text-primary-foreground" />
-              </span>
-              <div className="flex-1">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h3 className="text-lg font-extrabold">Cursos d'ESO</h3>
-                  <span className="flex items-center gap-1 rounded-full bg-bloom-yellow text-foreground text-[10px] font-bold px-2 py-1 shadow">
-                    <Construction className="w-3 h-3" /> En construcció
-                  </span>
-                </div>
-                <p className="text-sm opacity-90 text-balance">
-                  Vocabulari organitzat per cursos i àmbits curriculars de 1r a 4t d'ESO.
-                </p>
-              </div>
-              <span className="text-2xl opacity-70 group-hover:opacity-100 transition-opacity">→</span>
-            </Link>
-
             <BlocGrid
               blocs={blocs}
               onSelect={(bloc) => setView({ type: "fitxes", bloc })}
