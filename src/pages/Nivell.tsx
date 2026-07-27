@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, GraduationCap } from "lucide-react";
+import { ArrowLeft, Download, GraduationCap } from "lucide-react";
 import { toast } from "sonner";
 import { type Bloc, type Level } from "@/data/blocksData";
 import { useBlocs } from "@/hooks/useBlocs";
@@ -14,6 +14,7 @@ import { QuizGame } from "@/components/QuizGame";
 import { SongViewer } from "@/components/SongViewer";
 import { BlocEditor } from "@/components/BlocEditor";
 import { DubbedVideoPlayer } from "@/components/DubbedVideoPlayer";
+import { exportAllToPDF } from "@/hooks/useExportPDF";
 import { t } from "@/i18n/ui";
 import { tBlocName } from "@/i18n/blocNames";
 
@@ -138,6 +139,14 @@ const Nivell = () => {
               <GraduationCap className="w-3.5 h-3.5" />
               ESO
               <span title="En construcció" className="text-[8px] leading-none">🚧</span>
+            </button>
+            <button
+              onClick={() => exportAllToPDF(blocs, targetLang, helpLang)}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-xs font-bold hover:bg-muted/80 transition-all active:scale-95"
+              title={t(helpLang, "pdf")}
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">{t(helpLang, "pdf")}</span>
             </button>
           </div>
         </div>
