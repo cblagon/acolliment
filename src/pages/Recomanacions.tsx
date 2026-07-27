@@ -126,7 +126,7 @@ export default function Recomanacions() {
     <div className="min-h-screen bg-background">
       <div className="max-w-3xl mx-auto px-4 py-8">
         <Link
-          to="/"
+          to="/ajuda"
           className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-foreground mb-6"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -204,7 +204,7 @@ export default function Recomanacions() {
         </section>
 
         <Link
-          to="/"
+          to="/ajuda"
           className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
         >
           <ArrowLeft className="w-4 h-4" />
