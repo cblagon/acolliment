@@ -6,6 +6,12 @@ import { useVideoBlocs } from "@/hooks/useVideoBlocs";
 import { useAuth } from "@/hooks/useAuth";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { useBlocSubmissions, submissionToBloc } from "@/hooks/useBlocSubmissions";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { BlocGrid } from "@/components/BlocGrid";
 import { FitxaViewer } from "@/components/FitxaViewer";
 import { QuizGame } from "@/components/QuizGame";
@@ -19,7 +25,7 @@ import { exportAllToPDF } from "@/hooks/useExportPDF";
 import { t, langName } from "@/i18n/ui";
 import { tBlocName } from "@/i18n/blocNames";
 import { useLegalLabels } from "@/pages/Legal";
-import { BarChart3, HelpCircle, LogIn, LogOut, Mail, MapPin, Moon, ScrollText, ShieldCheck, Sun, Wand2 } from "lucide-react";
+import { BarChart3, CheckCircle2, Gamepad2, HelpCircle, Languages, LogIn, LogOut, Mail, Map, MapPin, Moon, ScrollText, ShieldCheck, Sun, Wand2 } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -149,14 +155,44 @@ const Index = () => {
               label={`🌍 ${t(helpLang, "helpIn")}:`}
               title={t(helpLang, "helpIn")}
             />
-            <Link
-              to="/eines"
-              title="Corrector i traductor"
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-secondary text-secondary-foreground text-sm font-semibold hover:bg-secondary/80 transition-all active:scale-95"
-            >
-              <Wand2 className="w-4 h-4" />
-              <span className="hidden sm:inline">Eines</span>
-            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Link
+                  to="/eines"
+                  title="Corrector i traductor"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-secondary text-secondary-foreground text-sm font-semibold hover:bg-secondary/80 transition-all active:scale-95"
+                >
+                  <Wand2 className="w-4 h-4" />
+                  <span className="hidden sm:inline">Eines</span>
+                </Link>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="min-w-[14rem]">
+                <DropdownMenuItem asChild>
+                  <Link to="/eines?tab=corrector" className="flex cursor-pointer items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-primary" />
+                    Corrector ortogràfic català
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/eines?tab=traductor" className="flex cursor-pointer items-center gap-2">
+                    <Languages className="h-4 w-4 text-primary" />
+                    Traductor
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/eines?tab=mapes" className="flex cursor-pointer items-center gap-2">
+                    <Map className="h-4 w-4 text-primary" />
+                    Mapes conceptuals dels temps verbals
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/eines?tab=jocs" className="flex cursor-pointer items-center gap-2">
+                    <Gamepad2 className="h-4 w-4 text-primary" />
+                    Jocs
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Link
               to="/centres-mapa"
               title="D'on ens visiten"
