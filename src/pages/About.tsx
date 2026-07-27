@@ -504,7 +504,26 @@ const About = () => {
           </div>
         </section>
 
-
+        <section className="mt-10">
+          <Link
+            to="/recomanacions"
+            className="group flex items-start gap-4 p-5 rounded-2xl border border-border bg-card hover:shadow-md hover:border-primary/30 transition-all active:scale-95"
+          >
+            <div className="bg-primary/10 text-primary rounded-xl p-3 h-fit shrink-0 group-hover:bg-primary group-hover:text-white transition-colors">
+              <Chrome className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold mb-2">
+                {rec.badge}
+              </span>
+              <h3 className="font-extrabold text-foreground text-lg">{rec.title}</h3>
+              <p className="text-sm text-muted-foreground mt-1">{rec.text}</p>
+              <span className="inline-flex items-center gap-1 mt-3 text-sm font-semibold text-primary group-hover:underline">
+                {rec.link} <ArrowLeft className="w-4 h-4 rotate-180" />
+              </span>
+            </div>
+          </Link>
+        </section>
 
         <section className="mt-12 p-6 rounded-2xl bg-gradient-to-br from-primary/10 via-accent/10 to-background border border-border">
           <span className="inline-block px-3 py-1 rounded-full bg-foreground text-background text-xs font-bold">
