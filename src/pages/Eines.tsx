@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { ArrowLeft, CheckCircle2, Languages, Loader2, Copy } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Languages, Loader2, Copy, Map } from "lucide-react";
 
 const TRANSLATE_LANGS = [
   { code: "es", label: "Castellà" },
@@ -155,6 +155,27 @@ function Translator() {
   );
 }
 
+function VerbMapsCard() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Map className="h-5 w-5 text-primary" />
+          Mapes conceptuals dels temps verbals
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <p className="text-sm text-muted-foreground">
+          Explora els temps verbals (present, passat i futur) amb colors per famílies de verbs.
+        </p>
+        <Button asChild className="w-full sm:w-auto">
+          <Link to="/mapes-verbs">Anar als mapes de verbs</Link>
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+
 export default function Eines() {
   return (
     <div className="min-h-screen bg-background">
@@ -166,11 +187,12 @@ export default function Eines() {
           </Button>
         </div>
         <p className="mb-6 text-muted-foreground">
-          Corrector ortogràfic i traductor amb IA per a textos en català i altres idiomes.
+          Corrector ortogràfic, traductor i mapes de verbs per practicar la llengua.
         </p>
         <div className="grid gap-6 md:grid-cols-1">
           <SpellChecker />
           <Translator />
+          <VerbMapsCard />
         </div>
       </div>
     </div>
