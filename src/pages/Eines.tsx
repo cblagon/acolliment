@@ -197,7 +197,18 @@ function JocsCard() {
   );
 }
 
+type Tool = "corrector" | "traductor" | "mapes" | "jocs";
+
+const tools: { id: Tool; label: string; icon: React.ReactNode }[] = [
+  { id: "corrector", label: "Corrector ortogràfic català", icon: <CheckCircle2 className="h-4 w-4" /> },
+  { id: "traductor", label: "Traductor", icon: <Languages className="h-4 w-4" /> },
+  { id: "mapes", label: "Mapes conceptuals dels temps verbals", icon: <Map className="h-4 w-4" /> },
+  { id: "jocs", label: "Jocs", icon: <Gamepad2 className="h-4 w-4" /> },
+];
+
 export default function Eines() {
+  const [selectedTool, setSelectedTool] = useState<Tool>("corrector");
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto max-w-4xl px-4 py-8">
@@ -208,12 +219,31 @@ export default function Eines() {
           </Button>
         </div>
         <p className="mb-6 text-muted-foreground">
-          Corrector ortogràfic, traductor i mapes de verbs per practicar la llengua.
+          Selecciona una eina per practicar i millorar el teu català.
         </p>
-        <div className="grid gap-6 md:grid-cols-1">
-          <SpellChecker />
-          <Translator />
-          <VerbMapsCard />
+
+        <div className="flex flex-wrap gap-2 mb-8">
+          {tools.map((tool) => (
+            <button
+              key={tool.id}
+              onClick={() => setSelectedTool(tool.id)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all ${
+                selectedTool === tool.id
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "bg-muted text-muted-foreground hover:text-foreground hover:bg-accent"
+              }`}
+            >
+              {tool.icon}
+              {tool.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="animate-reveal-up">
+          {selectedTool === "corrector" && <SpellChecker />}
+          {selectedTool === "traductor" && <Translator />}
+          {selectedTool === "mapes" && <VerbMapsCard />}
+          {selectedTool === "jocs" && <JocsCard />}
         </div>
       </div>
     </div>
