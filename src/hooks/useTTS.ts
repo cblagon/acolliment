@@ -5,6 +5,7 @@ import { type LangCode } from "@/hooks/useLanguage";
 export const LANG_TO_BCP47: Record<LangCode, string | null> = {
   ca: "ca-ES",
   es: "es-ES",
+  gl: "gl-ES",
   en: "en-US",
   fr: "fr-FR",
   ar: "ar-SA",
