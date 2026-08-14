@@ -429,7 +429,11 @@ export const translations: Record<string, Record<string, string>> = {
 /** Get translation for a fitxa in the given language. 'ca' returns the Catalan word as-is. */
 export function getTraduccio(paraula: string, lang: string): string {
   if (lang === "ca") return paraula;
-  return translations[paraula]?.[lang] || translations[paraula]?.["en"] || paraula;
+  const entry = translations[paraula];
+  if (!entry) return paraula;
+  // Galician has no dedicated entries yet: fall back to Portuguese (closest language), then English.
+  if (lang === "gl") return entry["gl"] || entry["pt"] || entry["ptBR"] || entry["en"] || paraula;
+  return entry[lang] || entry["en"] || paraula;
 }
 
 /** Get the word in the target language (alias of getTraduccio with explicit semantics). */
