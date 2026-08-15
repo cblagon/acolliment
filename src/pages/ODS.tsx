@@ -7,7 +7,7 @@ import { useLanguages, LANGUAGES } from "@/hooks/useLanguage";
 type Goal = {
   num: number;
   color: string;
-  emoji: string;
+  icon: string;
   title: string;
   text: string;
   star?: boolean;
@@ -21,7 +21,7 @@ const GOALS: Goal[] = [
   {
     num: 4,
     color: "#C5192D",
-    emoji: "📚",
+    icon: "/ods/ods-4.svg",
     star: true,
     title: "Educació de qualitat",
     text: "És el principal. El projecte afavoreix una educació inclusiva, equitativa i personalitzada, facilitant l'aprenentatge de la llengua vehicular i l'accés als recursos educatius de l'alumnat nouvingut. També desenvolupa competències digitals, pensament computacional i aprenentatge al llarg del procés.",
@@ -29,7 +29,7 @@ const GOALS: Goal[] = [
   {
     num: 10,
     color: "#DD1367",
-    emoji: "⚖️",
+    icon: "/ods/ods-10.svg",
     star: true,
     title: "Reducció de les desigualtats",
     text: "És especialment important perquè el projecte intenta reduir les desigualtats que poden generar la barrera lingüística, cultural i d'accés a la informació quan un alumne s'incorpora al centre durant el curs. La traducció, els recursos multilingües i l'acompanyament digital faciliten la inclusió.",
@@ -37,28 +37,28 @@ const GOALS: Goal[] = [
   {
     num: 9,
     color: "#FD6925",
-    emoji: "🏗️",
+    icon: "/ods/ods-9.svg",
     title: "Indústria, innovació i infraestructura",
     text: "La situació d'aprenentatge de Welcome Robotics Hub connecta programació, electrònica, sensors, ESP32 STEAMakers i sistemes d'àudio per crear solucions tecnològiques innovadores davant d'un problema real.",
   },
   {
     num: 11,
     color: "#FD9D24",
-    emoji: "🏙️",
+    icon: "/ods/ods-11.svg",
     title: "Ciutats i comunitats sostenibles",
     text: "El projecte contribueix a construir una comunitat educativa més inclusiva, segura i cohesionada, fomentant la participació i el sentiment de pertinença de l'alumnat nouvingut.",
   },
   {
     num: 16,
     color: "#00689D",
-    emoji: "🕊️",
+    icon: "/ods/ods-16.svg",
     title: "Pau, justícia i institucions sòlides",
     text: "En l'àmbit educatiu, el projecte treballa la convivència, el respecte, l'empatia i la participació, especialment quan els alumnes experimenten què significa arribar a un entorn on no coneixen la llengua.",
   },
   {
     num: 17,
     color: "#19486A",
-    emoji: "🤝",
+    icon: "/ods/ods-17.svg",
     title: "Aliances per assolir els objectius",
     text: "També hi ha una connexió interessant amb aquest ODS per la participació en Scientix, Teachers' Voices i les iniciatives europees d'educació digital, que permeten compartir experiències i coneixement més enllà del centre.",
   },
@@ -138,6 +138,24 @@ export default function ODS() {
       </header>
 
       <main className="mx-auto max-w-4xl px-4 py-8">
+        <div className="mb-6 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+          {GOALS.map((g) => (
+            <div
+              key={g.num}
+              className="flex items-center justify-center rounded-full shadow-sm ring-2 ring-white/50 dark:ring-white/20"
+              style={{ backgroundColor: g.color }}
+              title={`ODS ${g.num}`}
+            >
+              <img
+                src={g.icon}
+                alt={`Icona ODS ${g.num}`}
+                className="h-12 w-12 sm:h-14 sm:w-14"
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </div>
+
         <h1 className="text-3xl font-extrabold text-foreground sm:text-4xl">{title}</h1>
         <p className="mt-3 text-lg text-muted-foreground">{intro}</p>
 
@@ -152,7 +170,12 @@ export default function ODS() {
                 style={{ backgroundColor: g.color }}
               >
                 <span className="text-3xl font-black leading-none text-white">{g.num}</span>
-                <span className="text-2xl" aria-hidden="true">{g.emoji}</span>
+                <img
+                  src={g.icon}
+                  alt={`Icona ODS ${g.num}`}
+                  className="h-8 w-8"
+                  loading="lazy"
+                />
                 <h2 className="text-base font-bold leading-tight text-white">
                   {lines[2 + i * 2]} {g.star && "⭐"}
                 </h2>
