@@ -262,6 +262,12 @@ const Index = () => {
                     Com es revisen les aportacions
                   </Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/ods" className="flex cursor-pointer items-center gap-2">
+                    <Globe2 className="h-4 w-4 text-primary" />
+                    ODS del projecte
+                  </Link>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <Link
