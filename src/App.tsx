@@ -26,6 +26,7 @@ import Penjat from "./pages/Penjat.tsx";
 import MapesVerbs from "./pages/MapesVerbs.tsx";
 import Jocs from "./pages/Jocs.tsx";
 import Nivell from "./pages/Nivell.tsx";
+import ODS from "./pages/ODS.tsx";
 import { useTheme } from "./hooks/useTheme";
 import { usePageTracking } from "./hooks/usePageTracking";
 
@@ -55,6 +56,7 @@ const TrackingRoutes = () => {
       <Route path="/penjat" element={<Penjat />} />
       <Route path="/jocs" element={<Jocs />} />
       <Route path="/nivell" element={<Nivell />} />
+      <Route path="/ods" element={<ODS />} />
       <Route path="/mapes-verbs" element={<MapesVerbs />} />
       <Route path="/privacitat" element={<LegalPage kind="privacy" />} />
       <Route path="/galetes" element={<LegalPage kind="cookies" />} />
