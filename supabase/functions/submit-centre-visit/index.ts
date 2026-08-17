@@ -34,15 +34,15 @@ Deno.serve(async (req) => {
 
   try {
     const body = await req.json();
-    const centre = clean(body.centre, 120);
-    if (!centre || centre.length < 2) {
-      return new Response(JSON.stringify({ error: "El nom del centre és obligatori." }), {
+    const city = clean(body.city, 120);
+    const country = clean(body.country, 120);
+    if (!city && !country) {
+      return new Response(JSON.stringify({ error: "Indica com a mínim la ciutat o el país." }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    const city = clean(body.city, 120);
-    const country = clean(body.country, 120);
+    const centre = clean(body.centre, 120) ?? [city, country].filter(Boolean).join(", ");
     const lat = typeof body.lat === "number" ? body.lat : null;
     const lng = typeof body.lng === "number" ? body.lng : null;
 
