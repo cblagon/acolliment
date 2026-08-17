@@ -149,29 +149,21 @@ export default function CentresMapa() {
       <main className="container py-6 space-y-6">
         <section className="rounded-2xl border-2 border-primary/30 bg-primary/5 p-5">
           <div className="flex items-center gap-3 mb-3">
-            <School className="w-7 h-7 text-primary" />
+            <MapPin className="w-7 h-7 text-primary" />
             <div>
-              <h2 className="font-extrabold text-lg">Des de quin centre ens visites? 🏫</h2>
+              <h2 className="font-extrabold text-lg">Des d'on ens visites? 🌍</h2>
               <p className="text-sm text-muted-foreground">
-                Ens encantaria saber on arriba aquest projecte. Pots afegir el teu centre encara que no estiguis registrat.
+                Qualsevol persona pot deixar el seu registre, a títol individual o des d'un centre educatiu.
+                Només cal la ciutat o el país.
               </p>
             </div>
           </div>
-          <form onSubmit={submit} className="grid gap-3 sm:grid-cols-[2fr_1fr_1fr_auto]">
-            <input
-              type="text"
-              value={centre}
-              onChange={(e) => setCentre(e.target.value)}
-              placeholder="Nom del centre (institut, escola…)"
-              maxLength={120}
-              required
-              className="rounded-xl border-2 border-border px-3 py-2 bg-background focus:outline-none focus:border-primary"
-            />
+          <form onSubmit={submit} className="grid gap-3 sm:grid-cols-[1fr_1fr_2fr_auto]">
             <input
               type="text"
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              placeholder="Ciutat"
+              placeholder="Ciutat *"
               maxLength={120}
               className="rounded-xl border-2 border-border px-3 py-2 bg-background focus:outline-none focus:border-primary"
             />
@@ -180,6 +172,14 @@ export default function CentresMapa() {
               value={country}
               onChange={(e) => setCountry(e.target.value)}
               placeholder="País"
+              maxLength={120}
+              className="rounded-xl border-2 border-border px-3 py-2 bg-background focus:outline-none focus:border-primary"
+            />
+            <input
+              type="text"
+              value={centre}
+              onChange={(e) => setCentre(e.target.value)}
+              placeholder="Nom o centre (opcional)"
               maxLength={120}
               className="rounded-xl border-2 border-border px-3 py-2 bg-background focus:outline-none focus:border-primary"
             />
@@ -192,6 +192,7 @@ export default function CentresMapa() {
             </button>
           </form>
         </section>
+
 
         <div className="rounded-2xl overflow-hidden border border-border" style={{ height: "60vh", minHeight: 380 }}>
           <MapContainer center={[41.6, 1.7]} zoom={4} style={{ height: "100%", width: "100%" }} scrollWheelZoom>
