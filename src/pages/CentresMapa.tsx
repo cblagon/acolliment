@@ -269,7 +269,7 @@ export default function CentresMapa() {
           {loading ? (
             <p className="text-sm text-muted-foreground">Carregant…</p>
           ) : visibleVisits.length === 0 ? (
-            <p className="text-sm text-muted-foreground">Sigues el primer a afegir el teu centre!</p>
+            <p className="text-sm text-muted-foreground">Sigues el primer a dir-nos d'on ens visites!</p>
           ) : (
             <ul className="grid gap-2 sm:grid-cols-2">
               {visibleVisits.map((v) => (
