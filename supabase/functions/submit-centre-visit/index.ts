@@ -34,15 +34,15 @@ Deno.serve(async (req) => {
 
   try {
     const body = await req.json();
-    const centre = clean(body.centre, 120);
-    if (!centre || centre.length < 2) {
-      return new Response(JSON.stringify({ error: "El nom del centre és obligatori." }), {
+    const city = clean(body.city, 120);
+    const country = clean(body.country, 120);
+    if (!city && !country) {
+      return new Response(JSON.stringify({ error: "Indica com a mínim la ciutat o el país." }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    const city = clean(body.city, 120);
-    const country = clean(body.country, 120);
+    const centre = clean(body.centre, 120) ?? [city, country].filter(Boolean).join(", ");
     const lat = typeof body.lat === "number" ? body.lat : null;
     const lng = typeof body.lng === "number" ? body.lng : null;
 
@@ -84,21 +84,8 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Duplicate guard: same centre + ip in last 24h
-    const { count: dupCount } = await supabase
-      .from("centre_visits")
-      .select("id", { count: "exact", head: true })
-      .ilike("centre", centre)
-      .gte("created_at", dayAgo);
+    // Individual entries are allowed: only rate limits apply (no duplicate guard).
 
-    if ((dupCount ?? 0) > 0) {
-      // Still log the attempt to prevent loops
-      await supabase.from("centre_visits_log").insert({ ip });
-      return new Response(
-        JSON.stringify({ error: "Aquest centre ja s'ha afegit recentment. Gràcies!" }),
-        { status: 409, headers: { ...corsHeaders, "Content-Type": "application/json" } },
-      );
-    }
 
     const { data: inserted, error: insErr } = await supabase
       .from("centre_visits")
