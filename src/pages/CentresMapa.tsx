@@ -71,9 +71,9 @@ export default function CentresMapa() {
 
       const { data, error } = await supabase.functions.invoke("submit-centre-visit", {
         body: {
-          centre: c,
-          city: city.trim() || null,
-          country: country.trim() || null,
+          centre: c || null,
+          city: ci || null,
+          country: co || null,
           lat: geo?.lat ?? null,
           lng: geo?.lng ?? null,
         },
