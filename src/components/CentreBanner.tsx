@@ -74,9 +74,9 @@ export function CentreBanner() {
         <div className="flex items-center gap-3">
           <School className="w-8 h-8 text-primary shrink-0" />
           <div>
-            <p className="font-bold text-foreground">Des de quin centre ens visites? 🏫</p>
+            <p className="font-bold text-foreground">Des d'on ens visites? 🌍</p>
             <p className="text-sm text-muted-foreground">
-              Ens encantaria saber-ho per veure on arriba aquest projecte. Gràcies!
+              Ens encantaria saber d'on ens arriba aquest projecte. Gràcies!
             </p>
           </div>
         </div>
@@ -85,7 +85,7 @@ export function CentreBanner() {
             type="text"
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            placeholder="Nom del centre educatiu"
+            placeholder="Ciutat, país o centre educatiu"
             maxLength={120}
             className="flex-1 rounded-xl border-2 border-border px-3 py-2 bg-background focus:outline-none focus:border-primary"
           />
