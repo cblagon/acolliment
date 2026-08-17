@@ -254,7 +254,7 @@ export default function CentresMapa() {
         <section className="rounded-2xl border border-border bg-card p-6">
           <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
             <h2 className="text-lg font-bold">
-              Centres que ens visiten ({visibleVisits.length}
+              Registre de visites ({visibleVisits.length}
               {isAdmin && hiddenCount > 0 ? ` · ${hiddenCount} amagades` : ""})
             </h2>
             {isAdmin && (
