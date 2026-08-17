@@ -57,14 +57,17 @@ export default function CentresMapa() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const c = centre.trim();
-    if (c.length < 2) { toast.error("Escriu el nom del centre."); return; }
+    const ci = city.trim();
+    const co = country.trim();
+    if (!ci && !co) { toast.error("Indica com a mínim la ciutat o el país."); return; }
     setSubmitting(true);
     try {
-      const query = [c, city.trim(), country.trim()].filter(Boolean).join(", ");
+      const query = [c, ci, co].filter(Boolean).join(", ");
       let geo = await geocode(query);
       if (!geo) {
-        geo = await geocode([city.trim(), country.trim()].filter(Boolean).join(", "));
+        geo = await geocode([ci, co].filter(Boolean).join(", "));
       }
+
 
       const { data, error } = await supabase.functions.invoke("submit-centre-visit", {
         body: {
