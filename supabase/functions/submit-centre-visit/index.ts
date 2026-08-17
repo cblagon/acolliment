@@ -84,21 +84,8 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Duplicate guard: same centre + ip in last 24h
-    const { count: dupCount } = await supabase
-      .from("centre_visits")
-      .select("id", { count: "exact", head: true })
-      .ilike("centre", centre)
-      .gte("created_at", dayAgo);
+    // Individual entries are allowed: only rate limits apply (no duplicate guard).
 
-    if ((dupCount ?? 0) > 0) {
-      // Still log the attempt to prevent loops
-      await supabase.from("centre_visits_log").insert({ ip });
-      return new Response(
-        JSON.stringify({ error: "Aquest centre ja s'ha afegit recentment. Gràcies!" }),
-        { status: 409, headers: { ...corsHeaders, "Content-Type": "application/json" } },
-      );
-    }
 
     const { data: inserted, error: insErr } = await supabase
       .from("centre_visits")
