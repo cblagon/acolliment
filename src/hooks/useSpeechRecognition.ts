@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { type LangCode } from "@/hooks/useLanguage";
+import { t } from "@/i18n/ui";
 import { LANG_TO_BCP47 } from "@/hooks/useTTS";
 
 // Web Speech API types (not in lib.dom by default)
