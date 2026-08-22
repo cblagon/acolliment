@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Mic, MicOff, RotateCcw } from "lucide-react";
 import { useSpeechRecognition, findMatchedKeywords, normalizeForMatch } from "@/hooks/useSpeechRecognition";
+import { t } from "@/i18n/ui";
 import { type Bloc } from "@/data/blocksData";
 import { type LangCode } from "@/hooks/useLanguage";
 import { getWord } from "@/data/translations";
@@ -12,7 +13,7 @@ interface SpeechCheckProps {
 }
 
 export function SpeechCheck({ bloc, targetLang, helpLang }: SpeechCheckProps) {
-  const sr = useSpeechRecognition();
+  const sr = useSpeechRecognition(helpLang);
 
   const keywords = useMemo(
     () => bloc.fitxes.map((f) => getWord(f.paraula, targetLang)).filter(Boolean),
@@ -25,7 +26,7 @@ export function SpeechCheck({ bloc, targetLang, helpLang }: SpeechCheckProps) {
   if (!sr.supported) {
     return (
       <div className="w-full max-w-lg p-4 rounded-2xl bg-muted/50 border border-border text-sm text-muted-foreground">
-        🎙️ El reconeixement de veu no està disponible en aquest navegador. Prova Chrome o Edge en ordinador o Android.
+        🎙️ {t(helpLang, "speechNotSupported")}
       </div>
     );
   }

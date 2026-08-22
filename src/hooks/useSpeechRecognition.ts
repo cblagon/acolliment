@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { type LangCode } from "@/hooks/useLanguage";
+import { t } from "@/i18n/ui";
 import { LANG_TO_BCP47 } from "@/hooks/useTTS";
 
 // Web Speech API types (not in lib.dom by default)
@@ -25,7 +26,7 @@ export interface UseSpeechRecognitionResult {
   reset: () => void;
 }
 
-export function useSpeechRecognition(): UseSpeechRecognitionResult {
+export function useSpeechRecognition(helpLang: LangCode = "ca"): UseSpeechRecognitionResult {
   const Ctor = getSRCtor();
   const recRef = useRef<any>(null);
   const [listening, setListening] = useState(false);
@@ -41,7 +42,7 @@ export function useSpeechRecognition(): UseSpeechRecognitionResult {
 
   const start = useCallback((lang: LangCode = "ca") => {
     if (!Ctor) {
-      setError("El teu navegador no suporta el reconeixement de veu. Prova Chrome o Edge.");
+      setError(t(helpLang, "speechErrorNotSupported"));
       return;
     }
     const bcp47 = LANG_TO_BCP47[lang] ?? "ca-ES";
@@ -66,7 +67,7 @@ export function useSpeechRecognition(): UseSpeechRecognitionResult {
         setInterim(interimText);
       };
       rec.onerror = (e: any) => {
-        setError(e?.error ? `Error: ${e.error}` : "Error al reconèixer la veu");
+        setError(e?.error ? `${t(helpLang, "speechErrorRecognition")}: ${e.error}` : t(helpLang, "speechErrorRecognition"));
         setListening(false);
       };
       rec.onend = () => {
@@ -77,10 +78,10 @@ export function useSpeechRecognition(): UseSpeechRecognitionResult {
       rec.start();
       setListening(true);
     } catch (e: any) {
-      setError(e?.message ?? "No s'ha pogut iniciar el micròfon");
+      setError(e?.message ?? t(helpLang, "speechErrorMic"));
       setListening(false);
     }
-  }, [Ctor]);
+  }, [Ctor, helpLang]);
 
   const stop = useCallback(() => {
     try { recRef.current?.stop?.(); } catch {}
