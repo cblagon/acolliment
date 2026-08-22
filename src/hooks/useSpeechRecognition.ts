@@ -81,7 +81,7 @@ export function useSpeechRecognition(helpLang: LangCode = "ca"): UseSpeechRecogn
       setError(e?.message ?? t(helpLang, "speechErrorMic"));
       setListening(false);
     }
-  }, [Ctor]);
+  }, [Ctor, helpLang]);
 
   const stop = useCallback(() => {
     try { recRef.current?.stop?.(); } catch {}
