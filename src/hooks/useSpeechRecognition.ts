@@ -78,7 +78,7 @@ export function useSpeechRecognition(helpLang: LangCode = "ca"): UseSpeechRecogn
       rec.start();
       setListening(true);
     } catch (e: any) {
-      setError(e?.message ?? "No s'ha pogut iniciar el micròfon");
+      setError(e?.message ?? t(helpLang, "speechErrorMic"));
       setListening(false);
     }
   }, [Ctor]);
