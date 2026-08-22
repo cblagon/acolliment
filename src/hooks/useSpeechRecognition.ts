@@ -42,7 +42,7 @@ export function useSpeechRecognition(helpLang: LangCode = "ca"): UseSpeechRecogn
 
   const start = useCallback((lang: LangCode = "ca") => {
     if (!Ctor) {
-      setError("El teu navegador no suporta el reconeixement de veu. Prova Chrome o Edge.");
+      setError(t(helpLang, "speechErrorNotSupported"));
       return;
     }
     const bcp47 = LANG_TO_BCP47[lang] ?? "ca-ES";
