@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Mic, MicOff, RotateCcw } from "lucide-react";
 import { useSpeechRecognition, findMatchedKeywords, normalizeForMatch } from "@/hooks/useSpeechRecognition";
+import { t } from "@/i18n/ui";
 import { type Bloc } from "@/data/blocksData";
 import { type LangCode } from "@/hooks/useLanguage";
 import { getWord } from "@/data/translations";
