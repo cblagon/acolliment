@@ -26,7 +26,7 @@ export interface UseSpeechRecognitionResult {
   reset: () => void;
 }
 
-export function useSpeechRecognition(): UseSpeechRecognitionResult {
+export function useSpeechRecognition(helpLang: LangCode = "ca"): UseSpeechRecognitionResult {
   const Ctor = getSRCtor();
   const recRef = useRef<any>(null);
   const [listening, setListening] = useState(false);
