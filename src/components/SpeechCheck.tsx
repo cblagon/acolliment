@@ -13,7 +13,7 @@ interface SpeechCheckProps {
 }
 
 export function SpeechCheck({ bloc, targetLang, helpLang }: SpeechCheckProps) {
-  const sr = useSpeechRecognition();
+  const sr = useSpeechRecognition(helpLang);
 
   const keywords = useMemo(
     () => bloc.fitxes.map((f) => getWord(f.paraula, targetLang)).filter(Boolean),
