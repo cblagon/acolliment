@@ -67,7 +67,7 @@ export function useSpeechRecognition(helpLang: LangCode = "ca"): UseSpeechRecogn
         setInterim(interimText);
       };
       rec.onerror = (e: any) => {
-        setError(e?.error ? `Error: ${e.error}` : "Error al reconèixer la veu");
+        setError(e?.error ? `${t(helpLang, "speechErrorRecognition")}: ${e.error}` : t(helpLang, "speechErrorRecognition"));
         setListening(false);
       };
       rec.onend = () => {
