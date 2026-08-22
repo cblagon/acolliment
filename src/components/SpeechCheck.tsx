@@ -26,7 +26,7 @@ export function SpeechCheck({ bloc, targetLang, helpLang }: SpeechCheckProps) {
   if (!sr.supported) {
     return (
       <div className="w-full max-w-lg p-4 rounded-2xl bg-muted/50 border border-border text-sm text-muted-foreground">
-        🎙️ El reconeixement de veu no està disponible en aquest navegador. Prova Chrome o Edge en ordinador o Android.
+        🎙️ {t(helpLang, "speechNotSupported")}
       </div>
     );
   }
