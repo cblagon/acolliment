@@ -42,7 +42,7 @@ export function SpeechCheck({ bloc, targetLang, helpLang }: SpeechCheckProps) {
             <button
               onClick={sr.reset}
               className="p-2 rounded-full bg-muted hover:bg-muted/80 transition-all active:scale-90"
-              title="Esborrar"
+              title={t(helpLang, "clear")}
             >
               <RotateCcw className="w-4 h-4" />
             </button>
