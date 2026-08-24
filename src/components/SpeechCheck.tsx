@@ -54,7 +54,7 @@ export function SpeechCheck({ bloc, targetLang, helpLang }: SpeechCheckProps) {
             }`}
           >
             {sr.listening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-            {sr.listening ? "Atura" : "Parla"}
+            {sr.listening ? t(helpLang, "stop") : t(helpLang, "speak")}
           </button>
         </div>
       </div>
