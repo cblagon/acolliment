@@ -35,7 +35,7 @@ export function SpeechCheck({ bloc, targetLang, helpLang }: SpeechCheckProps) {
     <div className="w-full max-w-lg p-4 rounded-2xl bg-card border border-border space-y-3 shadow-sm">
       <div className="flex items-center justify-between gap-2">
         <h3 className="font-extrabold text-foreground flex items-center gap-2">
-          🎙️ Practica la pronunciació
+          🎙️ {t(helpLang, "practicePronunciation")}
         </h3>
         <div className="flex items-center gap-2">
           {(sr.transcript || sr.interim) && (
