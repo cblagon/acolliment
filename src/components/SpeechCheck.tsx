@@ -102,7 +102,7 @@ export function SpeechCheck({ bloc, targetLang, helpLang }: SpeechCheckProps) {
 
       {keywords.length > 0 && (
         <div className="text-xs text-muted-foreground font-semibold">
-          {matched.size} / {keywords.length} paraules detectades
+          {matched.size} / {keywords.length} {t(helpLang, "wordsDetected")}
         </div>
       )}
     </div>
