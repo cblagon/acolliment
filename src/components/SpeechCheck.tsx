@@ -60,7 +60,7 @@ export function SpeechCheck({ bloc, targetLang, helpLang }: SpeechCheckProps) {
       </div>
 
       <p className="text-xs text-muted-foreground">
-        Prem <strong>Parla</strong> i digues paraules d'aquest bloc. Es marcaran en verd les que detecti.
+        {t(helpLang, "speechInstructions")}
       </p>
 
       {/* Transcript */}
