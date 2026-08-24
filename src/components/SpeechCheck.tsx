@@ -72,7 +72,7 @@ export function SpeechCheck({ bloc, targetLang, helpLang }: SpeechCheckProps) {
           </span>
         ) : (
           <span className="text-muted-foreground italic">
-            {sr.listening ? "Escoltant…" : "La teva transcripció apareixerà aquí"}
+            {sr.listening ? t(helpLang, "listening") : t(helpLang, "transcriptionPlaceholder")}
           </span>
         )}
       </div>
