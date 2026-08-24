@@ -35,14 +35,14 @@ export function SpeechCheck({ bloc, targetLang, helpLang }: SpeechCheckProps) {
     <div className="w-full max-w-lg p-4 rounded-2xl bg-card border border-border space-y-3 shadow-sm">
       <div className="flex items-center justify-between gap-2">
         <h3 className="font-extrabold text-foreground flex items-center gap-2">
-          🎙️ Practica la pronunciació
+          🎙️ {t(helpLang, "practicePronunciation")}
         </h3>
         <div className="flex items-center gap-2">
           {(sr.transcript || sr.interim) && (
             <button
               onClick={sr.reset}
               className="p-2 rounded-full bg-muted hover:bg-muted/80 transition-all active:scale-90"
-              title="Esborrar"
+              title={t(helpLang, "clear")}
             >
               <RotateCcw className="w-4 h-4" />
             </button>
@@ -54,13 +54,13 @@ export function SpeechCheck({ bloc, targetLang, helpLang }: SpeechCheckProps) {
             }`}
           >
             {sr.listening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-            {sr.listening ? "Atura" : "Parla"}
+            {sr.listening ? t(helpLang, "stop") : t(helpLang, "speak")}
           </button>
         </div>
       </div>
 
       <p className="text-xs text-muted-foreground">
-        Prem <strong>Parla</strong> i digues paraules d'aquest bloc. Es marcaran en verd les que detecti.
+        {t(helpLang, "speechInstructions")}
       </p>
 
       {/* Transcript */}
@@ -72,7 +72,7 @@ export function SpeechCheck({ bloc, targetLang, helpLang }: SpeechCheckProps) {
           </span>
         ) : (
           <span className="text-muted-foreground italic">
-            {sr.listening ? "Escoltant…" : "La teva transcripció apareixerà aquí"}
+            {sr.listening ? t(helpLang, "listening") : t(helpLang, "transcriptionPlaceholder")}
           </span>
         )}
       </div>
@@ -102,7 +102,7 @@ export function SpeechCheck({ bloc, targetLang, helpLang }: SpeechCheckProps) {
 
       {keywords.length > 0 && (
         <div className="text-xs text-muted-foreground font-semibold">
-          {matched.size} / {keywords.length} paraules detectades
+          {matched.size} / {keywords.length} {t(helpLang, "wordsDetected")}
         </div>
       )}
     </div>
