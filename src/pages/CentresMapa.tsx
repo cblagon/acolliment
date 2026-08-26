@@ -5,8 +5,8 @@ import { MapContainer, TileLayer, CircleMarker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
-import { useLanguages } from "@/hooks/useLanguage";
-import { centresStrings } from "@/i18n/centresMapa";
+import { useLanguages, LANGUAGES, type LangCode } from "@/hooks/useLanguage";
+import { centresStrings, CENTRES_STRINGS } from "@/i18n/centresMapa";
 import { toast } from "sonner";
 
 type CentreVisit = {
@@ -36,7 +36,11 @@ async function geocode(query: string): Promise<{ lat: number; lng: number } | nu
 export default function CentresMapa() {
   const { isAdmin } = useIsAdmin();
   const { helpLang } = useLanguages();
-  const s = centresStrings(helpLang);
+  const [altLang, setAltLang] = useState<LangCode | null>(null);
+  const hasHelpLang = !!CENTRES_STRINGS[helpLang];
+  const viewLang: LangCode = hasHelpLang ? helpLang : (altLang ?? "ca");
+  const s = centresStrings(viewLang);
+  const availableLangs = (Object.keys(CENTRES_STRINGS) as LangCode[]);
   const [visits, setVisits] = useState<CentreVisit[]>([]);
   const [loading, setLoading] = useState(true);
   const [centre, setCentre] = useState("");
@@ -154,6 +158,24 @@ export default function CentresMapa() {
       </header>
 
       <main className="container py-6 space-y-6">
+        {!hasHelpLang && (
+          <div className="rounded-2xl border-2 border-amber-300 bg-amber-50 dark:bg-amber-950/30 p-4 flex flex-wrap items-center gap-3">
+            <span className="text-sm font-semibold">
+              🌐 {LANGUAGES[helpLang]?.nativeName ?? helpLang}: no disponible / not available — {s.title}
+            </span>
+            <select
+              value={viewLang}
+              onChange={(e) => setAltLang(e.target.value as LangCode)}
+              className="rounded-xl border-2 border-border px-3 py-1.5 bg-background text-sm font-semibold"
+            >
+              {availableLangs.map((code) => (
+                <option key={code} value={code}>
+                  {LANGUAGES[code]?.flag} {LANGUAGES[code]?.nativeName ?? code}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
         <section className="rounded-2xl border-2 border-primary/30 bg-primary/5 p-5">
           <div className="flex items-center gap-3 mb-3">
             <MapPin className="w-7 h-7 text-primary" />
