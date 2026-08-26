@@ -5,6 +5,8 @@ import { MapContainer, TileLayer, CircleMarker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
+import { useLanguages } from "@/hooks/useLanguage";
+import { centresStrings } from "@/i18n/centresMapa";
 import { toast } from "sonner";
 
 type CentreVisit = {
@@ -33,6 +35,8 @@ async function geocode(query: string): Promise<{ lat: number; lng: number } | nu
 
 export default function CentresMapa() {
   const { isAdmin } = useIsAdmin();
+  const { helpLang } = useLanguages();
+  const s = centresStrings(helpLang);
   const [visits, setVisits] = useState<CentreVisit[]>([]);
   const [loading, setLoading] = useState(true);
   const [centre, setCentre] = useState("");
@@ -59,7 +63,7 @@ export default function CentresMapa() {
     const c = centre.trim();
     const ci = city.trim();
     const co = country.trim();
-    if (!ci && !co) { toast.error("Indica com a mínim la ciutat o el país."); return; }
+    if (!ci && !co) { toast.error(s.needCityOrCountry); return; }
     setSubmitting(true);
     try {
       const query = [c, ci, co].filter(Boolean).join(", ");
@@ -80,16 +84,16 @@ export default function CentresMapa() {
       });
       if (error) {
         // Try to surface server message
-        const msg = (data as any)?.error || error.message || "Error en enviar";
+        const msg = (data as any)?.error || error.message || s.errorSave;
         throw new Error(msg);
       }
       if ((data as any)?.error) throw new Error((data as any).error);
 
-      toast.success("Gràcies per dir-nos d'on vens! 💛");
+      toast.success(s.thanks);
       setCentre(""); setCity(""); setCountry("");
       load();
     } catch (e: any) {
-      toast.error(e.message ?? "Error en desar");
+      toast.error(e.message ?? s.errorSave);
     } finally {
       setSubmitting(false);
     }
@@ -98,14 +102,14 @@ export default function CentresMapa() {
   const setStatus = async (id: string, status: "approved" | "hidden") => {
     const { error } = await supabase.from("centre_visits").update({ status }).eq("id", id);
     if (error) toast.error(error.message);
-    else { toast.success(status === "hidden" ? "Amagada" : "Visible"); load(); }
+    else { toast.success(status === "hidden" ? s.hiddenToast : s.visibleToast); load(); }
   };
 
   const remove = async (id: string) => {
-    if (!window.confirm("Esborrar aquesta entrada definitivament?")) return;
+    if (!window.confirm(s.confirmDelete)) return;
     const { error } = await supabase.from("centre_visits").delete().eq("id", id);
     if (error) toast.error(error.message);
-    else { toast.success("Esborrat"); load(); }
+    else { toast.success(s.deleted); load(); }
   };
 
   const visibleVisits = useMemo(
@@ -139,12 +143,12 @@ export default function CentresMapa() {
         <div className="container py-4 flex items-center justify-between gap-3 flex-wrap">
           <div>
             <h1 className="text-2xl font-extrabold flex items-center gap-2">
-              <MapPin className="w-6 h-6 text-primary" /> D'on ens visiten
+              <MapPin className="w-6 h-6 text-primary" /> {s.title}
             </h1>
-            <p className="text-xs text-muted-foreground">Comparteix el teu centre i mira el mapa de la comunitat</p>
+            <p className="text-xs text-muted-foreground">{s.subtitle}</p>
           </div>
           <Link to="/" className="flex items-center gap-1 text-sm font-semibold text-primary hover:underline">
-            <ArrowLeft className="w-4 h-4" /> Tornar
+            <ArrowLeft className="w-4 h-4" /> {s.back}
           </Link>
         </div>
       </header>
@@ -154,10 +158,9 @@ export default function CentresMapa() {
           <div className="flex items-center gap-3 mb-3">
             <MapPin className="w-7 h-7 text-primary" />
             <div>
-              <h2 className="font-extrabold text-lg">Des d'on ens visites? 🌍</h2>
+              <h2 className="font-extrabold text-lg">{s.formTitle}</h2>
               <p className="text-sm text-muted-foreground">
-                Qualsevol persona pot deixar el seu registre, a títol individual o des d'un centre educatiu.
-                Només cal la ciutat o el país.
+                {s.formText}
               </p>
             </div>
           </div>
@@ -166,7 +169,7 @@ export default function CentresMapa() {
               type="text"
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              placeholder="Ciutat *"
+              placeholder={s.cityPh}
               maxLength={120}
               className="rounded-xl border-2 border-border px-3 py-2 bg-background focus:outline-none focus:border-primary"
             />
@@ -174,7 +177,7 @@ export default function CentresMapa() {
               type="text"
               value={country}
               onChange={(e) => setCountry(e.target.value)}
-              placeholder="País"
+              placeholder={s.countryPh}
               maxLength={120}
               className="rounded-xl border-2 border-border px-3 py-2 bg-background focus:outline-none focus:border-primary"
             />
@@ -182,7 +185,7 @@ export default function CentresMapa() {
               type="text"
               value={centre}
               onChange={(e) => setCentre(e.target.value)}
-              placeholder="Nom o centre (opcional)"
+              placeholder={s.namePh}
               maxLength={120}
               className="rounded-xl border-2 border-border px-3 py-2 bg-background focus:outline-none focus:border-primary"
             />
@@ -191,7 +194,7 @@ export default function CentresMapa() {
               disabled={submitting}
               className="px-5 py-2 rounded-xl bg-primary text-primary-foreground font-bold shadow hover:shadow-md transition-all disabled:opacity-60"
             >
-              {submitting ? "Desant…" : "Afegir al mapa"}
+              {submitting ? s.saving : s.add}
             </button>
           </form>
         </section>
@@ -224,14 +227,14 @@ export default function CentresMapa() {
                             <div className="flex items-center gap-1 shrink-0">
                               <button
                                 onClick={() => setStatus(e.id, "hidden")}
-                                title="Amagar del mapa"
+                                title={s.hideAction}
                                 className="p-1 rounded hover:bg-amber-100 hover:text-amber-700"
                               >
                                 <EyeOff className="w-3.5 h-3.5" />
                               </button>
                               <button
                                 onClick={() => remove(e.id)}
-                                title="Esborrar"
+                                title={s.deleteAction}
                                 className="p-1 rounded hover:bg-red-100 hover:text-red-700"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
@@ -254,22 +257,22 @@ export default function CentresMapa() {
         <section className="rounded-2xl border border-border bg-card p-6">
           <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
             <h2 className="text-lg font-bold">
-              Registre de visites ({visibleVisits.length}
-              {isAdmin && hiddenCount > 0 ? ` · ${hiddenCount} amagades` : ""})
+              {s.listTitle} ({visibleVisits.length}
+              {isAdmin && hiddenCount > 0 ? ` · ${hiddenCount} ${s.hidden}` : ""})
             </h2>
             {isAdmin && (
               <button
                 onClick={() => setShowHidden((v) => !v)}
                 className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-muted hover:bg-muted/70"
               >
-                {showHidden ? "Ocultar amagades" : "Mostrar amagades"}
+                {showHidden ? s.hideHidden : s.showHidden}
               </button>
             )}
           </div>
           {loading ? (
-            <p className="text-sm text-muted-foreground">Carregant…</p>
+            <p className="text-sm text-muted-foreground">{s.loading}</p>
           ) : visibleVisits.length === 0 ? (
-            <p className="text-sm text-muted-foreground">Sigues el primer a dir-nos d'on ens visites!</p>
+            <p className="text-sm text-muted-foreground">{s.empty}</p>
           ) : (
             <ul className="grid gap-2 sm:grid-cols-2">
               {visibleVisits.map((v) => (
@@ -284,7 +287,7 @@ export default function CentresMapa() {
                     <div className="font-semibold truncate">
                       {v.centre}
                       {v.status === "hidden" && (
-                        <span className="ml-2 text-[10px] uppercase font-bold text-red-700 dark:text-red-300">amagada</span>
+                        <span className="ml-2 text-[10px] uppercase font-bold text-red-700 dark:text-red-300">{s.hidden}</span>
                       )}
                     </div>
                     <div className="text-xs text-muted-foreground truncate">
@@ -296,7 +299,7 @@ export default function CentresMapa() {
                       {v.status === "approved" ? (
                         <button
                           onClick={() => setStatus(v.id, "hidden")}
-                          title="Amagar"
+                          title={s.hideAction}
                           className="p-1.5 rounded-lg text-muted-foreground hover:bg-amber-100 hover:text-amber-700"
                         >
                           <EyeOff className="w-4 h-4" />
@@ -304,7 +307,7 @@ export default function CentresMapa() {
                       ) : (
                         <button
                           onClick={() => setStatus(v.id, "approved")}
-                          title="Tornar a mostrar"
+                          title={s.showAction}
                           className="p-1.5 rounded-lg text-muted-foreground hover:bg-green-100 hover:text-green-700"
                         >
                           <Eye className="w-4 h-4" />
@@ -312,7 +315,7 @@ export default function CentresMapa() {
                       )}
                       <button
                         onClick={() => remove(v.id)}
-                        title="Esborrar"
+                        title={s.deleteAction}
                         className="p-1.5 rounded-lg text-muted-foreground hover:bg-red-100 hover:text-red-700"
                       >
                         <Trash2 className="w-4 h-4" />
