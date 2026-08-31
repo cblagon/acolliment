@@ -67,32 +67,27 @@ export default function CentresMapa() {
 
   useEffect(() => { load(); }, []);
 
-  // Admin-only: real geolocated visits from page tracking (not registered by users)
+  // Real geolocated visits from page tracking (aggregated, no personal data)
   useEffect(() => {
-    if (!isAdmin) { setRealPoints([]); return; }
     let active = true;
     (async () => {
-      const { data } = await supabase
-        .from("page_events")
-        .select("city,country,lat,lng,session_id")
-        .not("lat", "is", null)
-        .limit(10000);
+      const { data } = await supabase.rpc("visitor_locations");
       if (!active || !data) return;
-      const m = new Map<string, { lat: number; lng: number; city: string; country: string; sessions: Set<string> }>();
-      for (const r of data as any[]) {
-        if (r.lat == null || r.lng == null) continue;
-        const key = `${Number(r.lat).toFixed(2)}_${Number(r.lng).toFixed(2)}`;
-        let e = m.get(key);
-        if (!e) {
-          e = { lat: r.lat, lng: r.lng, city: r.city ?? "—", country: r.country ?? "", sessions: new Set() };
-          m.set(key, e);
-        }
-        e.sessions.add(r.session_id);
-      }
-      setRealPoints([...m.values()].map((e) => ({ ...e, sessions: e.sessions.size })));
+      setRealPoints(
+        (data as any[])
+          .filter((r) => r.lat != null && r.lng != null)
+          .map((r) => ({
+            lat: Number(r.lat),
+            lng: Number(r.lng),
+            city: r.city ?? "—",
+            country: r.country ?? "",
+            sessions: Number(r.sessions) || 0,
+          })),
+      );
     })();
     return () => { active = false; };
-  }, [isAdmin]);
+  }, []);
+
 
 
   const submit = async (e: React.FormEvent) => {
