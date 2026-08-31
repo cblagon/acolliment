@@ -292,6 +292,16 @@ export type Database = {
         }
         Returns: boolean
       }
+      visitor_locations: {
+        Args: never
+        Returns: {
+          city: string
+          country: string
+          lat: number
+          lng: number
+          sessions: number
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "user"
