@@ -8,14 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-
-const SUBJECTS = [
-  "Vull dir-te alguna cosa bonica 💛",
-  "Tinc un suggeriment",
-  "He trobat un error",
-  "Col·laboració / proposta",
-  "Una altra cosa",
-];
+import { useLanguages, LANGUAGES, type LangCode } from "@/hooks/useLanguage";
+import { contacteStrings, CONTACTE_STRINGS } from "@/i18n/contacte";
 
 function makeChallenge() {
   const a = Math.floor(Math.random() * 8) + 1;
@@ -24,9 +18,16 @@ function makeChallenge() {
 }
 
 export default function Contacte() {
+  const { helpLang } = useLanguages();
+  const [altLang, setAltLang] = useState<LangCode | null>(null);
+  const hasHelpLang = !!CONTACTE_STRINGS[helpLang];
+  const viewLang: LangCode = hasHelpLang ? helpLang : (altLang ?? "ca");
+  const s = contacteStrings(viewLang);
+  const availableLangs = useMemo(() => (Object.keys(CONTACTE_STRINGS) as LangCode[]), []);
+
   const [nom, setNom] = useState("");
   const [correu, setCorreu] = useState("");
-  const [assumpte, setAssumpte] = useState(SUBJECTS[0]);
+  const [assumpte, setAssumpte] = useState(s.subjects[0]);
   const [missatge, setMissatge] = useState("");
   const [honeypot, setHoneypot] = useState("");
   const [challenge, setChallenge] = useState(makeChallenge);
@@ -38,6 +39,15 @@ export default function Contacte() {
   useEffect(() => {
     startedAt.current = Date.now();
   }, []);
+
+  useEffect(() => {
+    setAssumpte(s.subjects[0]);
+  }, [s.subjects]);
+
+  const challengeText = useMemo(
+    () => s.challengeText.replace("{a}", String(challenge.a)).replace("{b}", String(challenge.b)),
+    [s.challengeText, challenge.a, challenge.b],
+  );
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,11 +70,11 @@ export default function Contacte() {
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       setEnviat(true);
-      toast.success("Missatge enviat! Gràcies 💛");
+      toast.success(s.toastSuccess);
       setNom(""); setCorreu(""); setMissatge(""); setResposta("");
       setChallenge(makeChallenge());
     } catch (err: any) {
-      toast.error(err?.message ?? "No s'ha pogut enviar. Torna-ho a provar.");
+      toast.error(err?.message ?? s.toastError);
       setChallenge(makeChallenge());
       setResposta("");
     } finally {
@@ -76,7 +86,7 @@ export default function Contacte() {
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-amber-50 to-sky-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800">
       <header className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link to="/" className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
-          <ArrowLeft className="w-4 h-4" /> Tornar
+          <ArrowLeft className="w-4 h-4" /> {s.back}
         </Link>
       </header>
 
@@ -85,23 +95,41 @@ export default function Contacte() {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 text-primary mb-4">
             <Mail className="w-8 h-8" />
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold mb-2">Contacta amb l'autora</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold mb-2">{s.title}</h1>
           <p className="text-muted-foreground">
-            Vols dir-me alguna cosa, fer un suggeriment o trobar un error?
-            M'encantarà llegir-te 💛
+            {s.subtitle}
           </p>
         </div>
+
+        {!hasHelpLang && (
+          <div className="mb-6 rounded-2xl border-2 border-amber-300 bg-amber-50 dark:bg-amber-950/30 p-4 flex flex-wrap items-center gap-3">
+            <span className="text-sm font-semibold">
+              🌐 {LANGUAGES[helpLang]?.nativeName ?? helpLang}: no disponible / not available — {s.title}
+            </span>
+            <select
+              value={viewLang}
+              onChange={(e) => setAltLang(e.target.value as LangCode)}
+              className="rounded-xl border-2 border-border px-3 py-1.5 bg-background text-sm font-semibold"
+            >
+              {availableLangs.map((code) => (
+                <option key={code} value={code}>
+                  {LANGUAGES[code]?.flag} {LANGUAGES[code]?.nativeName ?? code}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         <Card className="p-6 sm:p-8 shadow-lg">
           {enviat ? (
             <div className="text-center py-10">
               <Heart className="w-12 h-12 text-pink-500 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold mb-2">Gràcies de tot cor!</h2>
+              <h2 className="text-2xl font-bold mb-2">{s.successTitle}</h2>
               <p className="text-muted-foreground mb-6">
-                He rebut el teu missatge i et respondré tan aviat com pugui.
+                {s.successText}
               </p>
               <Button onClick={() => setEnviat(false)} variant="outline">
-                Enviar un altre missatge
+                {s.successButton}
               </Button>
             </div>
           ) : (
@@ -120,36 +148,36 @@ export default function Contacte() {
 
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="nom">El teu nom</Label>
+                  <Label htmlFor="nom">{s.nameLabel}</Label>
                   <Input id="nom" value={nom} onChange={(e) => setNom(e.target.value)}
-                    required maxLength={100} placeholder="Com et dius?" />
+                    required maxLength={100} placeholder={s.namePlaceholder} />
                 </div>
                 <div>
-                  <Label htmlFor="correu">El teu correu</Label>
+                  <Label htmlFor="correu">{s.emailLabel}</Label>
                   <Input id="correu" type="email" value={correu}
                     onChange={(e) => setCorreu(e.target.value)} required maxLength={200}
-                    placeholder="exemple@correu.cat" />
+                    placeholder={s.emailPlaceholder} />
                 </div>
               </div>
 
               <div>
-                <Label htmlFor="assumpte">Sobre què vols parlar?</Label>
+                <Label htmlFor="assumpte">{s.subjectLabel}</Label>
                 <select
                   id="assumpte"
                   value={assumpte}
                   onChange={(e) => setAssumpte(e.target.value)}
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                 >
-                  {SUBJECTS.map((s) => <option key={s} value={s}>{s}</option>)}
+                  {s.subjects.map((subject) => <option key={subject} value={subject}>{subject}</option>)}
                 </select>
               </div>
 
               <div>
-                <Label htmlFor="missatge">El teu missatge</Label>
+                <Label htmlFor="missatge">{s.messageLabel}</Label>
                 <Textarea id="missatge" value={missatge}
                   onChange={(e) => setMissatge(e.target.value)} required minLength={10}
                   maxLength={4000} rows={6}
-                  placeholder="Escriu-me amb confiança..." />
+                  placeholder={s.messagePlaceholder} />
                 <p className="text-xs text-muted-foreground mt-1">
                   {missatge.length}/4000
                 </p>
@@ -157,10 +185,10 @@ export default function Contacte() {
 
               <div className="rounded-xl bg-muted/50 p-4">
                 <Label htmlFor="challenge" className="flex items-center gap-2">
-                  🔢 Prova ràpida anti-robot
+                  {s.challengeLabel}
                 </Label>
                 <p className="text-sm text-muted-foreground mb-2">
-                  Quant fa <strong>{challenge.a} + {challenge.b}</strong>?
+                  Quant fa <strong>{challengeText}</strong>?
                 </p>
                 <Input id="challenge" type="number" value={resposta}
                   onChange={(e) => setResposta(e.target.value)} required
@@ -169,11 +197,11 @@ export default function Contacte() {
 
               <Button type="submit" disabled={enviant} className="w-full" size="lg">
                 <Send className="w-4 h-4 mr-2" />
-                {enviant ? "Enviant..." : "Enviar missatge"}
+                {enviant ? s.sending : s.sendButton}
               </Button>
 
               <p className="text-xs text-center text-muted-foreground">
-                Tractarem el teu correu només per respondre't. No el compartirem.
+                {s.privacyNote}
               </p>
             </form>
           )}
