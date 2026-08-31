@@ -249,16 +249,13 @@ export default function CentresMapa() {
           </form>
         </section>
 
-        {isAdmin && (
-          <div className="flex items-center gap-3 flex-wrap rounded-2xl border border-border bg-card px-4 py-3">
-            <span className="text-xs font-bold uppercase text-muted-foreground">Només administració</span>
-            <label className="flex items-center gap-2 text-sm font-semibold cursor-pointer">
-              <input type="checkbox" checked={showReal} onChange={(e) => setShowReal(e.target.checked)} />
-              <span className="inline-block w-3 h-3 rounded-full bg-sky-500" />
-              Mostrar visites reals ({realPoints.length} ubicacions)
-            </label>
-          </div>
-        )}
+        <div className="flex items-center gap-3 flex-wrap rounded-2xl border border-border bg-card px-4 py-3">
+          <label className="flex items-center gap-2 text-sm font-semibold cursor-pointer">
+            <input type="checkbox" checked={showReal} onChange={(e) => setShowReal(e.target.checked)} />
+            <span className="inline-block w-3 h-3 rounded-full bg-sky-500" />
+            Mostrar visites reals ({realPoints.length} ubicacions)
+          </label>
+        </div>
 
         <div className="rounded-2xl overflow-hidden border border-border" style={{ height: "60vh", minHeight: 380 }}>
           <MapContainer center={[41.6, 1.7]} zoom={4} style={{ height: "100%", width: "100%" }} scrollWheelZoom>
@@ -266,7 +263,7 @@ export default function CentresMapa() {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            {isAdmin && showReal && realPoints.map((p, i) => {
+            {showReal && realPoints.map((p, i) => {
               const maxReal = Math.max(1, ...realPoints.map((r) => r.sessions));
               return (
                 <CircleMarker
