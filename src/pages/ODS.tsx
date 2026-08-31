@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Globe2, Loader2 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { invokeQueued } from "@/lib/aiQueue";
 import { useLanguages, LANGUAGES } from "@/hooks/useLanguage";
 

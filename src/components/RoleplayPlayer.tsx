@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { Play, Pause, RotateCcw, Volume2, VolumeX, Loader2, Languages } from "lucide-react";
 import { type RoleplayData } from "@/data/roleplayData";
 import { selectBestVoice } from "@/hooks/useTTS";
-import { supabase } from "@/integrations/supabase/client";
 import { invokeQueued } from "@/lib/aiQueue";
 import { useLanguages } from "@/hooks/useLanguage";
 
