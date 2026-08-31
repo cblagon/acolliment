@@ -101,19 +101,17 @@ export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
     setTranslatedLines(null);
     (async () => {
       try {
-        const { data: resp, error } = await supabase.functions.invoke("ai-text-tools", {
-          body: {
-            action: "translate-lines",
-            targetLang,
-            lines: data.lines.map((l) => l.text),
-          },
+        const resp = await invokeQueued<{ lines?: string[] }>("ai-text-tools", {
+          action: "translate-lines",
+          targetLang,
+          lines: data.lines.map((l) => l.text),
         });
         if (cancelled) return;
-        if (error) throw error;
         const outLines: string[] = resp?.lines ?? [];
         if (outLines.length !== data.lines.length) {
           throw new Error("Traducció incompleta");
         }
+
         setTranslatedLines(outLines);
         try { localStorage.setItem(cacheKey, JSON.stringify(outLines)); } catch { /* ignore */ }
       } catch (e) {
