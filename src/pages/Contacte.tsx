@@ -188,7 +188,7 @@ export default function Contacte() {
                   {s.challengeLabel}
                 </Label>
                 <p className="text-sm text-muted-foreground mb-2">
-                  Quant fa <strong>{challengeText}</strong>?
+                  <strong>{challengeText}</strong>
                 </p>
                 <Input id="challenge" type="number" value={resposta}
                   onChange={(e) => setResposta(e.target.value)} required
