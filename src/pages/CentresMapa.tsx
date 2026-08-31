@@ -49,6 +49,11 @@ export default function CentresMapa() {
   const [submitting, setSubmitting] = useState(false);
   const [showHidden, setShowHidden] = useState(false);
 
+  const [showReal, setShowReal] = useState(true);
+  const [realPoints, setRealPoints] = useState<
+    { lat: number; lng: number; city: string; country: string; sessions: number }[]
+  >([]);
+
   const load = async () => {
     setLoading(true);
     const { data } = await supabase
@@ -61,6 +66,34 @@ export default function CentresMapa() {
   };
 
   useEffect(() => { load(); }, []);
+
+  // Admin-only: real geolocated visits from page tracking (not registered by users)
+  useEffect(() => {
+    if (!isAdmin) { setRealPoints([]); return; }
+    let active = true;
+    (async () => {
+      const { data } = await supabase
+        .from("page_events")
+        .select("city,country,lat,lng,session_id")
+        .not("lat", "is", null)
+        .limit(10000);
+      if (!active || !data) return;
+      const m = new Map<string, { lat: number; lng: number; city: string; country: string; sessions: Set<string> }>();
+      for (const r of data as any[]) {
+        if (r.lat == null || r.lng == null) continue;
+        const key = `${Number(r.lat).toFixed(2)}_${Number(r.lng).toFixed(2)}`;
+        let e = m.get(key);
+        if (!e) {
+          e = { lat: r.lat, lng: r.lng, city: r.city ?? "—", country: r.country ?? "", sessions: new Set() };
+          m.set(key, e);
+        }
+        e.sessions.add(r.session_id);
+      }
+      setRealPoints([...m.values()].map((e) => ({ ...e, sessions: e.sessions.size })));
+    })();
+    return () => { active = false; };
+  }, [isAdmin]);
+
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -221,6 +254,16 @@ export default function CentresMapa() {
           </form>
         </section>
 
+        {isAdmin && (
+          <div className="flex items-center gap-3 flex-wrap rounded-2xl border border-border bg-card px-4 py-3">
+            <span className="text-xs font-bold uppercase text-muted-foreground">Només administració</span>
+            <label className="flex items-center gap-2 text-sm font-semibold cursor-pointer">
+              <input type="checkbox" checked={showReal} onChange={(e) => setShowReal(e.target.checked)} />
+              <span className="inline-block w-3 h-3 rounded-full bg-sky-500" />
+              Mostrar visites reals ({realPoints.length} ubicacions)
+            </label>
+          </div>
+        )}
 
         <div className="rounded-2xl overflow-hidden border border-border" style={{ height: "60vh", minHeight: 380 }}>
           <MapContainer center={[41.6, 1.7]} zoom={4} style={{ height: "100%", width: "100%" }} scrollWheelZoom>
@@ -228,6 +271,26 @@ export default function CentresMapa() {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
+            {isAdmin && showReal && realPoints.map((p, i) => {
+              const maxReal = Math.max(1, ...realPoints.map((r) => r.sessions));
+              return (
+                <CircleMarker
+                  key={`real-${i}`}
+                  center={[p.lat, p.lng]}
+                  radius={6 + Math.round((p.sessions / maxReal) * 14)}
+                  pathOptions={{ color: "hsl(199, 89%, 48%)", fillColor: "hsl(199, 89%, 48%)", fillOpacity: 0.35, weight: 2, dashArray: "4 3" }}
+                >
+                  <Popup>
+                    <div className="text-sm">
+                      <div className="font-bold">{p.city}{p.country ? `, ${p.country}` : ""}</div>
+                      <div>{p.sessions} {p.sessions === 1 ? "sessió única" : "sessions úniques"}</div>
+                      <div className="text-xs text-muted-foreground">Visita real (no registrada)</div>
+                    </div>
+                  </Popup>
+                </CircleMarker>
+              );
+            })}
+
             {points.map((p, i) => {
               const radius = 8 + Math.round((p.entries.length / maxCount) * 14);
               return (
