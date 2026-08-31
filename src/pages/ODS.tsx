@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Globe2, Loader2 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { invokeQueued } from "@/lib/aiQueue";
 import { useLanguages, LANGUAGES } from "@/hooks/useLanguage";
 
 type Goal = {
@@ -97,13 +97,13 @@ export default function ODS() {
     setLoading(true);
     (async () => {
       try {
-        const { data, error } = await supabase.functions.invoke("ai-text-tools", {
-          body: { action: "translate-lines", targetLang: helpLang, lines: BASE_LINES },
+        const data = await invokeQueued<{ lines?: string[] }>("ai-text-tools", {
+          action: "translate-lines", targetLang: helpLang, lines: BASE_LINES,
         });
         if (cancelled) return;
-        if (error) throw error;
         const out: string[] = data?.lines ?? [];
         if (out.length !== BASE_LINES.length) throw new Error("incomplete");
+
         setLines(out);
         try { localStorage.setItem(cacheKey, JSON.stringify(out)); } catch { /* ignore */ }
       } catch {
