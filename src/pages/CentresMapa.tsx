@@ -49,6 +49,11 @@ export default function CentresMapa() {
   const [submitting, setSubmitting] = useState(false);
   const [showHidden, setShowHidden] = useState(false);
 
+  const [showReal, setShowReal] = useState(true);
+  const [realPoints, setRealPoints] = useState<
+    { lat: number; lng: number; city: string; country: string; sessions: number }[]
+  >([]);
+
   const load = async () => {
     setLoading(true);
     const { data } = await supabase
@@ -61,6 +66,34 @@ export default function CentresMapa() {
   };
 
   useEffect(() => { load(); }, []);
+
+  // Admin-only: real geolocated visits from page tracking (not registered by users)
+  useEffect(() => {
+    if (!isAdmin) { setRealPoints([]); return; }
+    let active = true;
+    (async () => {
+      const { data } = await supabase
+        .from("page_events")
+        .select("city,country,lat,lng,session_id")
+        .not("lat", "is", null)
+        .limit(10000);
+      if (!active || !data) return;
+      const m = new Map<string, { lat: number; lng: number; city: string; country: string; sessions: Set<string> }>();
+      for (const r of data as any[]) {
+        if (r.lat == null || r.lng == null) continue;
+        const key = `${Number(r.lat).toFixed(2)}_${Number(r.lng).toFixed(2)}`;
+        let e = m.get(key);
+        if (!e) {
+          e = { lat: r.lat, lng: r.lng, city: r.city ?? "—", country: r.country ?? "", sessions: new Set() };
+          m.set(key, e);
+        }
+        e.sessions.add(r.session_id);
+      }
+      setRealPoints([...m.values()].map((e) => ({ ...e, sessions: e.sessions.size })));
+    })();
+    return () => { active = false; };
+  }, [isAdmin]);
+
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
