@@ -6,6 +6,7 @@ import { type RoleplayData } from "@/data/roleplayData";
 import { useLanguages, LANGUAGES } from "@/hooks/useLanguage";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { runQueued } from "@/lib/aiQueue";
 
 const MAX_UPLOAD_MB = 20;
 
@@ -131,11 +132,13 @@ export function VideoBloc({ index, videoUrl, title, description, onVideoChange, 
           const supaUrl = import.meta.env.VITE_SUPABASE_URL;
           const anon = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
-          const dubRes = await fetch(`${supaUrl}/functions/v1/dub-video`, {
-            method: "POST",
-            headers: { apikey: anon, Authorization: `Bearer ${token ?? anon}` },
-            body: form,
-          });
+          const dubRes = await runQueued(() =>
+            fetch(`${supaUrl}/functions/v1/dub-video`, {
+              method: "POST",
+              headers: { apikey: anon, Authorization: `Bearer ${token ?? anon}` },
+              body: form,
+            })
+          );
           if (!dubRes.ok) {
             const txt = await dubRes.text();
             throw new Error(`Error del doblatge: ${dubRes.status} — ${txt.slice(0, 200)}`);
