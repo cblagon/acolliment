@@ -67,32 +67,27 @@ export default function CentresMapa() {
 
   useEffect(() => { load(); }, []);
 
-  // Admin-only: real geolocated visits from page tracking (not registered by users)
+  // Real geolocated visits from page tracking (aggregated, no personal data)
   useEffect(() => {
-    if (!isAdmin) { setRealPoints([]); return; }
     let active = true;
     (async () => {
-      const { data } = await supabase
-        .from("page_events")
-        .select("city,country,lat,lng,session_id")
-        .not("lat", "is", null)
-        .limit(10000);
+      const { data } = await supabase.rpc("visitor_locations");
       if (!active || !data) return;
-      const m = new Map<string, { lat: number; lng: number; city: string; country: string; sessions: Set<string> }>();
-      for (const r of data as any[]) {
-        if (r.lat == null || r.lng == null) continue;
-        const key = `${Number(r.lat).toFixed(2)}_${Number(r.lng).toFixed(2)}`;
-        let e = m.get(key);
-        if (!e) {
-          e = { lat: r.lat, lng: r.lng, city: r.city ?? "—", country: r.country ?? "", sessions: new Set() };
-          m.set(key, e);
-        }
-        e.sessions.add(r.session_id);
-      }
-      setRealPoints([...m.values()].map((e) => ({ ...e, sessions: e.sessions.size })));
+      setRealPoints(
+        (data as any[])
+          .filter((r) => r.lat != null && r.lng != null)
+          .map((r) => ({
+            lat: Number(r.lat),
+            lng: Number(r.lng),
+            city: r.city ?? "—",
+            country: r.country ?? "",
+            sessions: Number(r.sessions) || 0,
+          })),
+      );
     })();
     return () => { active = false; };
-  }, [isAdmin]);
+  }, []);
+
 
 
   const submit = async (e: React.FormEvent) => {
@@ -254,16 +249,13 @@ export default function CentresMapa() {
           </form>
         </section>
 
-        {isAdmin && (
-          <div className="flex items-center gap-3 flex-wrap rounded-2xl border border-border bg-card px-4 py-3">
-            <span className="text-xs font-bold uppercase text-muted-foreground">Només administració</span>
-            <label className="flex items-center gap-2 text-sm font-semibold cursor-pointer">
-              <input type="checkbox" checked={showReal} onChange={(e) => setShowReal(e.target.checked)} />
-              <span className="inline-block w-3 h-3 rounded-full bg-sky-500" />
-              Mostrar visites reals ({realPoints.length} ubicacions)
-            </label>
-          </div>
-        )}
+        <div className="flex items-center gap-3 flex-wrap rounded-2xl border border-border bg-card px-4 py-3">
+          <label className="flex items-center gap-2 text-sm font-semibold cursor-pointer">
+            <input type="checkbox" checked={showReal} onChange={(e) => setShowReal(e.target.checked)} />
+            <span className="inline-block w-3 h-3 rounded-full bg-sky-500" />
+            Mostrar visites reals ({realPoints.length} ubicacions)
+          </label>
+        </div>
 
         <div className="rounded-2xl overflow-hidden border border-border" style={{ height: "60vh", minHeight: 380 }}>
           <MapContainer center={[41.6, 1.7]} zoom={4} style={{ height: "100%", width: "100%" }} scrollWheelZoom>
@@ -271,7 +263,7 @@ export default function CentresMapa() {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            {isAdmin && showReal && realPoints.map((p, i) => {
+            {showReal && realPoints.map((p, i) => {
               const maxReal = Math.max(1, ...realPoints.map((r) => r.sessions));
               return (
                 <CircleMarker
