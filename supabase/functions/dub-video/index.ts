@@ -66,7 +66,7 @@ Deno.serve(async (req) => {
     const sttForm = new FormData();
     sttForm.append("model", "openai/gpt-4o-mini-transcribe");
     sttForm.append("file", file, file.name || "audio.mp4");
-    const sttRes = await fetch("https://ai.gateway.lovable.dev/v1/audio/transcriptions", {
+    const sttRes = await gatewayFetch("https://ai.gateway.lovable.dev/v1/audio/transcriptions", {
       method: "POST",
       headers: { Authorization: `Bearer ${LOVABLE_API_KEY}` },
       body: sttForm,
@@ -86,7 +86,7 @@ Deno.serve(async (req) => {
     }
 
     // 2) Translate to target language (short, natural, spoken register)
-    const chatRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const chatRes = await gatewayFetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,
@@ -118,7 +118,7 @@ Deno.serve(async (req) => {
     }
 
     // 3) TTS
-    const ttsRes = await fetch("https://ai.gateway.lovable.dev/v1/audio/speech", {
+    const ttsRes = await gatewayFetch("https://ai.gateway.lovable.dev/v1/audio/speech", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,
