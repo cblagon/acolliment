@@ -5,6 +5,24 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+// Retry gateway calls on 429 / 5xx with bounded backoff (honours Retry-After).
+async function gatewayFetch(url: string, init: RequestInit, maxRetries = 4): Promise<Response> {
+  let delay = 1500;
+  for (let attempt = 0; ; attempt++) {
+    const res = await fetch(url, init);
+    if (res.ok || attempt >= maxRetries || (res.status !== 429 && res.status < 500)) return res;
+    const retryAfter = Number(res.headers.get("Retry-After"));
+    const wait = Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 : delay;
+    await res.text().catch(() => "");
+    await sleep(Math.min(wait, 15000) + Math.random() * 500);
+    delay = Math.min(delay * 2, 15000);
+  }
+}
+
+
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
