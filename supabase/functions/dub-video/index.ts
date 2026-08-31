@@ -20,6 +20,23 @@ function voiceFor(_lang: string): string {
   return "alloy";
 }
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+// Retry gateway calls on 429 / 5xx with bounded backoff (honours Retry-After).
+async function gatewayFetch(url: string, init: RequestInit, maxRetries = 4): Promise<Response> {
+  let delay = 1500;
+  for (let attempt = 0; ; attempt++) {
+    const res = await fetch(url, init);
+    if (res.ok || attempt >= maxRetries || (res.status !== 429 && res.status < 500)) return res;
+    const retryAfter = Number(res.headers.get("Retry-After"));
+    const wait = Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 : delay;
+    await res.text().catch(() => "");
+    await sleep(Math.min(wait, 15000) + Math.random() * 500);
+    delay = Math.min(delay * 2, 15000);
+  }
+}
+
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   if (req.method !== "POST") {
@@ -49,7 +66,7 @@ Deno.serve(async (req) => {
     const sttForm = new FormData();
     sttForm.append("model", "openai/gpt-4o-mini-transcribe");
     sttForm.append("file", file, file.name || "audio.mp4");
-    const sttRes = await fetch("https://ai.gateway.lovable.dev/v1/audio/transcriptions", {
+    const sttRes = await gatewayFetch("https://ai.gateway.lovable.dev/v1/audio/transcriptions", {
       method: "POST",
       headers: { Authorization: `Bearer ${LOVABLE_API_KEY}` },
       body: sttForm,
@@ -69,7 +86,7 @@ Deno.serve(async (req) => {
     }
 
     // 2) Translate to target language (short, natural, spoken register)
-    const chatRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const chatRes = await gatewayFetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,
@@ -101,7 +118,7 @@ Deno.serve(async (req) => {
     }
 
     // 3) TTS
-    const ttsRes = await fetch("https://ai.gateway.lovable.dev/v1/audio/speech", {
+    const ttsRes = await gatewayFetch("https://ai.gateway.lovable.dev/v1/audio/speech", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,

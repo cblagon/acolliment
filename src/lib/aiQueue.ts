@@ -69,3 +69,8 @@ export async function invokeQueued<T = unknown>(
     throw new Error("Error de traducció");
   });
 }
+
+/** Runs a task through the same global queue (max 2 concurrent). */
+export function runQueued<T>(task: () => Promise<T>): Promise<T> {
+  return enqueue(task);
+}
