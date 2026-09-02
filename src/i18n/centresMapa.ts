@@ -27,6 +27,8 @@ export type CentresStrings = {
   deleted: string;
   hiddenToast: string;
   visibleToast: string;
+  showRealVisits: string;
+  locations: string;
 };
 
 export const CENTRES_STRINGS: Partial<Record<LangCode, CentresStrings>> = {
@@ -58,6 +60,8 @@ export const CENTRES_STRINGS: Partial<Record<LangCode, CentresStrings>> = {
     deleted: "Esborrat",
     hiddenToast: "Amagada",
     visibleToast: "Visible",
+    showRealVisits: "Mostrar visites reals",
+    locations: "ubicacions",
   },
   es: {
     title: "Desde dónde nos visitan",
@@ -87,6 +91,8 @@ export const CENTRES_STRINGS: Partial<Record<LangCode, CentresStrings>> = {
     deleted: "Borrado",
     hiddenToast: "Oculta",
     visibleToast: "Visible",
+    showRealVisits: "Mostrar visitas reales",
+    locations: "ubicaciones",
   },
   en: {
     title: "Where our visitors come from",
@@ -116,6 +122,8 @@ export const CENTRES_STRINGS: Partial<Record<LangCode, CentresStrings>> = {
     deleted: "Deleted",
     hiddenToast: "Hidden",
     visibleToast: "Visible",
+    showRealVisits: "Show real visits",
+    locations: "locations",
   },
   fr: {
     title: "D'où viennent nos visiteurs",
@@ -145,6 +153,8 @@ export const CENTRES_STRINGS: Partial<Record<LangCode, CentresStrings>> = {
     deleted: "Supprimé",
     hiddenToast: "Masquée",
     visibleToast: "Visible",
+    showRealVisits: "Afficher les visites réelles",
+    locations: "emplacements",
   },
   el: {
     title: "Από πού μας επισκέπτονται",
@@ -174,6 +184,8 @@ export const CENTRES_STRINGS: Partial<Record<LangCode, CentresStrings>> = {
     deleted: "Διαγράφηκε",
     hiddenToast: "Κρυμμένη",
     visibleToast: "Ορατή",
+    showRealVisits: "Εμφάνιση πραγματικών επισκέψεων",
+    locations: "τοποθεσίες",
   },
   ar: {
     title: "من أين يزورنا الناس",
@@ -203,6 +215,8 @@ export const CENTRES_STRINGS: Partial<Record<LangCode, CentresStrings>> = {
     deleted: "تم الحذف",
     hiddenToast: "مخفية",
     visibleToast: "ظاهرة",
+    showRealVisits: "إظهار الزيارات الفعلية",
+    locations: "مواقع",
   },
   gl: {
     title: "De onde nos visitan",
@@ -232,6 +246,8 @@ export const CENTRES_STRINGS: Partial<Record<LangCode, CentresStrings>> = {
     deleted: "Borrado",
     hiddenToast: "Agochada",
     visibleToast: "Visible",
+    showRealVisits: "Amosar visitas reais",
+    locations: "localizacións",
   },
   pt: {
     title: "De onde nos visitam",
@@ -261,6 +277,8 @@ export const CENTRES_STRINGS: Partial<Record<LangCode, CentresStrings>> = {
     deleted: "Eliminado",
     hiddenToast: "Oculta",
     visibleToast: "Visível",
+    showRealVisits: "Mostrar visitas reais",
+    locations: "localizações",
   },
   it: {
     title: "Da dove ci visitano",
@@ -290,6 +308,8 @@ export const CENTRES_STRINGS: Partial<Record<LangCode, CentresStrings>> = {
     deleted: "Eliminato",
     hiddenToast: "Nascosta",
     visibleToast: "Visibile",
+    showRealVisits: "Mostra visite reali",
+    locations: "località",
   },
   ro: {
     title: "De unde ne vizitează",
@@ -319,6 +339,8 @@ export const CENTRES_STRINGS: Partial<Record<LangCode, CentresStrings>> = {
     deleted: "Șters",
     hiddenToast: "Ascunsă",
     visibleToast: "Vizibilă",
+    showRealVisits: "Afișează vizitele reale",
+    locations: "locații",
   },
   uk: {
     title: "Звідки нас відвідують",
@@ -348,6 +370,8 @@ export const CENTRES_STRINGS: Partial<Record<LangCode, CentresStrings>> = {
     deleted: "Видалено",
     hiddenToast: "Приховано",
     visibleToast: "Видимо",
+    showRealVisits: "Показати справжні візити",
+    locations: "місць",
   },
   ur: {
     title: "ہم سے کہاں سے ملاقات ہوتی ہے",
@@ -377,6 +401,8 @@ export const CENTRES_STRINGS: Partial<Record<LangCode, CentresStrings>> = {
     deleted: "حذف ہو گیا",
     hiddenToast: "چھپا دیا",
     visibleToast: "دکھائی دے رہا ہے",
+    showRealVisits: "حقیقی وزٹس دکھائیں",
+    locations: "مقامات",
   },
   zh: {
     title: "访客来自哪里",
@@ -405,6 +431,8 @@ export const CENTRES_STRINGS: Partial<Record<LangCode, CentresStrings>> = {
     deleted: "已删除",
     hiddenToast: "已隐藏",
     visibleToast: "可见",
+    showRealVisits: "显示真实访问",
+    locations: "个位置",
   },
   hi: {
     title: "हमारे पास कहाँ से आते हैं",
@@ -434,6 +462,8 @@ export const CENTRES_STRINGS: Partial<Record<LangCode, CentresStrings>> = {
     deleted: "हटा दिया",
     hiddenToast: "छिपी",
     visibleToast: "दृश्य",
+    showRealVisits: "वास्तविक विज़िट दिखाएँ",
+    locations: "स्थान",
   },
 };
 

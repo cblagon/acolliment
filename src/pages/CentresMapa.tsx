@@ -253,7 +253,7 @@ export default function CentresMapa() {
           <label className="flex items-center gap-2 text-sm font-semibold cursor-pointer">
             <input type="checkbox" checked={showReal} onChange={(e) => setShowReal(e.target.checked)} />
             <span className="inline-block w-3 h-3 rounded-full bg-sky-500" />
-            Mostrar visites reals ({realPoints.length} ubicacions)
+            {s.showRealVisits} ({realPoints.length} {s.locations})
           </label>
         </div>
 
