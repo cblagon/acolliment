@@ -51,7 +51,7 @@ const STRINGS: Partial<Record<LangCode, AboutStrings>> = {
     p2: "Aquestes directrius són una iniciativa emblemàtica del Digital Education Action Plan (2021–2027), que té com a objectiu donar suport a la transformació digital dels sistemes educatius arreu d'Europa.",
     p3: "L'entrevista en línia, organitzada per la Comissió Europea, va ser enregistrada i contribuirà a un vídeo testimonial amb finalitats de difusió. Em sento molt honrada i agraïda d'haver estat seleccionada per participar-hi i representar la feina desenvolupada durant el projecte pilot.",
     backHome: "Tornar a l'inici",
-    moderationLink: "{s.moderationLink}",
+    moderationLink: "🛡️ Com es revisen les aportacions dels usuaris",
   },
   es: {
     subtitle: "Cómo usarla",
@@ -759,7 +759,7 @@ const About = () => {
               to="/ajuda/moderacio"
               className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-amber-100 text-amber-900 font-bold border border-amber-300 hover:bg-amber-200 transition-all active:scale-95"
             >
-              🛡️ Com es revisen les aportacions dels usuaris
+              {s.moderationLink}
             </Link>
           </div>
           <Link
