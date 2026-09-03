@@ -2,8 +2,8 @@ import { type LangCode } from "@/hooks/useLanguage";
 
 /**
  * Bloc/module title translations keyed by the Catalan name (bloc.nom).
- * If a translation is missing for the requested helpLang, falls back to
- * English, then to the original Catalan.
+ * If a translation is missing for the requested helpLang, falls back to the
+ * original Catalan title.
  */
 const blocNames: Record<string, Partial<Record<LangCode, string>>> = {
   "Salutacions": { es: "Saludos", en: "Greetings", fr: "Salutations", ar: "التحيات", ur: "سلام", pt: "Saudações", ptBR: "Saudações", it: "Saluti", ro: "Salutări", uk: "Привітання", el: "Χαιρετισμοί", zh: "问候语", hi: "अभिवादन", wo: "Nuyu", mnk: "Kontondiroo", ha: "السلام", snk: "Salaame", srk: "Salaame" },
