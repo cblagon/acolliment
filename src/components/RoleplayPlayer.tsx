@@ -13,6 +13,7 @@ interface RoleplayPlayerProps {
 const TARGET_LANGS: Record<string, { label: string; bcp47: string }> = {
   ca: { label: "Català", bcp47: "ca-ES" },
   es: { label: "Español", bcp47: "es-ES" },
+  gl: { label: "Galego", bcp47: "gl-ES" },
   en: { label: "English", bcp47: "en-US" },
   fr: { label: "Français", bcp47: "fr-FR" },
   it: { label: "Italiano", bcp47: "it-IT" },
