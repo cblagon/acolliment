@@ -61,5 +61,8 @@ export function tBlocName(catalanName: string, helpLang: LangCode): string {
   if (helpLang === "ca") return catalanName;
   const entry = blocNames[catalanName];
   if (!entry) return catalanName;
-  return entry[helpLang] ?? entry.en ?? catalanName;
+  // If there's no translation for the help language, keep the original
+  // Catalan title (the language being learnt) instead of showing English.
+  return entry[helpLang] ?? catalanName;
 }
+
