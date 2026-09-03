@@ -12,7 +12,7 @@ const LANG_NAMES: Record<string, string> = {
   ur: "Urdu", wo: "Wolof", uk: "Ukrainian", mnk: "Mandinka", it: "Italian",
   el: "Greek", ptBR: "Brazilian Portuguese", pt: "European Portuguese",
   ha: "Hassaniya Arabic", zh: "Mandarin Chinese", hi: "Hindi",
-  snk: "Soninke", ro: "Romanian", srk: "Sarankhulé",
+  snk: "Soninke", ro: "Romanian", srk: "Sarankhulé", gl: "Galician",
 };
 
 // Voice choice per language (OpenAI TTS multilingual voices)
