@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft, Gamepad2, Target } from "lucide-react";
+import { ArrowLeft, Gamepad2, Target, Grid3x3 } from "lucide-react";
 import { useLanguages } from "@/hooks/useLanguage";
 import { t } from "@/i18n/ui";
 
 interface GameCard {
   id: string;
   to: string;
-  titleKey: "hangman";
+  titleKey: "hangman" | "crossword";
   icon: React.ReactNode;
   color: string;
   available: boolean;
@@ -22,6 +22,14 @@ const Jocs = () => {
       titleKey: "hangman",
       icon: <Target className="w-8 h-8" />,
       color: "bg-bloom-pink",
+      available: true,
+    },
+    {
+      id: "mots-encreuats",
+      to: "/mots-encreuats",
+      titleKey: "crossword",
+      icon: <Grid3x3 className="w-8 h-8" />,
+      color: "bg-bloom-blue",
       available: true,
     },
   ];
