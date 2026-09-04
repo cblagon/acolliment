@@ -42,6 +42,7 @@ type StringKey =
   | "newBlocTitle"
   | "games"
   | "hangman"
+  | "crossword"
   | "comingSoon"
   | "play"
   | "gamesIntro"
@@ -98,6 +99,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     newBlocTitle: "Nou Bloc",
     games: "Jocs",
     hangman: "Penjat",
+    crossword: "Mots encreuats",
     comingSoon: "Properament",
     play: "Jugar",
     gamesIntro: "Jocs per practicar vocabulari i expressió oral mentre aprens.",
@@ -154,6 +156,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     newBlocTitle: "Nuevo Bloque",
     games: "Juegos",
     hangman: "Ahorcado",
+    crossword: "Crucigrama",
     comingSoon: "Próximamente",
     play: "Jugar",
     gamesIntro: "Juegos para practicar vocabulario y expresión oral mientras aprendes.",
@@ -210,6 +213,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     newBlocTitle: "New Block",
     games: "Games",
     hangman: "Hangman",
+    crossword: "Crossword",
     comingSoon: "Coming soon",
     play: "Play",
     gamesIntro: "Games to practice vocabulary and oral expression while you learn.",
@@ -266,6 +270,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     newBlocTitle: "Nouveau bloc",
     games: "Jeux",
     hangman: "Pendu",
+    crossword: "Mots croisés",
     comingSoon: "Bientôt",
     play: "Jouer",
     gamesIntro: "Des jeux pour pratiquer le vocabulaire et l'expression orale pendant que vous apprenez.",
@@ -322,6 +327,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     newBlocTitle: "كتلة جديدة",
     games: "ألعاب",
     hangman: "الرجل المشنوق",
+    crossword: "الكلمات المتقاطعة",
     comingSoon: "قريباً",
     play: "العب",
     gamesIntro: "ألعاب لممارسة المفردات والتعبير الشفهي أثناء التعلم.",
@@ -378,6 +384,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     newBlocTitle: "Novo bloque",
     games: "Xogos",
     hangman: "Aforcado",
+    crossword: "Encrucillado",
     comingSoon: "Proximamente",
     play: "Xogar",
     gamesIntro: "Xogos para practicar vocabulario e expresión oral mentres aprendes.",
@@ -434,6 +441,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     newBlocTitle: "Novo bloco",
     games: "Jogos",
     hangman: "Forca",
+    crossword: "Palavras cruzadas",
     comingSoon: "Brevemente",
     play: "Jogar",
     gamesIntro: "Jogos para praticar vocabulário e expressão oral enquanto aprendes.",
@@ -490,6 +498,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     newBlocTitle: "Novo bloco",
     games: "Jogos",
     hangman: "Forca",
+    crossword: "Palavras cruzadas",
     comingSoon: "Em breve",
     play: "Jogar",
     gamesIntro: "Jogos para praticar vocabulário e expressão oral enquanto aprende.",
@@ -546,6 +555,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     newBlocTitle: "Nuovo blocco",
     games: "Giochi",
     hangman: "Impiccato",
+    crossword: "Cruciverba",
     comingSoon: "Presto",
     play: "Gioca",
     gamesIntro: "Giochi per praticare vocabolario ed espressione orale mentre impari.",
@@ -602,6 +612,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     newBlocTitle: "Bloc nou",
     games: "Jocuri",
     hangman: "Spânzurătoarea",
+    crossword: "Cuvinte încrucișate",
     comingSoon: "În curând",
     play: "Joacă",
     gamesIntro: "Jocuri pentru a practica vocabularul și exprimarea orală în timp ce înveți.",
@@ -708,6 +719,7 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     newBlocTitle: "Νέο μπλοκ",
     games: "Παιχνίδια",
     hangman: "Κρεμάλα",
+    crossword: "Σταυρόλεξο",
     comingSoon: "Σύντομα",
     play: "Παίξε",
     gamesIntro: "Παιχνίδια για να εξασκείς λεξιλόγιο και προφορικό λόγο ενώ μαθαίνεις.",
