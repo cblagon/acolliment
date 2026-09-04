@@ -438,6 +438,7 @@ const Index = () => {
         {view.type === "songs" && (
           <SongViewer
             bloc={view.bloc}
+            targetLang={targetLang}
             onBack={() => setView({ type: "fitxes", bloc: view.bloc })}
           />
         )}
