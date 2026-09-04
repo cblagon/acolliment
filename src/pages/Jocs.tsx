@@ -29,7 +29,7 @@ const Jocs = () => {
       to: "/mots-encreuats",
       titleKey: "crossword",
       icon: <Grid3x3 className="w-8 h-8" />,
-      color: "bg-bloom-blue",
+      color: "bg-bloom-teal",
       available: true,
     },
   ];
