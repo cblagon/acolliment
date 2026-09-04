@@ -1,7 +1,13 @@
+import { type LangCode } from "@/hooks/useLanguage";
+import { tBlocName } from "@/i18n/blocNames";
+
 export interface Song {
   title: string;
   artist: string;
-  youtubeId: string;
+  /** Direct YouTube video (curated). */
+  youtubeId?: string;
+  /** Fallback: opens a YouTube search in the target language. */
+  searchQuery?: string;
   description: string;
 }
 
@@ -82,6 +88,84 @@ export const blocSongs: Record<string, Song[]> = {
   ],
 };
 
-export function getSongsForBloc(blocId: string): Song[] {
-  return blocSongs[blocId] || [];
+/** Curated songs for languages other than Catalan, keyed by lang then bloc id. */
+const songsByLang: Partial<Record<LangCode, Record<string, Song[]>>> = {
+  es: {
+    salutacions: [
+      { title: "Hola, ¿cómo estás?", artist: "Canciones infantiles", youtubeId: "tbnLJDrOouM", description: "Canción de saludos en español." },
+    ],
+    colors: [
+      { title: "La canción de los colores", artist: "Canciones infantiles", youtubeId: "0OSC1jLJC6E", description: "Aprende los colores cantando." },
+    ],
+    numeros: [
+      { title: "Los números del 1 al 10", artist: "Canciones infantiles", youtubeId: "ORHDcCA3RXk", description: "Cuenta del 1 al 10 en español." },
+    ],
+  },
+  en: {
+    salutacions: [
+      { title: "Hello Song", artist: "Super Simple Songs", youtubeId: "tVlcKp3bWH8", description: "Say hello in English!" },
+    ],
+    colors: [
+      { title: "I See Something Blue", artist: "Super Simple Songs", youtubeId: "jYAWf8Y91hA", description: "Learn the colours in English." },
+    ],
+    numeros: [
+      { title: "Numbers Song 1-10", artist: "Super Simple Songs", youtubeId: "D0Ajq682yrA", description: "Count from 1 to 10 in English." },
+    ],
+  },
+  fr: {
+    salutacions: [
+      { title: "Bonjour ! Comment ça va ?", artist: "Comptines", youtubeId: "OiHtdeuQ1sc", description: "Chanson de salutations en français." },
+    ],
+    colors: [
+      { title: "La chanson des couleurs", artist: "Comptines", youtubeId: "0jbmzKcpxa4", description: "Apprends les couleurs en chantant." },
+    ],
+  },
+};
+
+/** Word for "children's songs" used to build a YouTube search per language. */
+const SEARCH_TERM: Partial<Record<LangCode, string>> = {
+  ca: "cançons infantils",
+  es: "canciones infantiles",
+  gl: "cancións infantís",
+  en: "kids songs",
+  fr: "comptines pour enfants",
+  it: "canzoni per bambini",
+  pt: "canções infantis",
+  ptBR: "músicas infantis",
+  ro: "cântece pentru copii",
+  el: "παιδικά τραγούδια",
+  uk: "дитячі пісні",
+  ar: "أغاني أطفال",
+  ur: "بچوں کے گیت",
+  hi: "बच्चों के गाने",
+  zh: "儿歌",
+  wo: "woy ndaw yi",
+  mnk: "dindiŋ denkiloolu",
+  ha: "أغاني أطفال",
+  snk: "lemunu suuxu",
+  srk: "lemunu suuxu",
+};
+
+/**
+ * Songs for a bloc in the language the student is learning.
+ * Catalan uses the curated list; other languages use curated songs when
+ * available and otherwise a YouTube search link in that language.
+ */
+export function getSongsForBloc(blocId: string, lang: LangCode = "ca", blocName?: string): Song[] {
+  if (lang === "ca") return blocSongs[blocId] || [];
+
+  const curated = songsByLang[lang]?.[blocId];
+  if (curated?.length) return curated;
+
+  const term = SEARCH_TERM[lang] ?? SEARCH_TERM.en!;
+  const topic = blocName ? tBlocName(blocName, lang) : blocId;
+  const query = `${topic} ${term}`;
+  return [
+    {
+      title: query,
+      artist: "YouTube",
+      searchQuery: query,
+      description: `${topic} — ${term}`,
+    },
+  ];
 }
