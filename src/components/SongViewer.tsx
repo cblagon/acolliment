@@ -1,16 +1,19 @@
 import { type Bloc } from "@/data/blocksData";
 import { getSongsForBloc, type Song } from "@/data/songsData";
-import { ArrowLeft, Music, Play } from "lucide-react";
+import { LANGUAGES, type LangCode } from "@/hooks/useLanguage";
+import { ArrowLeft, ExternalLink, Music, Play } from "lucide-react";
 import { useState } from "react";
 
 interface SongViewerProps {
   bloc: Bloc;
+  targetLang?: LangCode;
   onBack: () => void;
 }
 
-export function SongViewer({ bloc, onBack }: SongViewerProps) {
-  const songs = getSongsForBloc(bloc.id);
+export function SongViewer({ bloc, targetLang = "ca", onBack }: SongViewerProps) {
+  const songs = getSongsForBloc(bloc.id, targetLang, bloc.nom);
   const [activeSong, setActiveSong] = useState<Song | null>(null);
+  const langLabel = LANGUAGES[targetLang]?.nativeName ?? "";
 
   return (
     <div className="flex flex-col items-center gap-6 animate-reveal-up max-w-2xl mx-auto">
@@ -30,8 +33,12 @@ export function SongViewer({ bloc, onBack }: SongViewerProps) {
         <div className="w-16" />
       </div>
 
+      <p className="text-sm text-muted-foreground -mt-3">
+        🎯 {langLabel}
+      </p>
+
       {/* Active video */}
-      {activeSong && (
+      {activeSong?.youtubeId && (
         <div className="w-full rounded-2xl overflow-hidden shadow-lg border border-border bg-card animate-reveal-up">
           <div className="aspect-video">
             <iframe
@@ -64,11 +71,23 @@ export function SongViewer({ bloc, onBack }: SongViewerProps) {
             </p>
           )}
           {songs.map((song) => {
-            const isActive = activeSong?.youtubeId === song.youtubeId;
+            const isActive = !!song.youtubeId && activeSong?.youtubeId === song.youtubeId;
+            const isSearch = !song.youtubeId;
+            const handleClick = () => {
+              if (isSearch) {
+                window.open(
+                  `https://www.youtube.com/results?search_query=${encodeURIComponent(song.searchQuery ?? song.title)}`,
+                  "_blank",
+                  "noopener,noreferrer",
+                );
+                return;
+              }
+              setActiveSong(isActive ? null : song);
+            };
             return (
               <button
-                key={song.youtubeId}
-                onClick={() => setActiveSong(isActive ? null : song)}
+                key={song.youtubeId ?? song.title}
+                onClick={handleClick}
                 className={`w-full flex items-center gap-4 p-4 rounded-2xl border-2 transition-all duration-300 active:scale-[0.98] text-left ${
                   isActive
                     ? `${bloc.color} text-white border-transparent shadow-lg`
@@ -80,7 +99,7 @@ export function SongViewer({ bloc, onBack }: SongViewerProps) {
                     isActive ? "bg-white/20" : `${bloc.color} text-white`
                   }`}
                 >
-                  <Play className="w-5 h-5" />
+                  {isSearch ? <ExternalLink className="w-5 h-5" /> : <Play className="w-5 h-5" />}
                 </div>
                 <div className="flex-1 min-w-0">
                   <h3 className={`font-bold text-sm truncate ${isActive ? "text-white" : "text-foreground"}`}>
