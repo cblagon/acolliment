@@ -155,7 +155,12 @@ const MotsEncreuats = () => {
   const [seed, setSeed] = useState(0);
   const [entries, setEntries] = useState<Record<string, string>>({});
   const [checked, setChecked] = useState(false);
+  const [autoCorrect, setAutoCorrect] = useState(true);
+  const [wrong, setWrong] = useState<Record<string, boolean>>({});
+  const [activeNum, setActiveNum] = useState<string | null>(null);
+  const [hintText, setHintText] = useState<string | null>(null);
   const inputs = useRef<Record<string, HTMLInputElement | null>>({});
+  const timers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
 
   const placed = useMemo(() => buildCrossword(WORDS[level]), [level, seed]);
 
