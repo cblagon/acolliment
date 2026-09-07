@@ -309,8 +309,10 @@ const MotsEncreuats = () => {
                 const sol = solution[key];
                 if (!sol) return <div key={key} className="w-8 h-8 bg-muted/40 rounded-sm" />;
                 const val = entries[key] ?? "";
-                const ok = checked && val === sol;
-                const bad = checked && val !== sol;
+                const live = wrong[key];
+                const ok = (checked && val === sol) || (val !== "" && val === sol);
+                const bad = live || (checked && val !== sol);
+                const inWord = activeCells.has(key);
                 return (
                   <div key={key} className="relative w-8 h-8">
                     {starts[key] && (
@@ -324,8 +326,14 @@ const MotsEncreuats = () => {
                       onChange={(e) => handleChange(key, e.target.value)}
                       maxLength={1}
                       aria-label={`Cel·la ${r}-${c}`}
-                      className={`w-8 h-8 text-center text-sm font-extrabold uppercase rounded-sm border-2 outline-none focus:border-primary bg-card text-foreground ${
-                        ok ? "border-green-500 bg-green-500/10" : bad ? "border-red-500 bg-red-500/10" : "border-border"
+                      className={`w-8 h-8 text-center text-sm font-extrabold uppercase rounded-sm border-2 outline-none focus:border-primary text-foreground transition-colors ${
+                        bad
+                          ? "border-red-500 bg-red-500/20 animate-pulse"
+                          : ok
+                          ? "border-green-500 bg-green-500/10"
+                          : inWord
+                          ? "border-primary/50 bg-primary/5"
+                          : "border-border bg-card"
                       }`}
                     />
                   </div>
@@ -334,7 +342,7 @@ const MotsEncreuats = () => {
             )}
           </div>
 
-          <div className="flex gap-2 mt-4 flex-wrap">
+          <div className="flex gap-2 mt-4 flex-wrap items-center">
             <button
               onClick={() => setChecked(true)}
               className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-primary-foreground font-bold text-sm active:scale-95"
@@ -342,8 +350,15 @@ const MotsEncreuats = () => {
               <Check className="w-4 h-4" /> Comprovar
             </button>
             <button
+              onClick={giveHint}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-bloom-yellow text-foreground font-bold text-sm active:scale-95"
+            >
+              <Lightbulb className="w-4 h-4" /> Pista
+            </button>
+            <button
               onClick={() => {
                 setEntries(solution);
+                setWrong({});
                 setChecked(true);
               }}
               className="flex items-center gap-2 px-4 py-2 rounded-xl bg-muted text-foreground font-bold text-sm active:scale-95"
@@ -356,7 +371,19 @@ const MotsEncreuats = () => {
             >
               <RotateCcw className="w-4 h-4" /> Nou joc
             </button>
+            <label className="flex items-center gap-2 text-sm font-semibold cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={autoCorrect}
+                onChange={(e) => setAutoCorrect(e.target.checked)}
+                className="w-4 h-4 accent-primary"
+              />
+              Auto-correcció
+            </label>
           </div>
+          {hintText && (
+            <p className="mt-3 text-sm font-semibold text-amber-600 dark:text-amber-400">💡 {hintText}</p>
+          )}
           {solved && (
             <p className="mt-3 font-bold text-green-600">🎉 Molt bé! Has completat els mots encreuats.</p>
           )}
@@ -368,8 +395,15 @@ const MotsEncreuats = () => {
             <ul className="space-y-1 text-sm">
               {across.map((p) => (
                 <li key={`A${p.num}`}>
-                  <span className="font-bold">{p.num}.</span> {p.clue}{" "}
-                  <span className="text-muted-foreground">({p.word.length})</span>
+                  <button
+                    onClick={() => focusWord(p)}
+                    className={`text-left rounded-md px-1 hover:bg-muted transition-colors ${
+                      activeNum === `A${p.num}` ? "bg-primary/10 font-semibold" : ""
+                    }`}
+                  >
+                    <span className="font-bold">{p.num}.</span> {p.clue}{" "}
+                    <span className="text-muted-foreground">({p.word.length})</span>
+                  </button>
                 </li>
               ))}
             </ul>
@@ -379,8 +413,15 @@ const MotsEncreuats = () => {
             <ul className="space-y-1 text-sm">
               {down.map((p) => (
                 <li key={`D${p.num}`}>
-                  <span className="font-bold">{p.num}.</span> {p.clue}{" "}
-                  <span className="text-muted-foreground">({p.word.length})</span>
+                  <button
+                    onClick={() => focusWord(p)}
+                    className={`text-left rounded-md px-1 hover:bg-muted transition-colors ${
+                      activeNum === `D${p.num}` ? "bg-primary/10 font-semibold" : ""
+                    }`}
+                  >
+                    <span className="font-bold">{p.num}.</span> {p.clue}{" "}
+                    <span className="text-muted-foreground">({p.word.length})</span>
+                  </button>
                 </li>
               ))}
             </ul>
