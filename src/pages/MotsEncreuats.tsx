@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, RotateCcw, Check, Eye } from "lucide-react";
+import { ArrowLeft, RotateCcw, Check, Eye, Lightbulb } from "lucide-react";
 
 type Level = "A1" | "A2" | "B1";
 type Word = { w: string; c: string };
