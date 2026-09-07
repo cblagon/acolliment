@@ -199,6 +199,9 @@ const MotsEncreuats = () => {
   useEffect(() => {
     setEntries({});
     setChecked(false);
+    setWrong({});
+    setActiveNum(null);
+    setHintText(null);
   }, [level, seed]);
 
   const solved = useMemo(
@@ -206,10 +209,60 @@ const MotsEncreuats = () => {
     [entries, solution]
   );
 
-  const handleChange = useCallback((key: string, value: string) => {
-    const ch = value.slice(-1).toUpperCase().replace(/[^A-ZÀ-ÜÇ·]/g, "");
-    setEntries((prev) => ({ ...prev, [key]: ch }));
-  }, []);
+  const cellsOf = useCallback(
+    (p: Placed) =>
+      Array.from({ length: p.word.length }, (_, i) =>
+        p.dir === "A" ? `${p.row}-${p.col + i}` : `${p.row + i}-${p.col}`
+      ),
+    []
+  );
+
+  const handleChange = useCallback(
+    (key: string, value: string) => {
+      const ch = value.slice(-1).toUpperCase().replace(/[^A-ZÀ-ÜÇ·]/g, "");
+      setEntries((prev) => ({ ...prev, [key]: ch }));
+      const isWrong = ch !== "" && ch !== solution[key];
+      setWrong((prev) => ({ ...prev, [key]: isWrong }));
+      if (timers.current[key]) clearTimeout(timers.current[key]);
+      if (isWrong && autoCorrect) {
+        timers.current[key] = setTimeout(() => {
+          setEntries((prev) => ({ ...prev, [key]: "" }));
+          setWrong((prev) => ({ ...prev, [key]: false }));
+        }, 900);
+      }
+    },
+    [solution, autoCorrect]
+  );
+
+  useEffect(() => () => Object.values(timers.current).forEach(clearTimeout), []);
+
+  const giveHint = useCallback(() => {
+    const target = placed.find((p) => `${p.dir}${p.num}` === activeNum) ?? placed[0];
+    if (!target) return;
+    const keys = cellsOf(target);
+    const empty = keys.find((k) => (entries[k] ?? "") !== solution[k]);
+    if (!empty) {
+      setHintText("Aquesta paraula ja està completa! 🎉");
+      return;
+    }
+    setEntries((prev) => ({ ...prev, [empty]: solution[empty] }));
+    setWrong((prev) => ({ ...prev, [empty]: false }));
+    setHintText(`Pista a "${target.clue}": comença per ${target.word[0]} i té ${target.word.length} lletres.`);
+  }, [placed, activeNum, cellsOf, entries, solution]);
+
+  const focusWord = useCallback(
+    (p: Placed) => {
+      setActiveNum(`${p.dir}${p.num}`);
+      setHintText(`${p.word.length} lletres · comença per ${p.word[0]}`);
+      inputs.current[cellsOf(p)[0]]?.focus();
+    },
+    [cellsOf]
+  );
+
+  const activeCells = useMemo(() => {
+    const p = placed.find((x) => `${x.dir}${x.num}` === activeNum);
+    return p ? new Set(cellsOf(p)) : new Set<string>();
+  }, [placed, activeNum, cellsOf]);
 
   const across = placed.filter((p) => p.dir === "A").sort((a, b) => a.num - b.num);
   const down = placed.filter((p) => p.dir === "D").sort((a, b) => a.num - b.num);
