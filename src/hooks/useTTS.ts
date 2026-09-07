@@ -139,7 +139,9 @@ export function useTTS() {
       if (speakingRef.current) speechSynthesis.cancel();
       speakingRef.current = true;
 
-      const utter = new SpeechSynthesisUtterance(text);
+      // En català cal apostrofar (l'elefant, d'aigua) perquè es pronunciï bé.
+      const spoken = lang === "ca" ? apostrofaCatala(text) : text;
+      const utter = new SpeechSynthesisUtterance(spoken);
       if (voice) utter.voice = voice;
       utter.lang = bcp47;
       utter.rate = 0.9;
