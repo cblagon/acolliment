@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 import { type LangCode } from "@/hooks/useLanguage";
+import { apostrofaCatala } from "@/lib/catalanApostrophe";
 
 /** Map our app's LangCode to a BCP-47 locale for the SpeechSynthesis API. null = unsupported. */
 export const LANG_TO_BCP47: Record<LangCode, string | null> = {
@@ -139,7 +140,9 @@ export function useTTS() {
       if (speakingRef.current) speechSynthesis.cancel();
       speakingRef.current = true;
 
-      const utter = new SpeechSynthesisUtterance(text);
+      // En català cal apostrofar (l'elefant, d'aigua) perquè es pronunciï bé.
+      const spoken = lang === "ca" ? apostrofaCatala(text) : text;
+      const utter = new SpeechSynthesisUtterance(spoken);
       if (voice) utter.voice = voice;
       utter.lang = bcp47;
       utter.rate = 0.9;

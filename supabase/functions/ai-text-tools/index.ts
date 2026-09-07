@@ -55,7 +55,7 @@ Deno.serve(async (req) => {
         });
       }
       const target = langName[targetLang] ?? targetLang ?? "anglès";
-      system = `Ets un traductor professional per a alumnat que aprèn idiomes. Tradueix cada línia del diàleg al ${target}, mantenint el to col·loquial i natural. Respon NOMÉS amb un objecte JSON vàlid amb aquesta forma exacta: {"lines":["traducció1","traducció2",...]}. El nombre de línies de sortida ha de coincidir exactament amb el d'entrada. No incloguis explicacions ni text fora del JSON.`;
+      system = `Ets un traductor professional per a alumnat que aprèn idiomes. Tradueix cada línia del diàleg al ${target}, mantenint el to col·loquial i natural. Respon NOMÉS amb un objecte JSON vàlid amb aquesta forma exacta: {"lines":["traducció1","traducció2",...]}. El nombre de línies de sortida ha de coincidir exactament amb el d'entrada. No incloguis explicacions ni text fora del JSON. Si la llengua de sortida és el català, apostrofa sempre correctament (l'elefant, l'hora, d'aigua, s'ha), mai "el elefant" ni "de aigua".`;
       user = JSON.stringify({ lines });
     } else if (!text || typeof text !== "string") {
       return new Response(JSON.stringify({ error: "Falta el text" }), {
@@ -64,11 +64,11 @@ Deno.serve(async (req) => {
       });
     } else if (action === "spellcheck") {
       system =
-        "Ets un corrector ortogràfic i gramatical de català. Corregeix només els errors ortogràfics, gramaticals i de puntuació. Mantén el sentit i l'estil originals. Respon NOMÉS amb el text corregit, sense explicacions, sense cometes, sense prefixos.";
+        "Ets un corrector ortogràfic i gramatical de català. Corregeix només els errors ortogràfics, gramaticals i de puntuació. Mantén el sentit i l'estil originals. Respon NOMÉS amb el text corregit, sense explicacions, sense cometes, sense prefixos. Corregeix sempre l'apostrofació catalana (l'elefant, l'hora, d'aigua), mai \"el elefant\".";
       user = text;
     } else if (action === "translate") {
       const target = langName[targetLang] ?? targetLang ?? "castellà";
-      system = `Ets un traductor professional. Tradueix el text al ${target}. Respon NOMÉS amb la traducció, sense explicacions ni cometes.`;
+      system = `Ets un traductor professional. Tradueix el text al ${target}. Respon NOMÉS amb la traducció, sense explicacions ni cometes. Si la llengua de sortida és el català, apostrofa sempre correctament (l'elefant, l'hora, d'aigua, s'ha), mai "el elefant" ni "de aigua".`;
       user = text;
     } else {
       return new Response(JSON.stringify({ error: "Acció no vàlida" }), {
