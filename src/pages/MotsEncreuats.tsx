@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, RotateCcw, Check, Eye } from "lucide-react";
+import { ArrowLeft, RotateCcw, Check, Eye, Lightbulb } from "lucide-react";
 
 type Level = "A1" | "A2" | "B1";
 type Word = { w: string; c: string };
@@ -155,7 +155,12 @@ const MotsEncreuats = () => {
   const [seed, setSeed] = useState(0);
   const [entries, setEntries] = useState<Record<string, string>>({});
   const [checked, setChecked] = useState(false);
+  const [autoCorrect, setAutoCorrect] = useState(true);
+  const [wrong, setWrong] = useState<Record<string, boolean>>({});
+  const [activeNum, setActiveNum] = useState<string | null>(null);
+  const [hintText, setHintText] = useState<string | null>(null);
   const inputs = useRef<Record<string, HTMLInputElement | null>>({});
+  const timers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
 
   const placed = useMemo(() => buildCrossword(WORDS[level]), [level, seed]);
 
@@ -194,6 +199,9 @@ const MotsEncreuats = () => {
   useEffect(() => {
     setEntries({});
     setChecked(false);
+    setWrong({});
+    setActiveNum(null);
+    setHintText(null);
   }, [level, seed]);
 
   const solved = useMemo(
@@ -201,10 +209,60 @@ const MotsEncreuats = () => {
     [entries, solution]
   );
 
-  const handleChange = useCallback((key: string, value: string) => {
-    const ch = value.slice(-1).toUpperCase().replace(/[^A-ZÀ-ÜÇ·]/g, "");
-    setEntries((prev) => ({ ...prev, [key]: ch }));
-  }, []);
+  const cellsOf = useCallback(
+    (p: Placed) =>
+      Array.from({ length: p.word.length }, (_, i) =>
+        p.dir === "A" ? `${p.row}-${p.col + i}` : `${p.row + i}-${p.col}`
+      ),
+    []
+  );
+
+  const handleChange = useCallback(
+    (key: string, value: string) => {
+      const ch = value.slice(-1).toUpperCase().replace(/[^A-ZÀ-ÜÇ·]/g, "");
+      setEntries((prev) => ({ ...prev, [key]: ch }));
+      const isWrong = ch !== "" && ch !== solution[key];
+      setWrong((prev) => ({ ...prev, [key]: isWrong }));
+      if (timers.current[key]) clearTimeout(timers.current[key]);
+      if (isWrong && autoCorrect) {
+        timers.current[key] = setTimeout(() => {
+          setEntries((prev) => ({ ...prev, [key]: "" }));
+          setWrong((prev) => ({ ...prev, [key]: false }));
+        }, 900);
+      }
+    },
+    [solution, autoCorrect]
+  );
+
+  useEffect(() => () => Object.values(timers.current).forEach(clearTimeout), []);
+
+  const giveHint = useCallback(() => {
+    const target = placed.find((p) => `${p.dir}${p.num}` === activeNum) ?? placed[0];
+    if (!target) return;
+    const keys = cellsOf(target);
+    const empty = keys.find((k) => (entries[k] ?? "") !== solution[k]);
+    if (!empty) {
+      setHintText("Aquesta paraula ja està completa! 🎉");
+      return;
+    }
+    setEntries((prev) => ({ ...prev, [empty]: solution[empty] }));
+    setWrong((prev) => ({ ...prev, [empty]: false }));
+    setHintText(`Pista a "${target.clue}": comença per ${target.word[0]} i té ${target.word.length} lletres.`);
+  }, [placed, activeNum, cellsOf, entries, solution]);
+
+  const focusWord = useCallback(
+    (p: Placed) => {
+      setActiveNum(`${p.dir}${p.num}`);
+      setHintText(`${p.word.length} lletres · comença per ${p.word[0]}`);
+      inputs.current[cellsOf(p)[0]]?.focus();
+    },
+    [cellsOf]
+  );
+
+  const activeCells = useMemo(() => {
+    const p = placed.find((x) => `${x.dir}${x.num}` === activeNum);
+    return p ? new Set(cellsOf(p)) : new Set<string>();
+  }, [placed, activeNum, cellsOf]);
 
   const across = placed.filter((p) => p.dir === "A").sort((a, b) => a.num - b.num);
   const down = placed.filter((p) => p.dir === "D").sort((a, b) => a.num - b.num);
@@ -251,8 +309,10 @@ const MotsEncreuats = () => {
                 const sol = solution[key];
                 if (!sol) return <div key={key} className="w-8 h-8 bg-muted/40 rounded-sm" />;
                 const val = entries[key] ?? "";
-                const ok = checked && val === sol;
-                const bad = checked && val !== sol;
+                const live = wrong[key];
+                const ok = (checked && val === sol) || (val !== "" && val === sol);
+                const bad = live || (checked && val !== sol);
+                const inWord = activeCells.has(key);
                 return (
                   <div key={key} className="relative w-8 h-8">
                     {starts[key] && (
@@ -266,8 +326,14 @@ const MotsEncreuats = () => {
                       onChange={(e) => handleChange(key, e.target.value)}
                       maxLength={1}
                       aria-label={`Cel·la ${r}-${c}`}
-                      className={`w-8 h-8 text-center text-sm font-extrabold uppercase rounded-sm border-2 outline-none focus:border-primary bg-card text-foreground ${
-                        ok ? "border-green-500 bg-green-500/10" : bad ? "border-red-500 bg-red-500/10" : "border-border"
+                      className={`w-8 h-8 text-center text-sm font-extrabold uppercase rounded-sm border-2 outline-none focus:border-primary text-foreground transition-colors ${
+                        bad
+                          ? "border-red-500 bg-red-500/20 animate-pulse"
+                          : ok
+                          ? "border-green-500 bg-green-500/10"
+                          : inWord
+                          ? "border-primary/50 bg-primary/5"
+                          : "border-border bg-card"
                       }`}
                     />
                   </div>
@@ -276,7 +342,7 @@ const MotsEncreuats = () => {
             )}
           </div>
 
-          <div className="flex gap-2 mt-4 flex-wrap">
+          <div className="flex gap-2 mt-4 flex-wrap items-center">
             <button
               onClick={() => setChecked(true)}
               className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-primary-foreground font-bold text-sm active:scale-95"
@@ -284,8 +350,15 @@ const MotsEncreuats = () => {
               <Check className="w-4 h-4" /> Comprovar
             </button>
             <button
+              onClick={giveHint}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-bloom-yellow text-foreground font-bold text-sm active:scale-95"
+            >
+              <Lightbulb className="w-4 h-4" /> Pista
+            </button>
+            <button
               onClick={() => {
                 setEntries(solution);
+                setWrong({});
                 setChecked(true);
               }}
               className="flex items-center gap-2 px-4 py-2 rounded-xl bg-muted text-foreground font-bold text-sm active:scale-95"
@@ -298,7 +371,19 @@ const MotsEncreuats = () => {
             >
               <RotateCcw className="w-4 h-4" /> Nou joc
             </button>
+            <label className="flex items-center gap-2 text-sm font-semibold cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={autoCorrect}
+                onChange={(e) => setAutoCorrect(e.target.checked)}
+                className="w-4 h-4 accent-primary"
+              />
+              Auto-correcció
+            </label>
           </div>
+          {hintText && (
+            <p className="mt-3 text-sm font-semibold text-amber-600 dark:text-amber-400">💡 {hintText}</p>
+          )}
           {solved && (
             <p className="mt-3 font-bold text-green-600">🎉 Molt bé! Has completat els mots encreuats.</p>
           )}
@@ -310,8 +395,15 @@ const MotsEncreuats = () => {
             <ul className="space-y-1 text-sm">
               {across.map((p) => (
                 <li key={`A${p.num}`}>
-                  <span className="font-bold">{p.num}.</span> {p.clue}{" "}
-                  <span className="text-muted-foreground">({p.word.length})</span>
+                  <button
+                    onClick={() => focusWord(p)}
+                    className={`text-left rounded-md px-1 hover:bg-muted transition-colors ${
+                      activeNum === `A${p.num}` ? "bg-primary/10 font-semibold" : ""
+                    }`}
+                  >
+                    <span className="font-bold">{p.num}.</span> {p.clue}{" "}
+                    <span className="text-muted-foreground">({p.word.length})</span>
+                  </button>
                 </li>
               ))}
             </ul>
@@ -321,8 +413,15 @@ const MotsEncreuats = () => {
             <ul className="space-y-1 text-sm">
               {down.map((p) => (
                 <li key={`D${p.num}`}>
-                  <span className="font-bold">{p.num}.</span> {p.clue}{" "}
-                  <span className="text-muted-foreground">({p.word.length})</span>
+                  <button
+                    onClick={() => focusWord(p)}
+                    className={`text-left rounded-md px-1 hover:bg-muted transition-colors ${
+                      activeNum === `D${p.num}` ? "bg-primary/10 font-semibold" : ""
+                    }`}
+                  >
+                    <span className="font-bold">{p.num}.</span> {p.clue}{" "}
+                    <span className="text-muted-foreground">({p.word.length})</span>
+                  </button>
                 </li>
               ))}
             </ul>
