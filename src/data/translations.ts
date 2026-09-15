@@ -1,3 +1,5 @@
+import { translationsGl } from "./translationsGl";
+
 // Translations keyed by Catalan word → { langCode: translation }
 // Languages: es, en, fr, ar, wo, uk, mnk, it, el, ur, ptBR, pt, ha, zh, hi, snk, ro, srk
 
