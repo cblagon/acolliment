@@ -1,3 +1,5 @@
+import { translationsGl } from "./translationsGl";
+
 // Translations keyed by Catalan word → { langCode: translation }
 // Languages: es, en, fr, ar, wo, uk, mnk, it, el, ur, ptBR, pt, ha, zh, hi, snk, ro, srk
 
@@ -430,9 +432,9 @@ export const translations: Record<string, Record<string, string>> = {
 export function getTraduccio(paraula: string, lang: string): string {
   if (lang === "ca") return paraula;
   const entry = translations[paraula];
-  if (!entry) return paraula;
-  // Galician has no dedicated entries yet: fall back to Portuguese (closest language), then English.
-  if (lang === "gl") return entry["gl"] || entry["pt"] || entry["ptBR"] || entry["en"] || paraula;
+  if (!entry) return lang === "gl" ? translationsGl[paraula] || paraula : paraula;
+  // Gallec: diccionari propi; si falta alguna paraula, portuguès com a llengua més propera.
+  if (lang === "gl") return translationsGl[paraula] || entry["gl"] || entry["pt"] || entry["ptBR"] || entry["en"] || paraula;
   return entry[lang] || entry["en"] || paraula;
 }
 
