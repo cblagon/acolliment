@@ -120,6 +120,45 @@ const songsByLang: Partial<Record<LangCode, Record<string, Song[]>>> = {
       { title: "La chanson des couleurs", artist: "Comptines", youtubeId: "0jbmzKcpxa4", description: "Apprends les couleurs en chantant." },
     ],
   },
+  gl: {
+    salutacions: [
+      { title: "Bos días — saúdos en galego", artist: "YouTube", searchQuery: "cancion bos dias saudos galego nenos", description: "Aprende a saudar en galego cantando." },
+      { title: "Como te chamas? — presentacións", artist: "YouTube", searchQuery: "cancion infantil galego como te chamas presentarse", description: "Canción para presentarse en galego." },
+    ],
+    animals: [
+      { title: "Os animais en galego", artist: "YouTube", searchQuery: "cancion infantil galego os animais", description: "Nomes de animais cantando en galego." },
+    ],
+    aula: [
+      { title: "O abecedario galego", artist: "YouTube", searchQuery: "cancion abecedario galego nenos", description: "As letras e o vocabulario da aula." },
+    ],
+    colors: [
+      { title: "As cores en galego", artist: "YouTube", searchQuery: "cancion infantil galego as cores", description: "Vermello, azul, verde... as cores cantando." },
+    ],
+    numeros: [
+      { title: "Os números do 1 ao 10", artist: "YouTube", searchQuery: "cancion infantil galego numeros 1 ao 10 contar", description: "Conta do 1 ao 10 en galego." },
+    ],
+    familia: [
+      { title: "A miña familia", artist: "YouTube", searchQuery: "cancion infantil galega a familia pai nai", description: "Vocabulario da familia en galego." },
+    ],
+    "cos-huma": [
+      { title: "As partes do corpo", artist: "YouTube", searchQuery: "cancion infantil galega partes do corpo", description: "Cabeza, brazos, pernas... en galego." },
+    ],
+    menjar: [
+      { title: "Froitas e verduras", artist: "YouTube", searchQuery: "cancion infantil galega froitas e verduras", description: "Vocabulario da comida en galego." },
+    ],
+    emocions: [
+      { title: "As emocións", artist: "YouTube", searchQuery: "cancion infantil galega emocions sentimentos", description: "Alegría, medo, tristeza... en galego." },
+    ],
+    "dies-setmana": [
+      { title: "Os días da semana", artist: "YouTube", searchQuery: "cancion galega dias da semana nenos", description: "Luns, martes, mércores... cantando." },
+    ],
+    casa: [
+      { title: "A miña casa", artist: "YouTube", searchQuery: "cancion infantil galega a casa habitacions", description: "As estancias da casa en galego." },
+    ],
+    roba: [
+      { title: "A roupa", artist: "YouTube", searchQuery: "cancion infantil galega a roupa vestirse", description: "Vocabulario da roupa en galego." },
+    ],
+  },
 };
 
 /** Word for "children's songs" used to build a YouTube search per language. */
