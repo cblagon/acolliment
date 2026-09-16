@@ -56,7 +56,7 @@ const Index = () => {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
   const [view, setView] = useState<View>({ type: "grid" });
-  const learningContentRef = useRef<HTMLElement>(null);
+  const learningContentRef = useRef<HTMLDivElement>(null);
 
   const scrollToLearning = () => {
     learningContentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -132,8 +132,8 @@ const Index = () => {
           <button onClick={() => setView({ type: "grid" })} className="flex items-center gap-2 active:scale-95 transition-transform">
             <span className="text-3xl">🌍</span>
             <div className="text-left">
-              <div className="text-xl font-extrabold leading-none text-foreground">
-                {t(helpLang, "learnTitle", { lang: langName(targetLang, helpLang) })}
+              <div className="text-xl font-black leading-none text-foreground">
+                ACOLLIMENT
               </div>
               <p className="text-xs text-muted-foreground font-semibold">{t(helpLang, "appSubtitle")}</p>
             </div>
