@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { type Bloc, type Level } from "@/data/blocksData";
 import { useBlocs } from "@/hooks/useBlocs";
 import { useLanguages } from "@/hooks/useLanguage";
@@ -21,6 +21,7 @@ import { LanguageSelector } from "@/components/LanguageSelector";
 import { VisitorCounter } from "@/components/VisitorCounter";
 import { DubbedVideoPlayer } from "@/components/DubbedVideoPlayer";
 import { CentreBanner } from "@/components/CentreBanner";
+import { WelcomeHero } from "@/components/WelcomeHero";
 import { exportAllToPDF } from "@/hooks/useExportPDF";
 import { t, langName } from "@/i18n/ui";
 import { tBlocName } from "@/i18n/blocNames";
@@ -55,6 +56,11 @@ const Index = () => {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
   const [view, setView] = useState<View>({ type: "grid" });
+  const learningContentRef = useRef<HTMLDivElement>(null);
+
+  const scrollToLearning = () => {
+    learningContentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   // IDs that belong to the "Presentacions orals" section (rendered separately), per level
   const ORAL_IDS_BY_LEVEL: Record<Level, Set<string>> = {
@@ -126,9 +132,9 @@ const Index = () => {
           <button onClick={() => setView({ type: "grid" })} className="flex items-center gap-2 active:scale-95 transition-transform">
             <span className="text-3xl">🌍</span>
             <div className="text-left">
-              <h1 className="text-xl font-extrabold leading-none text-foreground">
-                {t(helpLang, "learnTitle", { lang: langName(targetLang, helpLang) })}
-              </h1>
+              <div className="text-xl font-black leading-none text-foreground">
+                ACOLLIMENT
+              </div>
               <p className="text-xs text-muted-foreground font-semibold">{t(helpLang, "appSubtitle")}</p>
             </div>
           </button>
@@ -338,7 +344,13 @@ const Index = () => {
         </div>
       </header>
 
-      <CentreBanner />
+      {view.type === "grid" && (
+        <WelcomeHero helpLang={helpLang} targetLang={targetLang} onStart={scrollToLearning} />
+      )}
+
+      <div ref={learningContentRef} className="scroll-mt-24">
+        <CentreBanner />
+      </div>
 
       {/* Content */}
       <main className="container py-8">
