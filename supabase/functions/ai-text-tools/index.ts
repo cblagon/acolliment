@@ -42,7 +42,7 @@ Deno.serve(async (req) => {
     const langName: Record<string, string> = {
       ca: "català", es: "castellà", en: "anglès", fr: "francès", gl: "gallec",
       ar: "àrab", it: "italià", pt: "portuguès", de: "alemany",
-      uk: "ucraïnès", ro: "romanès", zh: "xinès (simplificat)", hi: "hindi", ur: "urdú",
+      uk: "ucraïnès", ro: "romanès", zh: "xinès (simplificat)", hi: "hindi", ur: "urdú", ps: "paixtu (pastú)",
     };
 
     let system = "";

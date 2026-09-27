@@ -21,6 +21,7 @@ const TARGET_LANGS: Record<string, { label: string; bcp47: string }> = {
   de: { label: "Deutsch", bcp47: "de-DE" },
   ar: { label: "العربية", bcp47: "ar-SA" },
   ur: { label: "اردو", bcp47: "ur-PK" },
+  ps: { label: "پښتو", bcp47: "ps-AF" },
   ro: { label: "Română", bcp47: "ro-RO" },
   uk: { label: "Українська", bcp47: "uk-UA" },
   zh: { label: "中文", bcp47: "zh-CN" },
@@ -295,7 +296,7 @@ export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
             className={`bg-white/95 rounded-2xl px-4 py-3 max-w-[90%] shadow-xl ${
               isLeft ? "self-start" : "self-end"
             }`}
-            dir={bcp47.startsWith("ar") || bcp47.startsWith("ur") ? "rtl" : "ltr"}
+            dir={bcp47.startsWith("ar") || bcp47.startsWith("ur") || bcp47.startsWith("ps") ? "rtl" : "ltr"}
           >
             <p className="text-sm font-bold text-gray-800 leading-relaxed">
               {displayText}

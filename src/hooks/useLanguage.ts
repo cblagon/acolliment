@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 
-export type LangCode = "ca" | "en" | "es" | "ar" | "wo" | "uk" | "fr" | "mnk" | "it" | "el" | "ur" | "ptBR" | "pt" | "ha" | "zh" | "hi" | "snk" | "ro" | "srk" | "gl";
+export type LangCode = "ca" | "en" | "es" | "ar" | "wo" | "uk" | "fr" | "mnk" | "it" | "el" | "ur" | "ptBR" | "pt" | "ha" | "zh" | "hi" | "snk" | "ro" | "srk" | "gl" | "ps";
 
 export const LANGUAGES: Record<LangCode, { name: string; flag: string; nativeName: string }> = {
   ca: { name: "Català", flag: "🏴󠁥󠁳󠁣󠁴󠁿", nativeName: "Català" },
@@ -10,6 +10,7 @@ export const LANGUAGES: Record<LangCode, { name: string; flag: string; nativeNam
   fr: { name: "Francès", flag: "🇫🇷", nativeName: "Français" },
   ar: { name: "Àrab", flag: "🇲🇦", nativeName: "العربية" },
   ur: { name: "Urdú", flag: "🇵🇰", nativeName: "اردو" },
+  ps: { name: "Paixtu", flag: "🇦🇫", nativeName: "پښتو" },
   wo: { name: "Wolof", flag: "🇸🇳", nativeName: "Wolof" },
   uk: { name: "Ucraïnès", flag: "🇺🇦", nativeName: "Українська" },
   mnk: { name: "Mandinga", flag: "🇬🇲", nativeName: "Mandinka" },
