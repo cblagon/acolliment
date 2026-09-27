@@ -7,6 +7,7 @@ import { t, langName } from "@/i18n/ui";
 
 const LANG_NAMES: Record<LangCode, string> = {
   ca: "Català",
+  ps: "Pashto",
   es: "Castellà",
   gl: "Galego",
   en: "English",
