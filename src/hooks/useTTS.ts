@@ -11,6 +11,7 @@ export const LANG_TO_BCP47: Record<LangCode, string | null> = {
   fr: "fr-FR",
   ar: "ar-SA",
   ur: "ur-PK",
+  ps: "ps-AF",
   uk: "uk-UA",
   it: "it-IT",
   el: "el-GR",
