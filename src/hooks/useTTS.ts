@@ -11,6 +11,7 @@ export const LANG_TO_BCP47: Record<LangCode, string | null> = {
   fr: "fr-FR",
   ar: "ar-SA",
   ur: "ur-PK",
+  va: "ca-ES",
   ps: "ps-AF",
   uk: "uk-UA",
   it: "it-IT",
@@ -142,7 +143,7 @@ export function useTTS() {
       speakingRef.current = true;
 
       // En català cal apostrofar (l'elefant, d'aigua) perquè es pronunciï bé.
-      const spoken = lang === "ca" ? apostrofaCatala(text) : text;
+      const spoken = (lang === "ca" || lang === "va") ? apostrofaCatala(text) : text;
       const utter = new SpeechSynthesisUtterance(spoken);
       if (voice) utter.voice = voice;
       utter.lang = bcp47;

@@ -1,9 +1,10 @@
 import { useState, useCallback } from "react";
 
-export type LangCode = "ca" | "en" | "es" | "ar" | "wo" | "uk" | "fr" | "mnk" | "it" | "el" | "ur" | "ptBR" | "pt" | "ha" | "zh" | "hi" | "snk" | "ro" | "srk" | "gl" | "ps";
+export type LangCode = "ca" | "en" | "es" | "ar" | "wo" | "uk" | "fr" | "mnk" | "it" | "el" | "ur" | "ptBR" | "pt" | "ha" | "zh" | "hi" | "snk" | "ro" | "srk" | "gl" | "ps" | "va";
 
 export const LANGUAGES: Record<LangCode, { name: string; flag: string; nativeName: string }> = {
   ca: { name: "Català", flag: "🏴󠁥󠁳󠁣󠁴󠁿", nativeName: "Català" },
+  va: { name: "Valencià", flag: "🦇", nativeName: "Valencià" },
   es: { name: "Castellà", flag: "🇪🇸", nativeName: "Español" },
   gl: { name: "Gallec", flag: "🏴", nativeName: "Galego" },
   en: { name: "Anglès", flag: "🇬🇧", nativeName: "English" },
