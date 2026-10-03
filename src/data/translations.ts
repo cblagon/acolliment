@@ -1,4 +1,5 @@
 import { translationsGl } from "./translationsGl";
+import { translationsVa } from "./translationsVa";
 import { translationsPs } from "./translationsPs";
 
 // Translations keyed by Catalan word → { langCode: translation }
@@ -431,7 +432,8 @@ export const translations: Record<string, Record<string, string>> = {
 
 /** Get translation for a fitxa in the given language. 'ca' returns the Catalan word as-is. */
 export function getTraduccio(paraula: string, lang: string): string {
-  if (lang === "ca" || lang === "va") return paraula;
+  if (lang === "ca") return paraula;
+  if (lang === "va") return translationsVa[paraula] || paraula;
   const entry = translations[paraula];
   if (lang === "ps") return translationsPs[paraula] || entry?.["en"] || paraula;
   if (!entry) return lang === "gl" ? translationsGl[paraula] || paraula : paraula;
