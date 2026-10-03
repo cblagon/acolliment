@@ -433,7 +433,7 @@ export const translations: Record<string, Record<string, string>> = {
 export function getTraduccio(paraula: string, lang: string): string {
   if (lang === "ca") return paraula;
   const entry = translations[paraula];
-  if (lang === "ps") return translationsPs[paraula] || entry?.["ur"] || entry?.["en"] || paraula;
+  if (lang === "ps") return translationsPs[paraula] || entry?.["en"] || paraula;
   if (!entry) return lang === "gl" ? translationsGl[paraula] || paraula : paraula;
   // Gallec: diccionari propi; si falta alguna paraula, portuguès com a llengua més propera.
   if (lang === "gl") return translationsGl[paraula] || entry["gl"] || entry["pt"] || entry["ptBR"] || entry["en"] || paraula;
