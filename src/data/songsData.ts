@@ -191,7 +191,7 @@ const SEARCH_TERM: Partial<Record<LangCode, string>> = {
  * available and otherwise a YouTube search link in that language.
  */
 export function getSongsForBloc(blocId: string, lang: LangCode = "ca", blocName?: string): Song[] {
-  if (lang === "ca") return blocSongs[blocId] || [];
+  if (lang === "ca" || lang === "va") return blocSongs[blocId] || [];
 
   const curated = songsByLang[lang]?.[blocId];
   if (curated?.length) return curated;
