@@ -12,18 +12,25 @@ interface RoleplayPlayerProps {
 // Target learning languages: code → { label, bcp47 }
 const TARGET_LANGS: Record<string, { label: string; bcp47: string }> = {
   ca: { label: "Català", bcp47: "ca-ES" },
+  va: { label: "Valencià", bcp47: "ca-ES" },
   es: { label: "Español", bcp47: "es-ES" },
   gl: { label: "Galego", bcp47: "gl-ES" },
   en: { label: "English", bcp47: "en-US" },
   fr: { label: "Français", bcp47: "fr-FR" },
   it: { label: "Italiano", bcp47: "it-IT" },
   pt: { label: "Português", bcp47: "pt-PT" },
-  de: { label: "Deutsch", bcp47: "de-DE" },
+  ptBR: { label: "Português (Brasil)", bcp47: "pt-BR" },
   ar: { label: "العربية", bcp47: "ar-SA" },
   ur: { label: "اردو", bcp47: "ur-PK" },
   ps: { label: "پښتو", bcp47: "ps-AF" },
+  ha: { label: "حسانية", bcp47: "ar-MR" },
+  wo: { label: "Wolof", bcp47: "wo-SN" },
+  mnk: { label: "Mandinka", bcp47: "mnk-GM" },
+  snk: { label: "Soninkanxaane", bcp47: "snk-ML" },
+  srk: { label: "Saranxulle", bcp47: "srk-ML" },
   ro: { label: "Română", bcp47: "ro-RO" },
   uk: { label: "Українська", bcp47: "uk-UA" },
+  el: { label: "Ελληνικά", bcp47: "el-GR" },
   zh: { label: "中文", bcp47: "zh-CN" },
   hi: { label: "हिन्दी", bcp47: "hi-IN" },
 };
@@ -34,7 +41,6 @@ export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
   const { targetLang: appTargetLang } = useLanguages();
   // Map app LangCode → RoleplayPlayer target language code
   const mapAppLang = (code: string): string => {
-    if (code === "ptBR") return "pt";
     if (TARGET_LANGS[code]) return code;
     return "ca";
   };
