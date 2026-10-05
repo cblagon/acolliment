@@ -5,12 +5,12 @@ import { getTraduccio, getWord } from "@/data/translations";
 import { useTTS } from "@/hooks/useTTS";
 import { t } from "@/i18n/ui";
 import { tBlocName } from "@/i18n/blocNames";
+import { SpeechCheck } from "@/components/SpeechCheck";
 import { invokeQueued } from "@/lib/aiQueue";
 import { Volume2, VolumeX, ChevronLeft, ChevronRight, ArrowLeft, Gamepad2, Music, Loader2 } from "lucide-react";
 
 const ORAL_BLOC_IDS = new Set(["presentat", "descriu-companya"]);
 const ORAL_TRANSLATION_CACHE_PREFIX = "oral-presentation-translation:v1:";
-import { SpeechCheck } from "@/components/SpeechCheck";
 
 interface FitxaViewerProps {
   bloc: Bloc;
