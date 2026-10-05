@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { type Bloc } from "@/data/blocksData";
 import { type LangCode } from "@/hooks/useLanguage";
 import { getTraduccio, getWord } from "@/data/translations";
 import { useTTS } from "@/hooks/useTTS";
 import { t } from "@/i18n/ui";
 import { tBlocName } from "@/i18n/blocNames";
-import { Volume2, VolumeX, ChevronLeft, ChevronRight, ArrowLeft, Gamepad2, Music } from "lucide-react";
 import { SpeechCheck } from "@/components/SpeechCheck";
+import { invokeQueued } from "@/lib/aiQueue";
+import { Volume2, VolumeX, ChevronLeft, ChevronRight, ArrowLeft, Gamepad2, Music, Loader2 } from "lucide-react";
+
+const ORAL_BLOC_IDS = new Set(["presentat", "descriu-companya"]);
+const ORAL_TRANSLATION_CACHE_PREFIX = "oral-presentation-translation:v1:";
 
 interface FitxaViewerProps {
   bloc: Bloc;
@@ -20,8 +24,64 @@ interface FitxaViewerProps {
 export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, onStartSongs }: FitxaViewerProps) {
   const [current, setCurrent] = useState(0);
   const [flipped, setFlipped] = useState(false);
+  const [translatedPhrases, setTranslatedPhrases] = useState<string[] | null>(null);
+  const [translatingPhrases, setTranslatingPhrases] = useState(false);
   const speak = useTTS();
   const fitxa = bloc.fitxes[current];
+  const isOralPresentation = bloc.level === "A1" && ORAL_BLOC_IDS.has(bloc.id);
+
+  useEffect(() => {
+    if (!isOralPresentation || targetLang === "ca") {
+      setTranslatedPhrases(null);
+      setTranslatingPhrases(false);
+      return;
+    }
+
+    const cacheKey = `${ORAL_TRANSLATION_CACHE_PREFIX}${bloc.id}:${targetLang}`;
+    try {
+      const cached = localStorage.getItem(cacheKey);
+      if (cached) {
+        const parsed = JSON.parse(cached) as string[];
+        if (Array.isArray(parsed) && parsed.length === bloc.fitxes.length) {
+          setTranslatedPhrases(parsed);
+          setTranslatingPhrases(false);
+          return;
+        }
+      }
+    } catch {
+      // Ignore an invalid cache entry and request a fresh translation.
+    }
+
+    let cancelled = false;
+    setTranslatedPhrases(null);
+    setTranslatingPhrases(true);
+    invokeQueued<{ lines?: string[] }>("ai-text-tools", {
+      action: "translate-lines",
+      targetLang,
+      lines: bloc.fitxes.map((item) => item.frase),
+    })
+      .then((response) => {
+        if (cancelled) return;
+        const lines = response.lines ?? [];
+        if (lines.length !== bloc.fitxes.length) return;
+        setTranslatedPhrases(lines);
+        try {
+          localStorage.setItem(cacheKey, JSON.stringify(lines));
+        } catch {
+          // Translation still works when browser storage is unavailable.
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setTranslatedPhrases(null);
+      })
+      .finally(() => {
+        if (!cancelled) setTranslatingPhrases(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [bloc.id, bloc.fitxes, isOralPresentation, targetLang]);
 
   const go = (dir: 1 | -1) => {
     setCurrent((c) => (c + dir + bloc.fitxes.length) % bloc.fitxes.length);
@@ -30,7 +90,8 @@ export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, o
 
   const paraulaTarget = getWord(fitxa.paraula, targetLang);
   const traduccio = getTraduccio(fitxa.paraula, helpLang);
-  const showPhrase = targetLang === "ca";
+  const targetPhrase = targetLang === "ca" ? fitxa.frase : translatedPhrases?.[current];
+  const showPhrase = targetLang === "ca" || isOralPresentation;
   const ttsOk = speak.isAvailable(targetLang);
 
   return (
@@ -91,7 +152,14 @@ export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, o
           <span className="text-5xl">{fitxa.emoji}</span>
           <span className="text-2xl font-extrabold text-center">{paraulaTarget}</span>
           <span className="text-lg opacity-90 text-center">{traduccio}</span>
-          {showPhrase && <p className="text-sm opacity-80 italic text-center mt-2">"{fitxa.frase}"</p>}
+          {showPhrase && translatingPhrases && (
+            <span className="inline-flex items-center gap-2 text-sm opacity-80">
+              <Loader2 className="h-4 w-4 animate-spin" /> Traduint…
+            </span>
+          )}
+          {showPhrase && targetPhrase && (
+            <p className="text-sm opacity-80 italic text-center mt-2">"{targetPhrase}"</p>
+          )}
         </div>
       </div>
 
@@ -104,7 +172,7 @@ export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, o
           <ChevronLeft className="w-6 h-6" />
         </button>
         <button
-          onClick={() => ttsOk && speak(showPhrase ? paraulaTarget + ". " + fitxa.frase : paraulaTarget, targetLang)}
+          onClick={() => ttsOk && speak(targetPhrase ? `${paraulaTarget}. ${targetPhrase}` : paraulaTarget, targetLang)}
           disabled={!ttsOk}
           title={ttsOk ? "" : t(helpLang, "ttsUnavailable")}
           className={`p-4 rounded-full ${bloc.color} text-white shadow-md hover:shadow-lg transition-all active:scale-90 disabled:opacity-40 disabled:cursor-not-allowed`}

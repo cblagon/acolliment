@@ -12,18 +12,25 @@ interface RoleplayPlayerProps {
 // Target learning languages: code → { label, bcp47 }
 const TARGET_LANGS: Record<string, { label: string; bcp47: string }> = {
   ca: { label: "Català", bcp47: "ca-ES" },
+  va: { label: "Valencià", bcp47: "ca-ES" },
   es: { label: "Español", bcp47: "es-ES" },
   gl: { label: "Galego", bcp47: "gl-ES" },
   en: { label: "English", bcp47: "en-US" },
   fr: { label: "Français", bcp47: "fr-FR" },
   it: { label: "Italiano", bcp47: "it-IT" },
   pt: { label: "Português", bcp47: "pt-PT" },
-  de: { label: "Deutsch", bcp47: "de-DE" },
+  ptBR: { label: "Português (Brasil)", bcp47: "pt-BR" },
   ar: { label: "العربية", bcp47: "ar-SA" },
   ur: { label: "اردو", bcp47: "ur-PK" },
   ps: { label: "پښتو", bcp47: "ps-AF" },
+  ha: { label: "حسانية", bcp47: "ar-MR" },
+  wo: { label: "Wolof", bcp47: "wo-SN" },
+  mnk: { label: "Mandinka", bcp47: "mnk-GM" },
+  snk: { label: "Soninkanxaane", bcp47: "snk-ML" },
+  srk: { label: "Saranxulle", bcp47: "srk-ML" },
   ro: { label: "Română", bcp47: "ro-RO" },
   uk: { label: "Українська", bcp47: "uk-UA" },
+  el: { label: "Ελληνικά", bcp47: "el-GR" },
   zh: { label: "中文", bcp47: "zh-CN" },
   hi: { label: "हिन्दी", bcp47: "hi-IN" },
 };
@@ -34,7 +41,6 @@ export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
   const { targetLang: appTargetLang } = useLanguages();
   // Map app LangCode → RoleplayPlayer target language code
   const mapAppLang = (code: string): string => {
-    if (code === "ptBR") return "pt";
     if (TARGET_LANGS[code]) return code;
     return "ca";
   };
@@ -79,9 +85,12 @@ export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
     };
   }, [bcp47]);
 
-  // Fetch translation when target lang changes
+  // Restore a cached translation when the target language or roleplay changes.
+  // New translations are requested only when the learner presses Play, avoiding
+  // simultaneous requests from every roleplay visible on the level page.
   useEffect(() => {
     setTranslateError(null);
+    setTranslating(false);
     if (targetLang === "ca") {
       setTranslatedLines(null);
       return;
@@ -97,33 +106,35 @@ export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
         }
       }
     } catch { /* ignore */ }
-
-    let cancelled = false;
-    setTranslating(true);
     setTranslatedLines(null);
-    (async () => {
-      try {
-        const resp = await invokeQueued<{ lines?: string[] }>("ai-text-tools", {
-          action: "translate-lines",
-          targetLang,
-          lines: data.lines.map((l) => l.text),
-        });
-        if (cancelled) return;
-        const outLines: string[] = resp?.lines ?? [];
-        if (outLines.length !== data.lines.length) {
-          throw new Error("Traducció incompleta");
-        }
-
-        setTranslatedLines(outLines);
-        try { localStorage.setItem(cacheKey, JSON.stringify(outLines)); } catch { /* ignore */ }
-      } catch (e) {
-        if (!cancelled) setTranslateError((e as Error).message ?? "Error de traducció");
-      } finally {
-        if (!cancelled) setTranslating(false);
-      }
-    })();
-    return () => { cancelled = true; };
   }, [targetLang, data.id, data.lines]);
+
+  const loadTranslation = useCallback(async (): Promise<boolean> => {
+    if (targetLang === "ca" || translatedLines) return true;
+    setTranslating(true);
+    setTranslateError(null);
+    try {
+      const resp = await invokeQueued<{ lines?: string[] }>("ai-text-tools", {
+        action: "translate-lines",
+        targetLang,
+        lines: data.lines.map((line) => line.text),
+      });
+      const outLines = resp.lines ?? [];
+      if (outLines.length !== data.lines.length) throw new Error("Traducció incompleta");
+      setTranslatedLines(outLines);
+      try {
+        localStorage.setItem(`${CACHE_PREFIX}${data.id}:${targetLang}`, JSON.stringify(outLines));
+      } catch {
+        // Playback still works when browser storage is unavailable.
+      }
+      return true;
+    } catch (error) {
+      setTranslateError(error instanceof Error ? error.message : "Error de traducció");
+      return false;
+    } finally {
+      setTranslating(false);
+    }
+  }, [data.id, data.lines, targetLang, translatedLines]);
 
   const getLineText = useCallback((idx: number) => {
     if (targetLang === "ca" || !translatedLines) return data.lines[idx]?.text ?? "";
@@ -140,7 +151,7 @@ export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
       utterance.lang = bcp47;
       utterance.rate = bcp47.startsWith("ca") ? 0.78 : 0.9;
       utterance.pitch = 1;
-      synthRef.current!.speak(utterance);
+      synthRef.current?.speak(utterance);
     };
 
     if (voiceRef.current) {
@@ -189,8 +200,9 @@ export function RoleplayPlayer({ data }: RoleplayPlayerProps) {
     return () => clearTimeout(timerRef.current);
   }, [isPlaying, currentLine, advanceLine, speak, getLineText, data.lines.length]);
 
-  const handlePlayPause = () => {
+  const handlePlayPause = async () => {
     if (translating) return;
+    if (!isPlaying && !(await loadTranslation())) return;
     if (finished) {
       setFinished(false);
       setCurrentLine(-1);
