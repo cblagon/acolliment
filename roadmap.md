@@ -5,3 +5,4 @@
 - [x] Fitxes A1: traducció al paixtu en tocar la fitxa
 - [x] Presentacions orals A1: text i pronunciació en la llengua d'aprenentatge
 - [x] Presentacions orals A2: text i pronunciació en la llengua d'aprenentatge
+- [x] Presentacions orals A1 i A2: traducció del títol de cada fitxa i de la frase completa
