@@ -204,7 +204,12 @@ export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, o
         </button>
       </div>
 
-      <SpeechCheck bloc={bloc} targetLang={targetLang} helpLang={helpLang} />
+      <SpeechCheck
+        bloc={bloc}
+        targetLang={targetLang}
+        helpLang={helpLang}
+        translatedWords={isOralPresentation ? translatedWords : null}
+      />
     </div>
   );
 }

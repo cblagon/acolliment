@@ -10,14 +10,17 @@ interface SpeechCheckProps {
   bloc: Bloc;
   targetLang: LangCode;
   helpLang: LangCode;
+  translatedWords?: string[] | null;
 }
 
-export function SpeechCheck({ bloc, targetLang, helpLang }: SpeechCheckProps) {
+export function SpeechCheck({ bloc, targetLang, helpLang, translatedWords }: SpeechCheckProps) {
   const sr = useSpeechRecognition(helpLang);
 
   const keywords = useMemo(
-    () => bloc.fitxes.map((f) => getWord(f.paraula, targetLang)).filter(Boolean),
-    [bloc, targetLang],
+    () => translatedWords?.length === bloc.fitxes.length
+      ? translatedWords.filter(Boolean)
+      : bloc.fitxes.map((f) => getWord(f.paraula, targetLang)).filter(Boolean),
+    [bloc, targetLang, translatedWords],
   );
 
   const spoken = (sr.transcript + " " + sr.interim).trim();
