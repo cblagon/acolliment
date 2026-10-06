@@ -9,7 +9,12 @@ import { SpeechCheck } from "@/components/SpeechCheck";
 import { invokeQueued } from "@/lib/aiQueue";
 import { Volume2, VolumeX, ChevronLeft, ChevronRight, ArrowLeft, Gamepad2, Music, Loader2 } from "lucide-react";
 
-const ORAL_BLOC_IDS = new Set(["presentat", "descriu-companya"]);
+const ORAL_BLOC_IDS = new Set([
+  "presentat",
+  "descriu-companya",
+  "presenta-familia",
+  "explica-rutina",
+]);
 const ORAL_TRANSLATION_CACHE_PREFIX = "oral-presentation-translation:v1:";
 
 interface FitxaViewerProps {
@@ -28,7 +33,7 @@ export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, o
   const [translatingPhrases, setTranslatingPhrases] = useState(false);
   const speak = useTTS();
   const fitxa = bloc.fitxes[current];
-  const isOralPresentation = bloc.level === "A1" && ORAL_BLOC_IDS.has(bloc.id);
+  const isOralPresentation = ORAL_BLOC_IDS.has(bloc.id);
 
   useEffect(() => {
     if (!isOralPresentation || targetLang === "ca") {
