@@ -15,7 +15,7 @@ const ORAL_BLOC_IDS = new Set([
   "presenta-familia",
   "explica-rutina",
 ]);
-const ORAL_TRANSLATION_CACHE_PREFIX = "oral-presentation-translation:v1:";
+const ORAL_TRANSLATION_CACHE_PREFIX = "oral-presentation-translation:v2:";
 
 interface FitxaViewerProps {
   bloc: Bloc;
@@ -29,6 +29,7 @@ interface FitxaViewerProps {
 export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, onStartSongs }: FitxaViewerProps) {
   const [current, setCurrent] = useState(0);
   const [flipped, setFlipped] = useState(false);
+  const [translatedWords, setTranslatedWords] = useState<string[] | null>(null);
   const [translatedPhrases, setTranslatedPhrases] = useState<string[] | null>(null);
   const [translatingPhrases, setTranslatingPhrases] = useState(false);
   const speak = useTTS();
@@ -37,6 +38,7 @@ export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, o
 
   useEffect(() => {
     if (!isOralPresentation || targetLang === "ca") {
+      setTranslatedWords(null);
       setTranslatedPhrases(null);
       setTranslatingPhrases(false);
       return;
@@ -46,9 +48,10 @@ export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, o
     try {
       const cached = localStorage.getItem(cacheKey);
       if (cached) {
-        const parsed = JSON.parse(cached) as string[];
-        if (Array.isArray(parsed) && parsed.length === bloc.fitxes.length) {
-          setTranslatedPhrases(parsed);
+        const parsed = JSON.parse(cached) as { words?: string[]; phrases?: string[] };
+        if (parsed.words?.length === bloc.fitxes.length && parsed.phrases?.length === bloc.fitxes.length) {
+          setTranslatedWords(parsed.words);
+          setTranslatedPhrases(parsed.phrases);
           setTranslatingPhrases(false);
           return;
         }
@@ -58,20 +61,27 @@ export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, o
     }
 
     let cancelled = false;
+    setTranslatedWords(null);
     setTranslatedPhrases(null);
     setTranslatingPhrases(true);
     invokeQueued<{ lines?: string[] }>("ai-text-tools", {
       action: "translate-lines",
       targetLang,
-      lines: bloc.fitxes.map((item) => item.frase),
+      lines: [
+        ...bloc.fitxes.map((item) => item.paraula),
+        ...bloc.fitxes.map((item) => item.frase),
+      ],
     })
       .then((response) => {
         if (cancelled) return;
         const lines = response.lines ?? [];
-        if (lines.length !== bloc.fitxes.length) return;
-        setTranslatedPhrases(lines);
+        if (lines.length !== bloc.fitxes.length * 2) return;
+        const words = lines.slice(0, bloc.fitxes.length);
+        const phrases = lines.slice(bloc.fitxes.length);
+        setTranslatedWords(words);
+        setTranslatedPhrases(phrases);
         try {
-          localStorage.setItem(cacheKey, JSON.stringify(lines));
+          localStorage.setItem(cacheKey, JSON.stringify({ words, phrases }));
         } catch {
           // Translation still works when browser storage is unavailable.
         }
@@ -93,7 +103,9 @@ export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, o
     setFlipped(false);
   };
 
-  const paraulaTarget = getWord(fitxa.paraula, targetLang);
+  const paraulaTarget = isOralPresentation && targetLang !== "ca"
+    ? translatedWords?.[current] ?? getWord(fitxa.paraula, targetLang)
+    : getWord(fitxa.paraula, targetLang);
   const traduccio = getTraduccio(fitxa.paraula, helpLang);
   const targetPhrase = targetLang === "ca" ? fitxa.frase : translatedPhrases?.[current];
   const showPhrase = targetLang === "ca" || isOralPresentation;
@@ -192,7 +204,12 @@ export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, o
         </button>
       </div>
 
-      <SpeechCheck bloc={bloc} targetLang={targetLang} helpLang={helpLang} />
+      <SpeechCheck
+        bloc={bloc}
+        targetLang={targetLang}
+        helpLang={helpLang}
+        translatedWords={isOralPresentation ? translatedWords : null}
+      />
     </div>
   );
 }
