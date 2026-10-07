@@ -8,3 +8,4 @@
 - [x] Presentacions orals A1 i A2: traducció del títol de cada fitxa i de la frase completa
 - [x] Presentacions orals B1: traducció del títol i de la frase
 - [x] Textos de la web en paixtu (portada, botons, ajuda, mapa, contacte, noms de blocs)
+- [x] Botons de dalt i pàgines legals en paixtu

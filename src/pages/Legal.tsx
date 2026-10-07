@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { useLanguages, type LangCode } from "@/hooks/useLanguage";
+import { LEGAL_PS } from "@/i18n/legalPs";
 
 type LegalKind = "privacy" | "cookies" | "legal";
 
@@ -227,6 +228,7 @@ const CONTENT: Record<LegalKind, Partial<Record<LangCode, LegalContent>>> = {
 };
 
 function getContent(kind: LegalKind, lang: LangCode): LegalContent {
+  if (lang === "ps") return LEGAL_PS[kind] as unknown as LegalContent;
   return CONTENT[kind][lang] ?? CONTENT[kind].es ?? CONTENT[kind].en!;
 }
 
