@@ -14,6 +14,8 @@ const ORAL_BLOC_IDS = new Set([
   "descriu-companya",
   "presenta-familia",
   "explica-rutina",
+  "experiencia-personal",
+  "opinio-tema",
 ]);
 const ORAL_TRANSLATION_CACHE_PREFIX = "oral-presentation-translation:v2:";
 
