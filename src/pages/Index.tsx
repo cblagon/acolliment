@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { type Bloc, type Level } from "@/data/blocksData";
 import { useBlocs } from "@/hooks/useBlocs";
 import { useLanguages } from "@/hooks/useLanguage";
+import { tNav } from "@/i18n/nav";
 import { useVideoBlocs } from "@/hooks/useVideoBlocs";
 import { useAuth } from "@/hooks/useAuth";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
@@ -144,11 +145,11 @@ const Index = () => {
               <DropdownMenuTrigger asChild>
                 <Link
                   to="/nivell"
-                  title="Nivell"
+                  title={tNav(helpLang, "level")}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-bloom-purple text-white text-base font-semibold hover:opacity-90 transition-all active:scale-95"
                 >
                   <BarChart3 className="w-4 h-4" />
-                  <span className="hidden sm:inline">Nivell</span>
+                  <span className="hidden sm:inline">{tNav(helpLang, "level")}</span>
                 </Link>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="min-w-[12rem]">
@@ -196,11 +197,11 @@ const Index = () => {
               <DropdownMenuTrigger asChild>
                 <Link
                   to="/eines"
-                  title="Corrector i traductor"
+                  title={tNav(helpLang, "toolsTitle")}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-secondary text-secondary-foreground text-base font-semibold hover:bg-secondary/80 transition-all active:scale-95"
                 >
                   <Wand2 className="w-4 h-4" />
-                  <span className="hidden sm:inline">Eines</span>
+                  <span className="hidden sm:inline">{tNav(helpLang, "tools")}</span>
                 </Link>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="min-w-[14rem]">
@@ -232,21 +233,21 @@ const Index = () => {
             </DropdownMenu>
             <Link
               to="/centres-mapa"
-              title="D'on ens visiten"
+              title={tNav(helpLang, "mapTitle")}
               className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-base font-semibold hover:bg-muted/80 transition-all active:scale-95"
             >
               <MapPin className="w-4 h-4" />
-              <span className="hidden sm:inline">Mapa</span>
+              <span className="hidden sm:inline">{tNav(helpLang, "map")}</span>
             </Link>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Link
                   to="/ajuda"
-                  title="Ajuda"
+                  title={tNav(helpLang, "help")}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-base font-semibold hover:bg-muted/80 transition-all active:scale-95"
                 >
                   <HelpCircle className="w-4 h-4" />
-                  <span className="hidden sm:inline">Ajuda</span>
+                  <span className="hidden sm:inline">{tNav(helpLang, "help")}</span>
                 </Link>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="min-w-[14rem]">
@@ -278,11 +279,11 @@ const Index = () => {
             </DropdownMenu>
             <Link
               to="/contacte"
-              title="Escriu a l'autora"
+              title={tNav(helpLang, "contactTitle")}
               className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-base font-semibold hover:bg-muted/80 transition-all active:scale-95"
             >
               <Mail className="w-4 h-4" />
-              <span className="hidden sm:inline">Contacte</span>
+              <span className="hidden sm:inline">{tNav(helpLang, "contact")}</span>
             </Link>
             <button
               onClick={toggleTheme}
@@ -295,7 +296,7 @@ const Index = () => {
             {isAdmin && (
               <Link
                 to="/admin"
-                title="Panell d'administració"
+                title={tNav(helpLang, "admin")}
                 className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500 text-white text-base font-semibold hover:bg-amber-600 transition-all active:scale-95"
               >
                 <ShieldCheck className="w-4 h-4" />
@@ -307,7 +308,7 @@ const Index = () => {
               <>
                 <Link
                   to="/change-password"
-                  title="Canviar contrasenya"
+                  title={tNav(helpLang, "changePassword")}
                   className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-base font-semibold hover:bg-muted/80 transition-all active:scale-95"
                 >
                   🔑
@@ -319,17 +320,17 @@ const Index = () => {
                   className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-muted text-foreground text-base font-semibold hover:bg-muted/80 transition-all active:scale-95"
                 >
                   <LogOut className="w-4 h-4" />
-                  <span className="hidden sm:inline">Sortir</span>
+                  <span className="hidden sm:inline">{tNav(helpLang, "logout")}</span>
                 </button>
               </>
             ) : (
               <Link
                 to="/auth"
-                title="Inicia sessió"
+                title={tNav(helpLang, "loginTitle")}
                 className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-primary text-primary-foreground text-base font-semibold hover:bg-primary/90 transition-all active:scale-95"
               >
                 <LogIn className="w-4 h-4" />
-                <span className="hidden sm:inline">Entrar</span>
+                <span className="hidden sm:inline">{tNav(helpLang, "login")}</span>
               </Link>
             )}
             {view.type !== "grid" && (
