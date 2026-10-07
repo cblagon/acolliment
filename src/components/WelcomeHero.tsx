@@ -83,6 +83,27 @@ const HERO_COPY: Partial<Record<LangCode, HeroCopy>> = {
     features: ["Mais idiomas", "Recursos práticos", "Inclusão real", "Comunicação"],
     featureDetails: ["Compreender e ser compreendido", "Vocabulário, atividades, jogos e mais", "Todos aprendem e contribuem", "Situações reais na escola"],
   },
+  ps: {
+    "eyebrow": "ACOLLIMENT ته ښه راغلاست",
+    "lineOne": "یوه نوې ژبه،",
+    "lineTwo": "یوه نړۍ چې ویې سپړو",
+    "lineThree": "او له نورو سره یې شریکه کړو.",
+    "description": "په خپل سرعت زده کړه وکړئ، په ډاډه زړه خبرې وکړئ او له لومړۍ ورځې په ښوونځي کې خپل ځای ومومئ.",
+    "start": "همدا اوس پیل کړئ",
+    "quote": "کله چې د خپل ښوونځي ژبه زده کوئ، د زده کړې، ملګرتیا او راتلونکي دروازې درته پرانیستل کېږي.",
+    "features": [
+      "نورې ژبې",
+      "عملي سرچینې",
+      "رښتینی ګډون",
+      "اړیکې"
+    ],
+    "featureDetails": [
+      "د نورو په خبرو پوه شئ او خپلې خبرې نورو ته ورسوئ",
+      "لغتونه، فعالیتونه، لوبې او نور ډېر څه",
+      "هر څوک زده کړه کوي او ونډه اخلي",
+      "په ښوونځي کې واقعي حالتونه"
+    ]
+  },
 };
 
 const FEATURE_ICONS = [Globe2, BookOpen, UsersRound, MessageCircle];

@@ -446,6 +446,36 @@ export const CONTACTE_STRINGS: Partial<Record<LangCode, ContacteStrings>> = {
     toastError: "भेज नहीं सका। कृपया फिर से प्रयास करें।",
     fallbackNotice: "यह पृष्ठ चयनित भाषा में उपलब्ध नहीं है। आप इसे इस भाषा में देख सकते हैं:",
   },
+  ps: {
+    "back": "شاته",
+    "title": "له لیکوالې سره اړیکه ونیسئ",
+    "subtitle": "ایا غواړئ څه ووایئ، وړاندیز وکړئ، یا د یوې تېروتنې خبر راکړئ؟ ستاسو د خبرو په اورېدو به خوشحاله شم 💛",
+    "nameLabel": "ستاسو نوم",
+    "namePlaceholder": "ستاسو نوم څه دی؟",
+    "emailLabel": "ستاسو برېښنالیک",
+    "emailPlaceholder": "example@email.com",
+    "subjectLabel": "د څه په اړه خبرې کول غواړئ؟",
+    "subjects": [
+      "غواړم یوه خوږه خبره وکړم 💛",
+      "یو وړاندیز لرم",
+      "یوه تېروتنه مې وموندله",
+      "همکاري / وړاندیز",
+      "بل څه"
+    ],
+    "messageLabel": "ستاسو پیغام",
+    "messagePlaceholder": "په ډاډه زړه راته ولیکئ...",
+    "challengeLabel": "🔢 یوه لنډه ازموینه چې ډاډ ترلاسه کړو تاسو روبوټ نه یاست",
+    "challengeText": "{a} + {b} څو کېږي؟",
+    "sending": "د لېږلو په حال کې...",
+    "sendButton": "پیغام ولېږئ",
+    "successTitle": "د زړه له کومې مننه!",
+    "successText": "ستاسو پیغام مې ترلاسه کړ او هر څومره ژر چې وکولای شم، ځواب به درکړم.",
+    "successButton": "بل پیغام ولېږئ",
+    "privacyNote": "ستاسو برېښنالیک به یوازې د ځواب درکولو لپاره وکاروو. له بل چا سره به یې شریک نه کړو.",
+    "toastSuccess": "پیغام ولېږل شو! مننه 💛",
+    "toastError": "پیغام ونه لېږل شو. مهرباني وکړئ بیا هڅه وکړئ.",
+    "fallbackNotice": "دا پاڼه په ټاکل شوې ژبه کې نشته. تاسو یې په دې ژبو کې لیدلای شئ:"
+  },
 };
 
 export function contacteStrings(lang: LangCode): ContacteStrings {
