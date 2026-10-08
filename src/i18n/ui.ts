@@ -5,6 +5,14 @@ import { type LangCode, LANGUAGES } from "@/hooks/useLanguage";
  * Use {lang} placeholder to inject the localized target language name.
  */
 type StringKey =
+  | "grammar"
+  | "grammarIntro"
+  | "grammarLoad"
+  | "grammarLoading"
+  | "grammarExercises"
+  | "grammarExamples"
+  | "grammarRetry"
+  | "grammarNext"
   | "appSubtitle"
   | "learnTitle"
   | "learning"
@@ -62,6 +70,14 @@ type StringKey =
 
 const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
   ca: {
+    grammar: "Gramàtica",
+    grammarIntro: "Regles, exemples i exercicis per al teu nivell.",
+    grammarLoad: "Obre la gramàtica",
+    grammarLoading: "Preparant els temes…",
+    grammarExercises: "exercicis",
+    grammarExamples: "Exemples",
+    grammarRetry: "Torna-ho a provar",
+    grammarNext: "Següent",
     appSubtitle: "Programa d'acollida lingüística",
     learnTitle: "Aprèn {lang}!",
     learning: "Aprenc",
@@ -119,6 +135,14 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     speechErrorMic: "No s'ha pogut iniciar el micròfon",
   },
   es: {
+    grammar: "Gramática",
+    grammarIntro: "Reglas, ejemplos y ejercicios para tu nivel.",
+    grammarLoad: "Abrir la gramática",
+    grammarLoading: "Preparando los temas…",
+    grammarExercises: "ejercicios",
+    grammarExamples: "Ejemplos",
+    grammarRetry: "Vuelve a intentarlo",
+    grammarNext: "Siguiente",
     appSubtitle: "Programa de acogida lingüística",
     learnTitle: "¡Aprende {lang}!",
     learning: "Aprendo",
@@ -176,6 +200,14 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     speechErrorMic: "No se ha podido iniciar el micrófono",
   },
   en: {
+    grammar: "Grammar",
+    grammarIntro: "Rules, examples and exercises for your level.",
+    grammarLoad: "Open grammar",
+    grammarLoading: "Preparing the topics…",
+    grammarExercises: "exercises",
+    grammarExamples: "Examples",
+    grammarRetry: "Try again",
+    grammarNext: "Next",
     appSubtitle: "Language welcome programme",
     learnTitle: "Learn {lang}!",
     learning: "I'm learning",
@@ -233,6 +265,14 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     speechErrorMic: "Could not start the microphone",
   },
   fr: {
+    grammar: "Grammaire",
+    grammarIntro: "Règles, exemples et exercices pour ton niveau.",
+    grammarLoad: "Ouvrir la grammaire",
+    grammarLoading: "Préparation des thèmes…",
+    grammarExercises: "exercices",
+    grammarExamples: "Exemples",
+    grammarRetry: "Réessaie",
+    grammarNext: "Suivant",
     appSubtitle: "Programme d'accueil linguistique",
     learnTitle: "Apprends {lang} !",
     learning: "J'apprends",
@@ -290,6 +330,14 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     speechErrorMic: "Impossible de démarrer le microphone",
   },
   ar: {
+    grammar: "القواعد",
+    grammarIntro: "قواعد وأمثلة وتمارين لمستواك.",
+    grammarLoad: "افتح القواعد",
+    grammarLoading: "جارٍ تحضير المواضيع…",
+    grammarExercises: "تمارين",
+    grammarExamples: "أمثلة",
+    grammarRetry: "حاول مرة أخرى",
+    grammarNext: "التالي",
     appSubtitle: "برنامج الاستقبال اللغوي",
     learnTitle: "!تعلّم {lang}",
     learning: "أتعلّم",
@@ -347,6 +395,14 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     speechErrorMic: "تعذر تشغيل الميكروفون",
   },
   gl: {
+    grammar: "Gramática",
+    grammarIntro: "Regras, exemplos e exercicios para o teu nivel.",
+    grammarLoad: "Abrir a gramática",
+    grammarLoading: "Preparando os temas…",
+    grammarExercises: "exercicios",
+    grammarExamples: "Exemplos",
+    grammarRetry: "Téntao de novo",
+    grammarNext: "Seguinte",
     appSubtitle: "Programa de acollemento lingüístico",
     learnTitle: "Aprende {lang}!",
     learning: "Estou a aprender",
@@ -404,6 +460,14 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     speechErrorMic: "Non se puido iniciar o micrófono",
   },
   pt: {
+    grammar: "Gramática",
+    grammarIntro: "Regras, exemplos e exercícios para o teu nível.",
+    grammarLoad: "Abrir a gramática",
+    grammarLoading: "A preparar os temas…",
+    grammarExercises: "exercícios",
+    grammarExamples: "Exemplos",
+    grammarRetry: "Tenta outra vez",
+    grammarNext: "Seguinte",
     appSubtitle: "Programa de acolhimento linguístico",
     learnTitle: "Aprende {lang}!",
     learning: "Estou a aprender",
@@ -1139,6 +1203,14 @@ const dict: Partial<Record<LangCode, Partial<Record<StringKey, string>>>> = {
     speechErrorMic: "Could not start the microphone",
   },
   ps: {
+    grammar: "ګرامر",
+    grammarIntro: "ستاسو د کچې لپاره قواعد، بېلګې او تمرینونه.",
+    grammarLoad: "ګرامر پرانیزئ",
+    grammarLoading: "موضوعګانې چمتو کېږي…",
+    grammarExercises: "تمرینونه",
+    grammarExamples: "بېلګې",
+    grammarRetry: "بیا هڅه وکړئ",
+    grammarNext: "بل",
     "appSubtitle": "د ژبې د ښه راغلاست پروګرام",
     "learnTitle": "{lang} زده کړئ!",
     "learning": "زه زده کوم",
