@@ -4,6 +4,7 @@ import { type LangCode, LANGUAGES } from "@/hooks/useLanguage";
 import { invokeQueued } from "@/lib/aiQueue";
 import { useTTS } from "@/hooks/useTTS";
 import { t } from "@/i18n/ui";
+import { GRAMMAR_CA } from "@/data/grammarCa";
 import { ArrowLeft, Check, Loader2, RotateCcw, Volume2, X } from "lucide-react";
 
 export interface GrammarTopic {
@@ -33,6 +34,10 @@ export function GrammarSection({ level, targetLang, helpLang }: Props) {
   useEffect(() => {
     setOpen(null);
     setError(null);
+    if (targetLang === "ca" || targetLang === "va") {
+      setTopics(GRAMMAR_CA[level]);
+      return;
+    }
     try {
       const c = localStorage.getItem(key);
       setTopics(c ? (JSON.parse(c) as GrammarTopic[]) : null);
