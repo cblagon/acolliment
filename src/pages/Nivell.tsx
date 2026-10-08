@@ -17,6 +17,7 @@ import { DubbedVideoPlayer } from "@/components/DubbedVideoPlayer";
 import { exportAllToPDF } from "@/hooks/useExportPDF";
 import { t } from "@/i18n/ui";
 import { tBlocName } from "@/i18n/blocNames";
+import { GrammarSection } from "@/components/GrammarSection";
 
 const levels: Level[] = ["A1", "A2", "B1"];
 const levelColors: Record<Level, string> = {
@@ -239,6 +240,8 @@ const Nivell = () => {
                 </div>
               </section>
             )}
+
+            <GrammarSection level={selectedLevel} targetLang={targetLang} helpLang={helpLang} />
           </div>
         )}
         {view.type === "fitxes" && (
