@@ -50,6 +50,76 @@ Deno.serve(async (req) => {
     let system = "";
     let user = "";
 
+    if (action === "grammar") {
+      const { level, helpLang } = body;
+      if (!["A1", "A2", "B1"].includes(level) || typeof targetLang !== "string" || !langName[targetLang]) {
+        return new Response(JSON.stringify({ error: "Paràmetres no vàlids" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      const target = langName[targetLang];
+      const help = langName[helpLang] ?? "català";
+      const schema = {
+        type: "object", additionalProperties: false, required: ["topics"],
+        properties: {
+          topics: {
+            type: "array",
+            items: {
+              type: "object", additionalProperties: false,
+              required: ["title", "emoji", "rule", "examples", "questions"],
+              properties: {
+                title: { type: "string" }, emoji: { type: "string" }, rule: { type: "string" },
+                examples: { type: "array", items: { type: "object", additionalProperties: false, required: ["text", "translation"], properties: { text: { type: "string" }, translation: { type: "string" } } } },
+                questions: { type: "array", items: { type: "object", additionalProperties: false, required: ["question", "options", "answer", "explanation"], properties: { question: { type: "string" }, options: { type: "array", items: { type: "string" } }, answer: { type: "integer" }, explanation: { type: "string" } } } },
+              },
+            },
+          },
+        },
+      };
+      const gsys = `Ets docent de llengües per a alumnat nouvingut de 12-16 anys. Crea 4 temes de gramàtica bàsics i progressius del ${target} adequats al nivell ${level} del MECR (els més útils per a aquest nivell i propis d'aquesta llengua). Per a cada tema: "title" (títol curt en ${help}), "emoji", "rule" (explicació clara i senzilla de 2-4 frases en ${help}), "examples" (4 exemples: "text" en ${target}, "translation" en ${help}), "questions" (5 preguntes de tria la resposta: "question" amb la frase en ${target} i un buit "___" o una pregunta curta, "options" exactament 3 opcions en ${target}, "answer" índex 0-2 de la correcta, "explanation" breu en ${help}). Varia la posició de la resposta correcta. Si escrius en català, apostrofa correctament.`;
+      const gres = await gatewayFetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${LOVABLE_API_KEY}` },
+        body: JSON.stringify({
+          model: "openai/gpt-6-astra",
+          reasoning_effort: "low",
+          stream: true,
+          response_format: { type: "json_schema", json_schema: { name: "grammar", strict: true, schema } },
+          messages: [{ role: "system", content: gsys }, { role: "user", content: `Nivell ${level}, llengua ${target}, explicacions en ${help}.` }],
+        }),
+      });
+      if (!gres.ok || !gres.body) {
+        const status = gres.status === 429 || gres.status === 402 || gres.status === 403 ? gres.status : 500;
+        const msg = status === 429 ? "Massa peticions. Torna-ho a provar d'aquí una estona."
+          : status === 402 ? "S'han esgotat els crèdits d'IA. Afegeix-ne al workspace."
+          : `Error IA: ${await gres.text()}`;
+        return new Response(JSON.stringify({ error: msg }), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+      const reader = gres.body.getReader();
+      const dec = new TextDecoder();
+      let buf = "", content = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buf += dec.decode(value, { stream: true });
+        const parts = buf.split("\n");
+        buf = parts.pop() ?? "";
+        for (const line of parts) {
+          const l = line.trim();
+          if (!l.startsWith("data:")) continue;
+          const d = l.slice(5).trim();
+          if (d === "[DONE]") continue;
+          try { content += JSON.parse(d)?.choices?.[0]?.delta?.content ?? ""; } catch { /* partial */ }
+        }
+      }
+      try {
+        const parsed = JSON.parse(content);
+        return new Response(JSON.stringify({ topics: parsed.topics ?? [] }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      } catch {
+        return new Response(JSON.stringify({ error: "Resposta IA no vàlida" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+    }
+
     if (action === "translate-lines") {
       if (!Array.isArray(lines) || lines.length === 0) {
         return new Response(JSON.stringify({ error: "Falten les línies" }), {
