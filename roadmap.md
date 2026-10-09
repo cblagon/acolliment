@@ -9,4 +9,5 @@
 - [x] Presentacions orals B1: traducció del títol i de la frase
 - [x] Textos de la web en paixtu (portada, botons, ajuda, mapa, contacte, noms de blocs)
 - [x] Botons de dalt i pàgines legals en paixtu
-- [ ] Gramàtica per llengua i nivell (A1-A2-B1): feta, pendent de provar quan hi hagi crèdits d'IA
+- [x] Gramàtica en català i valencià (A1, A2, B1), feta a mà
+- [ ] Gramàtica per a la resta de llengües: falten crèdits d'IA
