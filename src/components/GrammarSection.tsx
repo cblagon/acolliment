@@ -5,6 +5,11 @@ import { invokeQueued } from "@/lib/aiQueue";
 import { useTTS } from "@/hooks/useTTS";
 import { t } from "@/i18n/ui";
 import { GRAMMAR_CA } from "@/data/grammarCa";
+import { GRAMMAR_EN } from "@/data/grammarEn";
+import { GRAMMAR_FR } from "@/data/grammarFr";
+import { GRAMMAR_GL } from "@/data/grammarGl";
+
+const STATIC: Partial<Record<LangCode, typeof GRAMMAR_CA>> = { ca: GRAMMAR_CA, va: GRAMMAR_CA, en: GRAMMAR_EN, fr: GRAMMAR_FR, gl: GRAMMAR_GL };
 import { ArrowLeft, Check, Loader2, RotateCcw, Volume2, X } from "lucide-react";
 
 export interface GrammarTopic {
@@ -34,8 +39,8 @@ export function GrammarSection({ level, targetLang, helpLang }: Props) {
   useEffect(() => {
     setOpen(null);
     setError(null);
-    if (targetLang === "ca" || targetLang === "va") {
-      setTopics(GRAMMAR_CA[level]);
+    if (STATIC[targetLang]) {
+      setTopics(STATIC[targetLang]![level]);
       return;
     }
     try {

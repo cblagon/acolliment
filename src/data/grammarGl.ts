@@ -207,7 +207,7 @@ export const GRAMMAR_GL: Record<"A1" | "A2" | "B1", GrammarTopic[]> = {
         { question: "Comiches a mazá? Si, ___.", options: ["comina", "comín a", "a comín"], answer: 0, explanation: "Pronom darrere: comina." },
         { question: "Vou ___ agora. (facer + o)", options: ["facer o", "facelo", "o facer"], answer: 1, explanation: "-r + o → -lo: facelo." },
         { question: "Dálle o caderno ___ profesor.", options: ["ao", "o", "lle"], answer: 0, explanation: "Indirecte amb ao + lle." },
-        { question: "Escribín unha carta e enviei___.", options: ["-a", "-la", "-lle"], answer: 0, explanation: "enviei + a = enviei-a? Es diu enviéina; a l'escrit, pronom a." },
+        { question: "Mercaches os libros? Si, ___ onte.", options: ["mercámolos", "os mercamos", "mercamos os"], answer: 0, explanation: "Afirmativa: pronom darrere (mercamos + os → mercámolos)." },
         { question: "Que ___ dixeches á túa nai?", options: ["lle", "a", "o"], answer: 0, explanation: "Complement indirecte: lle." },
       ],
     },
