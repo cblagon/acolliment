@@ -10,4 +10,5 @@
 - [x] Textos de la web en paixtu (portada, botons, ajuda, mapa, contacte, noms de blocs)
 - [x] Botons de dalt i pàgines legals en paixtu
 - [x] Gramàtica en català i valencià (A1, A2, B1), feta a mà
-- [ ] Gramàtica per a la resta de llengües: falten crèdits d'IA
+- [x] Gramàtica anglès, francès i gallec (feta a mà)
+- [ ] Gramàtica per a la resta de llengües: amb IA en obrir-la
