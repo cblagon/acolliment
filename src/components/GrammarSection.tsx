@@ -39,9 +39,40 @@ export function GrammarSection({ level, targetLang, helpLang }: Props) {
   useEffect(() => {
     setOpen(null);
     setError(null);
-    if (STATIC[targetLang]) {
-      setTopics(STATIC[targetLang]![level]);
-      return;
+    const base = STATIC[targetLang]?.[level];
+    if (base) {
+      setTopics(base);
+      if (helpLang === "ca") return;
+      const tKey = `grammar-help:v1:${targetLang}:${level}:${helpLang}`;
+      try {
+        const c = localStorage.getItem(tKey);
+        if (c) { setTopics(JSON.parse(c) as GrammarTopic[]); return; }
+      } catch { /* ignore */ }
+      // Flatten the explanatory texts (not the target-language examples/options)
+      const lines: string[] = [];
+      base.forEach((tp) => {
+        lines.push(tp.title, tp.rule);
+        tp.examples.forEach((e) => lines.push(e.translation));
+        tp.questions.forEach((q) => lines.push(q.explanation));
+      });
+      let cancelled = false;
+      invokeQueued<{ lines?: string[] }>("ai-text-tools", { action: "translate-lines", targetLang: helpLang, lines }, 1)
+        .then((r) => {
+          const out = r.lines ?? [];
+          if (cancelled || out.length !== lines.length) return;
+          let i = 0;
+          const next = base.map((tp) => ({
+            ...tp,
+            title: out[i++],
+            rule: out[i++],
+            examples: tp.examples.map((e) => ({ ...e, translation: out[i++] })),
+            questions: tp.questions.map((q) => ({ ...q, explanation: out[i++] })),
+          }));
+          setTopics(next);
+          try { localStorage.setItem(tKey, JSON.stringify(next)); } catch { /* ignore */ }
+        })
+        .catch(() => { /* keep Catalan fallback */ });
+      return () => { cancelled = true; };
     }
     try {
       const c = localStorage.getItem(key);
