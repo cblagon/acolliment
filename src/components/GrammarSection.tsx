@@ -8,8 +8,14 @@ import { GRAMMAR_CA } from "@/data/grammarCa";
 import { GRAMMAR_EN } from "@/data/grammarEn";
 import { GRAMMAR_FR } from "@/data/grammarFr";
 import { GRAMMAR_GL } from "@/data/grammarGl";
+import { GRAMMAR_CA_EXTRA } from "@/data/grammarCaExtra";
+import { GRAMMAR_EN_EXTRA } from "@/data/grammarEnExtra";
+import { GRAMMAR_FR_EXTRA } from "@/data/grammarFrExtra";
+import { GRAMMAR_GL_EXTRA } from "@/data/grammarGlExtra";
 
-const STATIC: Partial<Record<LangCode, typeof GRAMMAR_CA>> = { ca: GRAMMAR_CA, va: GRAMMAR_CA, en: GRAMMAR_EN, fr: GRAMMAR_FR, gl: GRAMMAR_GL };
+const merge = (a: typeof GRAMMAR_CA, b: typeof GRAMMAR_CA): typeof GRAMMAR_CA => ({ A1: [...a.A1, ...b.A1], A2: [...a.A2, ...b.A2], B1: [...a.B1, ...b.B1] });
+const CA_ALL = merge(GRAMMAR_CA, GRAMMAR_CA_EXTRA);
+const STATIC: Partial<Record<LangCode, typeof GRAMMAR_CA>> = { ca: CA_ALL, va: CA_ALL, en: merge(GRAMMAR_EN, GRAMMAR_EN_EXTRA), fr: merge(GRAMMAR_FR, GRAMMAR_FR_EXTRA), gl: merge(GRAMMAR_GL, GRAMMAR_GL_EXTRA) };
 import { ArrowLeft, Check, Loader2, RotateCcw, Volume2, X } from "lucide-react";
 
 export interface GrammarTopic {
@@ -43,7 +49,7 @@ export function GrammarSection({ level, targetLang, helpLang }: Props) {
     if (base) {
       setTopics(base);
       if (helpLang === "ca") return;
-      const tKey = `grammar-help:v1:${targetLang}:${level}:${helpLang}`;
+      const tKey = `grammar-help:v2:${targetLang}:${level}:${helpLang}`;
       try {
         const c = localStorage.getItem(tKey);
         if (c) { setTopics(JSON.parse(c) as GrammarTopic[]); return; }
