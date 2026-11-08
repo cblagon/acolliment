@@ -85,6 +85,7 @@ export default function EsoAmbit() {
                     <span className="font-bold text-base leading-tight text-center">{tBlocName(bloc.nom, helpLang)}</span>
                     <span className="text-xs opacity-80">{bloc.fitxes.length} {t(helpLang, "fitxesCount")}</span>
                   </button>
+                  )
                 ))}
               </div>
             )}
