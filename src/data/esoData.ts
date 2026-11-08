@@ -1,5 +1,6 @@
 import type { Bloc } from "@/data/blocksData";
 import { eso2Ambits } from "@/data/esoData2";
+import { eso3Ambits } from "@/data/esoData3";
 
 export type CursId = "1eso" | "2eso" | "3eso" | "4eso";
 export type AmbitId =
@@ -567,8 +568,8 @@ const eso3: Curs = {
   id: "3eso",
   nom: "3r d'ESO",
   emoji: "3️⃣",
-  descripcio: "Properament: vocabulari del tercer curs d'ESO.",
-  ambits: emptyAmbits(),
+  descripcio: "Vocabulari del tercer curs d'ESO, organitzat per àmbits curriculars i adaptat al nivell.",
+  ambits: eso3Ambits,
 };
 
 const eso4: Curs = {
