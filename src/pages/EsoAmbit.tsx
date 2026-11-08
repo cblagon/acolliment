@@ -64,6 +64,17 @@ export default function EsoAmbit() {
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                 {ambit.blocs.map((bloc, index) => (
+                  bloc.fitxes.length === 0 ? (
+                    <div
+                      key={bloc.id}
+                      className="flex flex-col items-center justify-center gap-3 rounded-2xl p-6 border-2 border-dashed border-muted-foreground/30 text-muted-foreground animate-reveal-up"
+                      style={{ animationDelay: `${index * 60}ms` }}
+                    >
+                      <span className="text-5xl opacity-60 grayscale">{bloc.emoji}</span>
+                      <span className="font-bold text-base leading-tight text-center">{tBlocName(bloc.nom, helpLang)}</span>
+                      <span className="text-xs font-semibold uppercase tracking-wide">🚧 En construcció</span>
+                    </div>
+                  ) : (
                   <button
                     key={bloc.id}
                     onClick={() => setView({ type: "fitxes", bloc })}
@@ -74,6 +85,7 @@ export default function EsoAmbit() {
                     <span className="font-bold text-base leading-tight text-center">{tBlocName(bloc.nom, helpLang)}</span>
                     <span className="text-xs opacity-80">{bloc.fitxes.length} {t(helpLang, "fitxesCount")}</span>
                   </button>
+                  )
                 ))}
               </div>
             )}
