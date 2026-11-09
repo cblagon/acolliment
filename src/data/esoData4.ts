@@ -47,7 +47,7 @@ const matematic: Ambit = {
 };
 
 const ciencies: Ambit = {
-  id: "ciencies",
+  id: "cientific-tecnologic",
   nom: "Àmbit Científic",
   emoji: "🔬",
   color: "bg-secondary",
@@ -89,7 +89,7 @@ const artistic: Ambit = {
 };
 
 const fisic: Ambit = {
-  id: "fisic",
+  id: "educacio-fisica",
   nom: "Àmbit Físic i Salut",
   emoji: "⚽",
   color: "bg-accent",
@@ -103,7 +103,7 @@ const fisic: Ambit = {
 };
 
 const orientacio: Ambit = {
-  id: "orientacio",
+  id: "tutoria",
   nom: "Àmbit d'Orientació",
   emoji: "🧭",
   color: "bg-secondary",
