@@ -64,34 +64,36 @@ export default function EsoAmbit() {
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                 {ambit.blocs.map((bloc, index) => (
-                  bloc.fitxes.length === 0 ? (
-                    <div
-                      key={bloc.id}
-                      className="flex flex-col items-center justify-center gap-3 rounded-2xl p-6 border-2 border-dashed border-muted-foreground/30 text-muted-foreground animate-reveal-up"
-                      style={{ animationDelay: `${index * 60}ms` }}
-                    >
-                      <span className="text-5xl opacity-60 grayscale">{bloc.emoji}</span>
-                      <span className="font-bold text-base leading-tight text-center">{tBlocName(bloc.nom, helpLang)}</span>
-                      <span className="text-xs font-semibold uppercase tracking-wide">🚧 En construcció</span>
-                    </div>
-                  ) : (
                   <button
                     key={bloc.id}
                     onClick={() => setView({ type: "fitxes", bloc })}
-                    className={`group relative flex flex-col items-center justify-center gap-3 rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 active:scale-[0.97] ${bloc.color} text-white animate-reveal-up`}
+                    className={`group relative flex flex-col items-center justify-center gap-3 rounded-2xl p-6 pt-8 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 active:scale-[0.97] ${bloc.color} text-white animate-reveal-up`}
                     style={{ animationDelay: `${index * 60}ms` }}
                   >
                     <span className="text-5xl drop-shadow-sm transition-transform duration-300 group-hover:scale-110">{bloc.emoji}</span>
                     <span className="font-bold text-base leading-tight text-center">{tBlocName(bloc.nom, helpLang)}</span>
+                    {(bloc.fitxes.length === 0 || curs.enConstruccio) && (
+                      <span className="absolute top-2 right-2 rounded-full bg-bloom-yellow text-foreground text-[10px] font-bold px-2 py-0.5 shadow">🚧 En construcció</span>
+                    )}
                     <span className="text-xs opacity-80">{bloc.fitxes.length} {t(helpLang, "fitxesCount")}</span>
                   </button>
-                  )
                 ))}
               </div>
             )}
           </>
         )}
-        {view.type === "fitxes" && (
+        {view.type === "fitxes" && view.bloc.fitxes.length === 0 && (
+          <div className="max-w-xl mx-auto text-center rounded-2xl border-2 border-dashed border-bloom-yellow bg-bloom-yellow/15 p-10">
+            <p className="text-6xl mb-4">{view.bloc.emoji}</p>
+            <h2 className="text-2xl font-extrabold mb-2">{tBlocName(view.bloc.nom, helpLang)}</h2>
+            <p className="font-semibold">🚧 En construcció</p>
+            <p className="text-muted-foreground mt-2">Encara estem preparant i modificant les fitxes d'aquest mòdul. Torna-hi aviat!</p>
+            <button onClick={() => setView({ type: "grid" })} className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-5 py-2 font-bold">
+              <ArrowLeft className="w-4 h-4" /> Tornar
+            </button>
+          </div>
+        )}
+        {view.type === "fitxes" && view.bloc.fitxes.length > 0 && (
           <FitxaViewer
             bloc={view.bloc}
             targetLang={targetLang}

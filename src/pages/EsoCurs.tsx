@@ -23,6 +23,11 @@ export default function EsoCurs() {
       </header>
       <main className="container py-8">
         <p className="text-muted-foreground mb-6 text-balance">{curs.descripcio}</p>
+        {curs.enConstruccio && (
+          <div className="mb-6 rounded-2xl border-2 border-dashed border-bloom-yellow bg-bloom-yellow/15 p-4 text-sm font-semibold text-foreground">
+            🚧 En construcció: aquest curs ja es pot fer servir, però encara hi estem fent modificacions.
+          </div>
+        )}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {curs.ambits.map((a, i) => (
             <Link
