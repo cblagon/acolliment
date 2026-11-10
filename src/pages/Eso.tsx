@@ -23,7 +23,7 @@ export default function Eso() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {cursos.map((c, i) => {
             const totalBlocs = c.ambits.reduce((s, a) => s + a.blocs.length, 0);
-            const enConstruccio = totalBlocs === 0;
+            const enConstruccio = totalBlocs === 0 || !!c.enConstruccio;
             return (
               <Link
                 key={c.id}
@@ -42,7 +42,7 @@ export default function Eso() {
                 <span className="text-5xl drop-shadow-sm transition-transform duration-300 group-hover:scale-110">{c.emoji}</span>
                 <span className="font-bold text-lg leading-tight text-center">{c.nom}</span>
                 <span className="text-xs opacity-90">
-                  {enConstruccio ? "Properament" : `${totalBlocs} mòduls`}
+                  {totalBlocs === 0 ? "Properament" : `${totalBlocs} mòduls`}
                 </span>
               </Link>
             );

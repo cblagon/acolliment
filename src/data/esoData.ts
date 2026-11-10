@@ -2,6 +2,7 @@ import type { Bloc } from "@/data/blocksData";
 import { eso2Ambits } from "@/data/esoData2";
 import { eso3Ambits } from "@/data/esoData3";
 import { eso4Ambits } from "@/data/esoData4";
+import { gestionsAmbit } from "@/data/esoGestions";
 
 export type CursId = "1eso" | "2eso" | "3eso" | "4eso";
 export type AmbitId =
@@ -11,7 +12,8 @@ export type AmbitId =
   | "social"
   | "artistic"
   | "educacio-fisica"
-  | "tutoria";
+  | "tutoria"
+  | "gestions";
 
 export interface Ambit {
   id: AmbitId;
@@ -28,6 +30,7 @@ export interface Curs {
   emoji: string;
   descripcio: string;
   ambits: Ambit[];
+  enConstruccio?: boolean;
 }
 
 // Helper to build a Bloc quickly. We reuse Level "A1" as a placeholder
@@ -562,7 +565,8 @@ const eso2: Curs = {
   nom: "2n d'ESO",
   emoji: "2️⃣",
   descripcio: "Vocabulari del segon curs d'ESO, organitzat per àmbits curriculars i adaptat al nivell.",
-  ambits: eso2Ambits,
+  ambits: [...eso2Ambits, gestionsAmbit("2eso")],
+  enConstruccio: true,
 };
 
 const eso3: Curs = {
@@ -570,7 +574,8 @@ const eso3: Curs = {
   nom: "3r d'ESO",
   emoji: "3️⃣",
   descripcio: "Vocabulari del tercer curs d'ESO, organitzat per àmbits curriculars i adaptat al nivell.",
-  ambits: eso3Ambits,
+  ambits: [...eso3Ambits, gestionsAmbit("3eso")],
+  enConstruccio: true,
 };
 
 const eso4: Curs = {
@@ -578,7 +583,8 @@ const eso4: Curs = {
   nom: "4t d'ESO",
   emoji: "4️⃣",
   descripcio: "Vocabulari del quart curs d'ESO, organitzat per àmbits curriculars i adaptat al nivell.",
-  ambits: eso4Ambits,
+  ambits: [...eso4Ambits, gestionsAmbit("4eso")],
+  enConstruccio: true,
 };
 
 export const cursos: Curs[] = [eso1, eso2, eso3, eso4];
