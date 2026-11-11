@@ -100,7 +100,6 @@ export default function EsoAmbit() {
             helpLang={helpLang}
             onBack={() => setView({ type: "grid" })}
             onStartQuiz={() => setView({ type: "quiz", bloc: view.bloc })}
-            onStartSongs={() => setView({ type: "fitxes", bloc: view.bloc })}
           />
         )}
         {view.type === "quiz" && (
