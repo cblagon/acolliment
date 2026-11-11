@@ -7,6 +7,7 @@ import { t } from "@/i18n/ui";
 import { tBlocName } from "@/i18n/blocNames";
 import { SpeechCheck } from "@/components/SpeechCheck";
 import { invokeQueued } from "@/lib/aiQueue";
+import type { ConceptHelp } from "@/data/esoConceptHelp";
 import { Volume2, VolumeX, ChevronLeft, ChevronRight, ArrowLeft, Gamepad2, Music, Loader2 } from "lucide-react";
 
 const ORAL_BLOC_IDS = new Set([
@@ -27,9 +28,10 @@ interface FitxaViewerProps {
   onStartQuiz: () => void;
   onStartSongs?: () => void;
   contentTranslations?: { targetWords: string[]; targetPhrases: string[]; helpWords: string[]; helpPhrases: string[] };
+  conceptHelp?: (ConceptHelp | undefined)[];
 }
 
-export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, onStartSongs, contentTranslations }: FitxaViewerProps) {
+export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, onStartSongs, contentTranslations, conceptHelp }: FitxaViewerProps) {
   const [current, setCurrent] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [translatedWords, setTranslatedWords] = useState<string[] | null>(null);
@@ -211,6 +213,14 @@ export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, o
           <ChevronRight className="w-6 h-6" />
         </button>
       </div>
+
+      {conceptHelp?.[current] && (
+        <section className="w-full max-w-lg border-t border-border pt-5 space-y-3" dir="auto">
+          <p className="text-base leading-relaxed text-foreground">{conceptHelp[current]?.explanation}</p>
+          <h3 className="font-bold text-primary">{t(helpLang, "grammarExamples")}</h3>
+          <p className="text-base leading-relaxed text-muted-foreground">{conceptHelp[current]?.example}</p>
+        </section>
+      )}
 
       <SpeechCheck
         bloc={bloc}

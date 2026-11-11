@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Afegir explicacions i exemples contextuals als conceptes abstractes d’ESO i verificar Factoritzar.
+
 - [x] Traduccions dels àmbits ESO: títols, fitxes, frases i jocs en les llengües seleccionades; proves i fitxa/joc verificats en castellà.
 
 - [x] Reformular el eslogan de la portada con un tono acogedor, positivo y nada impositivo.

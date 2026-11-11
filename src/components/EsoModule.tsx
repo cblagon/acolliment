@@ -6,6 +6,7 @@ import { QuizGame } from "@/components/QuizGame";
 import { Button } from "@/components/ui/button";
 import { t } from "@/i18n/ui";
 import { ArrowLeft, Loader2, RotateCcw } from "lucide-react";
+import { getEsoConceptHelp } from "@/data/esoConceptHelp";
 
 export function EsoModule({ bloc, targetLang, helpLang, quiz, onBack, onQuiz, onCards }: {
   bloc: Bloc; targetLang: LangCode; helpLang: LangCode; quiz: boolean;
@@ -14,6 +15,16 @@ export function EsoModule({ bloc, targetLang, helpLang, quiz, onBack, onQuiz, on
   const source = [bloc.nom, ...bloc.fitxes.map((f) => f.paraula), ...bloc.fitxes.map((f) => f.frase)];
   const target = useEsoTranslations(source, targetLang);
   const help = useEsoTranslations(source, helpLang);
+  const concepts = bloc.fitxes.map((f) => getEsoConceptHelp(bloc.id, f.paraula));
+  const detailLines = concepts.flatMap((item) => item ? [item.explanation, item.example] : []);
+  const details = useEsoTranslations(detailLines, helpLang);
+  let detailIndex = 0;
+  const explanations = concepts.map((item) => {
+    if (!item) return undefined;
+    const index = detailIndex;
+    detailIndex += 2;
+    return details.lines ? { explanation: details.lines[index], example: details.lines[index + 1] } : undefined;
+  });
   if (!target.lines || !help.lines) return (
     <div className="flex flex-col items-center gap-4 py-12" role="status">
       <p className="font-bold">{bloc.nom}</p>
@@ -36,6 +47,7 @@ export function EsoModule({ bloc, targetLang, helpLang, quiz, onBack, onQuiz, on
       }} />
   ) : (
     <FitxaViewer bloc={localizedBloc} targetLang={targetLang} helpLang={helpLang}
-      onBack={onBack} onStartQuiz={onQuiz} contentTranslations={translations} />
+      onBack={onBack} onStartQuiz={onQuiz} contentTranslations={translations}
+      conceptHelp={explanations} />
   );
 }
