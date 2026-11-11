@@ -3,8 +3,8 @@ import { Link, useParams, Navigate } from "react-router-dom";
 import { ArrowLeft, ScrollText, ArrowRight } from "lucide-react";
 import { getAmbit } from "@/data/esoData";
 import type { Bloc } from "@/data/blocksData";
-import { FitxaViewer } from "@/components/FitxaViewer";
-import { QuizGame } from "@/components/QuizGame";
+import { EsoModule } from "@/components/EsoModule";
+import { useEsoTranslations } from "@/hooks/useEsoTranslations";
 import { useLanguages } from "@/hooks/useLanguage";
 import { t } from "@/i18n/ui";
 import { tBlocName } from "@/i18n/blocNames";
@@ -19,6 +19,7 @@ export default function EsoAmbit() {
   const found = cursId && ambitId ? getAmbit(cursId, ambitId) : undefined;
   const { targetLang, helpLang } = useLanguages();
   const [view, setView] = useState<View>({ type: "grid" });
+  const headings = useEsoTranslations(found ? [found.ambit.nom, found.ambit.descripcio, ...found.ambit.blocs.map((bloc) => bloc.nom)] : [], helpLang);
 
   if (!found) return <Navigate to="/eso" replace />;
   const { curs, ambit } = found;
@@ -31,7 +32,7 @@ export default function EsoAmbit() {
             <ArrowLeft className="w-4 h-4" /> {curs.nom}
           </Link>
           <h1 className="text-xl font-extrabold flex items-center gap-2 text-center">
-            <span className="text-2xl">{ambit.emoji}</span> {ambit.nom}
+            <span className="text-2xl">{ambit.emoji}</span> {headings.lines?.[0] ?? ambit.nom}
           </h1>
           <div className="w-16" />
         </div>
@@ -39,7 +40,7 @@ export default function EsoAmbit() {
       <main className="container py-8">
         {view.type === "grid" && (
           <>
-            <p className="text-muted-foreground mb-6 text-balance">{ambit.descripcio}</p>
+            <p className="text-muted-foreground mb-6 text-balance" dir="auto">{headings.lines?.[1] ?? ambit.descripcio}</p>
             {ambit.id === "tutoria" && (
               <Link
                 to="/normes-centre"
@@ -71,7 +72,7 @@ export default function EsoAmbit() {
                     style={{ animationDelay: `${index * 60}ms` }}
                   >
                     <span className="text-5xl drop-shadow-sm transition-transform duration-300 group-hover:scale-110">{bloc.emoji}</span>
-                    <span className="font-bold text-base leading-tight text-center">{tBlocName(bloc.nom, helpLang)}</span>
+                    <span className="font-bold text-base leading-tight text-center" dir="auto">{headings.lines?.[index + 2] ?? tBlocName(bloc.nom, helpLang)}</span>
                     {(bloc.fitxes.length === 0 || curs.enConstruccio) && (
                       <span className="absolute top-2 right-2 rounded-full bg-bloom-yellow text-foreground text-[10px] font-bold px-2 py-0.5 shadow">🚧 En construcció</span>
                     )}
@@ -93,21 +94,16 @@ export default function EsoAmbit() {
             </button>
           </div>
         )}
-        {view.type === "fitxes" && view.bloc.fitxes.length > 0 && (
-          <FitxaViewer
+        {view.type !== "grid" && view.bloc.fitxes.length > 0 && (
+          <EsoModule
+            key={view.bloc.id}
             bloc={view.bloc}
             targetLang={targetLang}
             helpLang={helpLang}
+            quiz={view.type === "quiz"}
             onBack={() => setView({ type: "grid" })}
-            onStartQuiz={() => setView({ type: "quiz", bloc: view.bloc })}
-          />
-        )}
-        {view.type === "quiz" && (
-          <QuizGame
-            bloc={view.bloc}
-            targetLang={targetLang}
-            helpLang={helpLang}
-            onBack={() => setView({ type: "fitxes", bloc: view.bloc })}
+            onQuiz={() => setView({ type: "quiz", bloc: view.bloc })}
+            onCards={() => setView({ type: "fitxes", bloc: view.bloc })}
           />
         )}
       </main>

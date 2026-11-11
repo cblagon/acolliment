@@ -11,6 +11,7 @@ interface QuizGameProps {
   targetLang: LangCode;
   helpLang: LangCode;
   onBack: () => void;
+  wordTranslations?: { target: Record<string, string>; help: Record<string, string> };
 }
 
 interface Answer {
@@ -28,7 +29,9 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-export function QuizGame({ bloc, targetLang, helpLang, onBack }: QuizGameProps) {
+export function QuizGame({ bloc, targetLang, helpLang, onBack, wordTranslations }: QuizGameProps) {
+  const targetWord = useCallback((word: string) => wordTranslations?.target[word] ?? getWord(word, targetLang), [wordTranslations, targetLang]);
+  const helpWord = (word: string) => wordTranslations?.help[word] ?? getTraduccio(word, helpLang);
   const speak = useTTS();
   const ttsOk = speak.isAvailable(targetLang);
   const [questions, setQuestions] = useState(() => shuffle(bloc.fitxes));
@@ -52,7 +55,7 @@ export function QuizGame({ bloc, targetLang, helpLang, onBack }: QuizGameProps) 
       setSelected(opt.paraula);
       const correct = opt.paraula === current.paraula;
       if (correct) {
-        if (ttsOk) speak(getWord(current.paraula, targetLang), targetLang);
+        if (ttsOk) speak(targetWord(current.paraula), targetLang);
         setScore((s) => ({ ...s, correct: s.correct + 1 }));
       } else {
         setScore((s) => ({ ...s, wrong: s.wrong + 1 }));
@@ -67,7 +70,7 @@ export function QuizGame({ bloc, targetLang, helpLang, onBack }: QuizGameProps) 
         }
       }, 1200);
     },
-    [selected, current, qi, questions.length, speak, ttsOk, targetLang]
+    [selected, current, qi, questions.length, speak, ttsOk, targetLang, targetWord]
   );
 
   const restart = () => {
@@ -113,15 +116,15 @@ export function QuizGame({ bloc, targetLang, helpLang, onBack }: QuizGameProps) 
                 {answers.map((a, i) => (
                   <tr key={i} className={`border-b border-border/50 last:border-0 ${a.correct ? "" : "bg-destructive/5"}`}>
                     <td className="px-3 py-2 text-lg">{a.fitxa.emoji}</td>
-                    <td className="px-3 py-2 font-bold text-foreground">{getWord(a.fitxa.paraula, targetLang)}</td>
-                    <td className="px-3 py-2 text-muted-foreground">{getTraduccio(a.fitxa.paraula, helpLang)}</td>
+                    <td className="px-3 py-2 font-bold text-foreground">{targetWord(a.fitxa.paraula)}</td>
+                    <td className="px-3 py-2 text-muted-foreground">{helpWord(a.fitxa.paraula)}</td>
                     <td className="px-3 py-2 text-center">
                       {a.correct ? (
                         <CheckCircle2 className="w-5 h-5 text-accent inline-block" />
                       ) : (
                         <div className="flex flex-col items-center gap-0.5">
                           <XCircle className="w-5 h-5 text-destructive inline-block" />
-                          <span className="text-xs text-destructive">{getWord(a.chosen, targetLang)}</span>
+                          <span className="text-xs text-destructive">{targetWord(a.chosen)}</span>
                         </div>
                       )}
                     </td>
@@ -165,10 +168,10 @@ export function QuizGame({ bloc, targetLang, helpLang, onBack }: QuizGameProps) 
       {/* Question */}
       <div className="flex flex-col items-center gap-2">
         <span className="text-7xl drop-shadow-sm">{current.emoji}</span>
-        <p className="text-muted-foreground text-sm mt-1">{getTraduccio(current.paraula, helpLang)}</p>
+        <p className="text-muted-foreground text-sm mt-1" dir="auto">{helpWord(current.paraula)}</p>
         <p className="text-muted-foreground text-xs">{t(helpLang, "whichWord")}</p>
         <button
-          onClick={() => ttsOk && speak(getWord(current.paraula, targetLang), targetLang)}
+          onClick={() => ttsOk && speak(targetWord(current.paraula), targetLang)}
           disabled={!ttsOk}
           title={ttsOk ? "" : t(helpLang, "ttsUnavailable")}
           className={`p-2 rounded-full ${bloc.color} text-white shadow active:scale-90 transition-all mt-1 disabled:opacity-40 disabled:cursor-not-allowed`}
@@ -195,7 +198,7 @@ export function QuizGame({ bloc, targetLang, helpLang, onBack }: QuizGameProps) 
               disabled={!!selected}
               className={`p-4 rounded-2xl font-bold text-lg transition-all active:scale-95 ${cls}`}
             >
-              {getWord(opt.paraula, targetLang)}
+              {targetWord(opt.paraula)}
             </button>
           );
         })}
