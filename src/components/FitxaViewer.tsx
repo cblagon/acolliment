@@ -25,7 +25,7 @@ interface FitxaViewerProps {
   helpLang: LangCode;
   onBack: () => void;
   onStartQuiz: () => void;
-  onStartSongs: () => void;
+  onStartSongs?: () => void;
 }
 
 export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, onStartSongs }: FitxaViewerProps) {
@@ -129,10 +129,12 @@ export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, o
             <Gamepad2 className="w-4 h-4" />
             {t(helpLang, "game")}
           </button>
-          <button onClick={onStartSongs} className="flex items-center gap-1 text-primary hover:text-primary/80 transition-colors font-semibold text-sm active:scale-95">
-            <Music className="w-4 h-4" />
-            {t(helpLang, "songs")}
-          </button>
+          {onStartSongs && (
+            <button onClick={onStartSongs} className="flex items-center gap-1 text-primary hover:text-primary/80 transition-colors font-semibold text-sm active:scale-95">
+              <Music className="w-4 h-4" />
+              {t(helpLang, "songs")}
+            </button>
+          )}
         </div>
       </div>
 
