@@ -26,9 +26,10 @@ interface FitxaViewerProps {
   onBack: () => void;
   onStartQuiz: () => void;
   onStartSongs?: () => void;
+  contentTranslations?: { targetWords: string[]; targetPhrases: string[]; helpWords: string[]; helpPhrases: string[] };
 }
 
-export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, onStartSongs }: FitxaViewerProps) {
+export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, onStartSongs, contentTranslations }: FitxaViewerProps) {
   const [current, setCurrent] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [translatedWords, setTranslatedWords] = useState<string[] | null>(null);
@@ -105,12 +106,12 @@ export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, o
     setFlipped(false);
   };
 
-  const paraulaTarget = isOralPresentation && targetLang !== "ca"
+  const paraulaTarget = contentTranslations?.targetWords[current] ?? (isOralPresentation && targetLang !== "ca"
     ? translatedWords?.[current] ?? getWord(fitxa.paraula, targetLang)
-    : getWord(fitxa.paraula, targetLang);
-  const traduccio = getTraduccio(fitxa.paraula, helpLang);
-  const targetPhrase = targetLang === "ca" ? fitxa.frase : translatedPhrases?.[current];
-  const showPhrase = targetLang === "ca" || isOralPresentation;
+    : getWord(fitxa.paraula, targetLang));
+  const traduccio = contentTranslations?.helpWords[current] ?? getTraduccio(fitxa.paraula, helpLang);
+  const targetPhrase = contentTranslations?.targetPhrases[current] ?? (targetLang === "ca" ? fitxa.frase : translatedPhrases?.[current]);
+  const showPhrase = !!contentTranslations || targetLang === "ca" || isOralPresentation;
   const ttsOk = speak.isAvailable(targetLang);
 
   return (
@@ -181,6 +182,9 @@ export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, o
           {showPhrase && targetPhrase && (
             <p className="text-sm opacity-80 italic text-center mt-2">"{targetPhrase}"</p>
           )}
+          {contentTranslations && helpLang !== targetLang && (
+            <p className="text-sm text-center" dir="auto">{contentTranslations.helpPhrases[current]}</p>
+          )}
         </div>
       </div>
 
@@ -212,7 +216,7 @@ export function FitxaViewer({ bloc, targetLang, helpLang, onBack, onStartQuiz, o
         bloc={bloc}
         targetLang={targetLang}
         helpLang={helpLang}
-        translatedWords={isOralPresentation ? translatedWords : null}
+        translatedWords={contentTranslations?.targetWords ?? (isOralPresentation ? translatedWords : null)}
       />
     </div>
   );
