@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Afegir explicacions i exemples contextuals als conceptes abstractes d’ESO i verificar Factoritzar.
+- [x] Afegir explicacions i exemples contextuals als conceptes abstractes d’ESO; Factoritzar verificat en ordinador i mòbil.
 
 - [x] Traduccions dels àmbits ESO: títols, fitxes, frases i jocs en les llengües seleccionades; proves i fitxa/joc verificats en castellà.
 
