@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Ampliar Gestions amb tres mòduls específics per a cadascun dels cursos 2n, 3r i 4t d’ESO i verificar-los.
+
 - [x] Afegir explicacions i exemples contextuals als conceptes abstractes d’ESO; Factoritzar verificat en ordinador i mòbil.
 
 - [x] Traduccions dels àmbits ESO: títols, fitxes, frases i jocs en les llengües seleccionades; proves i fitxa/joc verificats en castellà.

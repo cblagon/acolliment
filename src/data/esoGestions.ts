@@ -1,5 +1,6 @@
 import type { Bloc } from "@/data/blocksData";
 import type { Ambit } from "@/data/esoData";
+import { gestionsExtra } from "@/data/esoGestionsExtra";
 
 // "Gestions" — everyday procedures (school and non-school) shared by 2n–4t ESO.
 const f = (paraula: string, traduccio: string, emoji: string, frase: string) => ({ paraula, traduccio, emoji, frase });
@@ -72,6 +73,6 @@ export const gestionsAmbit = (cursId: string): Ambit => ({
   nom: "Gestions",
   emoji: "🗂️",
   color: "bg-bloom-pink",
-  descripcio: "Gestions de la vida diària, escolars o no: anar al metge, una excursió, el gimnàs, revisar una nota...",
-  blocs: base.map((b, i) => ({ ...b, id: `${cursId}-gestions-${i + 1}` })),
+  descripcio: "Gestions escolars i de la vida diària, amb situacions específiques per a cada curs: salut, compres, activitats, tràmits i estudis.",
+  blocs: [...base, ...(gestionsExtra[cursId] ?? [])].map((b, i) => ({ ...b, id: `${cursId}-gestions-${i + 1}` })),
 });

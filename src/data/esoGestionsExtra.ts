@@ -1,0 +1,106 @@
+import type { Bloc } from "@/data/blocksData";
+
+type Entry = [string, string, string, string];
+const module = (nom: string, emoji: string, color: string, level: Bloc["level"], entries: Entry[]): Omit<Bloc, "id"> => ({
+  nom, emoji, color, level,
+  fitxes: entries.map(([paraula, traduccio, emoji, frase]) => ({ paraula, traduccio, emoji, frase })),
+});
+
+export const gestionsExtra: Record<string, Omit<Bloc, "id">[]> = {
+  "2eso": [
+    module("Fer-se el carnet de biblioteca", "📚", "bg-secondary", "A2", [
+      ["Biblioteca", "Library", "📚", "On és la biblioteca del barri?"],
+      ["Carnet de biblioteca", "Library card", "🪪", "Vull fer-me el carnet de biblioteca."],
+      ["Préstec", "Loan", "📖", "Puc agafar aquest llibre en préstec?"],
+      ["Retornar", "Return", "↩️", "Quan he de retornar el llibre?"],
+      ["Renovar", "Renew", "🔄", "Puc renovar el préstec uns dies més?"],
+      ["Reserva", "Reservation", "📌", "Vull fer una reserva d'aquest llibre."],
+      ["Catàleg", "Catalogue", "🔎", "Busquem el títol al catàleg."],
+      ["Sala d'estudi", "Study room", "🪑", "La sala d'estudi és oberta aquesta tarda?"],
+    ]),
+    module("Comprar i canviar un producte", "🛍️", "bg-primary", "A2", [
+      ["Preu", "Price", "🏷️", "Quin preu té aquesta samarreta?"],
+      ["Talla", "Size", "👕", "Teniu una talla més gran?"],
+      ["Emprovador", "Fitting room", "🚪", "Puc fer servir l'emprovador?"],
+      ["Tiquet", "Receipt", "🧾", "Em podeu donar el tiquet?"],
+      ["Canvi", "Exchange", "🔄", "Voldria fer un canvi de talla."],
+      ["Devolució", "Return", "📦", "Quines condicions té la devolució?"],
+      ["Defecte", "Fault", "🔍", "Aquest producte té un defecte."],
+      ["Pagar amb targeta", "Pay by card", "💳", "Puc pagar amb targeta?"],
+    ]),
+    module("Justificar una absència", "🏫", "bg-accent", "A2", [
+      ["Absència", "Absence", "📅", "He de justificar l'absència d'ahir."],
+      ["Avís", "Notice", "📨", "Enviaré un avís al tutor."],
+      ["Motiu", "Reason", "💬", "El motiu de l'absència és una visita mèdica."],
+      ["Justificant", "Supporting note", "📄", "On he de lliurar el justificant?"],
+      ["Retard", "Lateness", "⌛", "Arribaré amb retard perquè el bus s'ha avariat."],
+      ["Tasques pendents", "Pending work", "📝", "Quines tasques pendents he de recuperar?"],
+      ["Lliurar", "Submit", "📥", "Puc lliurar la feina demà?"],
+      ["Posar-se al dia", "Catch up", "✅", "Vull posar-me al dia amb les activitats."],
+    ]),
+  ],
+  "3eso": [
+    module("Inscriure's en un taller juvenil", "🎨", "bg-secondary", "B1", [
+      ["Centre cívic", "Community centre", "🏘️", "Quins tallers ofereix el centre cívic?"],
+      ["Taller", "Workshop", "🎨", "M'interessa el taller de fotografia."],
+      ["Places disponibles", "Available places", "🪑", "Encara hi ha places disponibles?"],
+      ["Requisit", "Requirement", "📋", "Quin requisit d'edat té l'activitat?"],
+      ["Llista d'espera", "Waiting list", "⏳", "Em podeu apuntar a la llista d'espera?"],
+      ["Material inclòs", "Materials included", "🧰", "El preu té el material inclòs?"],
+      ["Autorització familiar", "Family permission", "✍️", "Cal presentar una autorització familiar?"],
+      ["Confirmació", "Confirmation", "📧", "Quan rebré la confirmació de la inscripció?"],
+    ]),
+    module("Recuperar l'accés a la plataforma", "💻", "bg-primary", "B1", [
+      ["Usuari", "Username", "👤", "No recordo el meu nom d'usuari."],
+      ["Contrasenya", "Password", "🔑", "Vull restablir la contrasenya."],
+      ["Enllaç de recuperació", "Recovery link", "🔗", "L'enllaç de recuperació ha caducat."],
+      ["Correu de verificació", "Verification email", "📧", "No he rebut el correu de verificació."],
+      ["Incidència", "Issue", "⚠️", "Vull comunicar una incidència d'accés."],
+      ["Captura de pantalla", "Screenshot", "🖼️", "Adjunto una captura de pantalla sense dades privades."],
+      ["Suport tècnic", "Technical support", "🛠️", "Com puc contactar amb el suport tècnic?"],
+      ["Tancar la sessió", "Log out", "🚪", "Cal tancar la sessió a l'ordinador compartit."],
+    ]),
+    module("Comunicar un objecte perdut", "🎒", "bg-accent", "B1", [
+      ["Objecte perdut", "Lost item", "🔎", "Vull informar d'un objecte perdut."],
+      ["Descripció", "Description", "📝", "La descripció és: motxilla blava amb una cremallera vermella."],
+      ["Última ubicació", "Last location", "📍", "L'última ubicació era el vestidor."],
+      ["Objectes trobats", "Lost property", "📦", "On es guarden els objectes trobats?"],
+      ["Identificar", "Identify", "🪪", "Puc identificar la motxilla pel meu nom a dins."],
+      ["Contacte", "Contact", "☎️", "Us deixo un contacte perquè m'aviseu."],
+      ["Recollida", "Collection", "🤲", "Quin horari hi ha per a la recollida?"],
+      ["Comprovació", "Check", "✅", "Farem una comprovació abans de lliurar l'objecte."],
+    ]),
+  ],
+  "4eso": [
+    module("Demanar orientació d'estudis", "🎓", "bg-secondary", "B1", [
+      ["Orientació acadèmica", "Academic guidance", "🧭", "Vull una cita d'orientació acadèmica."],
+      ["Itinerari", "Study pathway", "🛤️", "Quin itinerari s'adapta als meus interessos?"],
+      ["Batxillerat", "Upper secondary education", "📚", "Quines modalitats de batxillerat ofereix el centre?"],
+      ["Cicle formatiu", "Vocational programme", "🛠️", "M'interessa un cicle formatiu d'informàtica."],
+      ["Preinscripció", "Pre-enrolment", "📋", "Quan s'obre la preinscripció?"],
+      ["Requisits d'accés", "Entry requirements", "🔐", "On puc consultar els requisits d'accés?"],
+      ["Portes obertes", "Open day", "🚪", "M'agradaria assistir a la jornada de portes obertes."],
+      ["Documentació", "Documents", "📂", "Quina documentació necessito presentar?"],
+    ]),
+    module("Sol·licitar una beca o un ajut", "📄", "bg-primary", "B1", [
+      ["Sol·licitud", "Application", "📝", "Necessito ajuda per completar la sol·licitud."],
+      ["Convocatòria", "Call for applications", "📢", "On puc llegir les bases de la convocatòria?"],
+      ["Termini de presentació", "Submission deadline", "⏳", "Quin és el termini de presentació?"],
+      ["Document acreditatiu", "Supporting document", "📎", "Quin document acreditatiu cal adjuntar?"],
+      ["Resguard", "Acknowledgement receipt", "🧾", "Guardaré el resguard de la sol·licitud."],
+      ["Esmena", "Correction of an application", "✏️", "M'han demanat una esmena perquè falta un document."],
+      ["Resolució", "Decision", "📬", "On puc consultar la resolució de l'ajut?"],
+      ["Consulta de l'estat", "Status enquiry", "🔍", "Vull fer una consulta de l'estat de la sol·licitud."],
+    ]),
+    module("Presentar una reclamació de consum", "🤝", "bg-accent", "B1", [
+      ["Servei contractat", "Contracted service", "📋", "El servei contractat no coincideix amb el que s'ha ofert."],
+      ["Comprovant de compra", "Proof of purchase", "🧾", "Adjunto el comprovant de compra."],
+      ["Garantia", "Warranty", "🛡️", "Voldria consultar les condicions de la garantia."],
+      ["Full de reclamació", "Complaint form", "📄", "Em podeu facilitar un full de reclamació?"],
+      ["Descripció dels fets", "Statement of facts", "📝", "La descripció dels fets inclou la data i el problema."],
+      ["Solució proposada", "Proposed solution", "💡", "La solució proposada és reparar el producte."],
+      ["Atenció al consumidor", "Consumer advice", "☎️", "On és l'oficina d'atenció al consumidor?"],
+      ["Resposta per escrit", "Written response", "📨", "Agrairia una resposta per escrit a la reclamació."],
+    ]),
+  ],
+};
